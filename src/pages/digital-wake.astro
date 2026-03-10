@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import DigitalWake from '../components/poems/DigitalWake.jsx';
+
+const piece = PIECES.find(p => p.id === 'digital-wake');
+---
+
+<PieceLayout piece={piece}>
+  <DigitalWake client:load />
+</PieceLayout>

@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import IronConfessional from '../components/poems/IronConfessional.jsx';
+
+const piece = PIECES.find(p => p.id === 'iron-confessional');
+---
+
+<PieceLayout piece={piece}>
+  <IronConfessional client:load />
+</PieceLayout>

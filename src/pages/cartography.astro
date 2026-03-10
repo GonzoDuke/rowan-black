@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import Cartography from '../components/poems/Cartography.jsx';
+
+const piece = PIECES.find(p => p.id === 'cartography');
+---
+
+<PieceLayout piece={piece}>
+  <Cartography client:load />
+</PieceLayout>

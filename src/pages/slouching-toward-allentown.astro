@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import SlouchingTowardAllentown from '../components/poems/SlouchingTowardAllentown.jsx';
+
+const piece = PIECES.find(p => p.id === 'slouching-toward-allentown');
+---
+
+<PieceLayout piece={piece}>
+  <SlouchingTowardAllentown client:load />
+</PieceLayout>

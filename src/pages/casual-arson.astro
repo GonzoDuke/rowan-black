@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import CasualArson from '../components/poems/CasualArson.jsx';
+
+const piece = PIECES.find(p => p.id === 'casual-arson');
+---
+
+<PieceLayout piece={piece}>
+  <CasualArson client:load />
+</PieceLayout>

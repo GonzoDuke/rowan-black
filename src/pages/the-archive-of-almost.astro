@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import TheArchiveOfAlmost from '../components/poems/TheArchiveOfAlmost.jsx';
+
+const piece = PIECES.find(p => p.id === 'the-archive-of-almost');
+---
+
+<PieceLayout piece={piece}>
+  <TheArchiveOfAlmost client:load />
+</PieceLayout>

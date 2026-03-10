@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import TheMap from '../components/poems/TheMap.jsx';
+
+const piece = PIECES.find(p => p.id === 'the-map');
+---
+
+<PieceLayout piece={piece}>
+  <TheMap client:load />
+</PieceLayout>
