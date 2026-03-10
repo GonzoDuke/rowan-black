@@ -41,22 +41,8 @@ const GLITCH_INTENSITY = {
   prophetic: 0.22,
 };
 
-// Character substitutions: subtle diacritics and unicode corruption
-const GLITCH_MAP = {
-  'a': ['å', 'ä', 'à', 'â'],
-  'e': ['ë', 'è', 'ê', 'é'],
-  'i': ['ï', 'ì', 'î'],
-  'o': ['ö', 'ò', 'ô', 'ø'],
-  'u': ['ü', 'ù', 'û'],
-  'n': ['ñ', 'ń'],
-  's': ['ś', 'š'],
-  't': ['ţ', 'ŧ'],
-  'c': ['ç', 'ć'],
-  'l': ['ł'],
-  'r': ['ŗ'],
-  'd': ['đ'],
-  '-': ['–', '¬', '~'],
-};
+// Character corruptions: broken unicode, blocks, strikethrough, missing data
+const GLITCH_CHARS = ['░', '▒', '▓', '█', '̸', '̶', '̷', '_', '¿', '×', '·', '∎', '▪', '⌧', '⊘'];
 
 function glitchText(text, period) {
   const intensity = GLITCH_INTENSITY[period] || 0;
@@ -67,12 +53,11 @@ function glitchText(text, period) {
   for (let i = 0; i < text.length; i++) seed += text.charCodeAt(i);
 
   return text.split('').map((char, i) => {
+    if (char === '.' || char === '/') return char; // preserve extensions and paths
     const pseudoRandom = ((seed * (i + 1) * 9301 + 49297) % 233280) / 233280;
     if (pseudoRandom > intensity) return char;
-    const replacements = GLITCH_MAP[char.toLowerCase()];
-    if (!replacements) return char;
-    const pick = replacements[Math.floor(pseudoRandom * replacements.length * 4) % replacements.length];
-    return char === char.toUpperCase() ? pick.toUpperCase() : pick;
+    const pick = GLITCH_CHARS[Math.floor(pseudoRandom * GLITCH_CHARS.length * 4) % GLITCH_CHARS.length];
+    return pick;
   }).join('');
 }
 
@@ -292,7 +277,7 @@ function TerminalText({ skipAnimation }) {
 
   return (
     <div style={{ marginBottom: '32px', maxWidth: '600px' }}>
-      <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: 'rgba(255,255,255,0.45)' }}>
+      <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: 'rgba(255,255,255,0.65)' }}>
         {main}
         {!hint && !done && <span style={{
           display: 'inline-block', width: '6px', height: '13px',
