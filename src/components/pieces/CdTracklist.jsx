@@ -1,61 +1,133 @@
 import React from 'react';
 
+const RULED_BG = `repeating-linear-gradient(
+  to bottom,
+  transparent 0px,
+  transparent 23px,
+  rgba(160,190,220,0.25) 23px,
+  rgba(160,190,220,0.25) 24px
+)`;
+
 const S = {
-  outer: { maxWidth: '680px', margin: '0 auto', padding: '40px 36px 60px' },
-  cdCase: {
-    background: '#f5f2ed', border: '1px solid rgba(0,0,0,0.1)',
-    borderRadius: '4px', overflow: 'hidden', maxWidth: '480px', margin: '0 auto',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-  },
+  outer: { maxWidth: '760px', margin: '0 auto', padding: '40px 24px 60px' },
   insert: {
-    background: '#f0ece4', padding: '32px 28px 24px',
-    borderBottom: '1px solid rgba(0,0,0,0.08)',
+    display: 'flex',
+    flexWrap: 'wrap',
+    border: '1px solid rgba(0,0,0,0.12)',
+    borderRadius: '2px',
+    overflow: 'hidden',
+    boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
   },
-  insertTitle: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '20px', fontWeight: 500,
-    color: '#2a2520', textAlign: 'center', letterSpacing: '0.06em', textTransform: 'uppercase',
-    marginBottom: '20px', lineHeight: 1.35,
+  panel: {
+    flex: '1 1 320px',
+    minHeight: '360px',
+    background: RULED_BG + ', #f9f9f7',
+    padding: '24px 22px 20px',
+    position: 'relative',
+    backgroundPosition: '0 12px',
   },
-  handwritten: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '14px', lineHeight: 1.6,
-    color: '#5a5040', fontStyle: 'italic', textAlign: 'center', marginBottom: '8px',
+  panelDivider: {
+    flex: '0 0 1px',
+    background: 'rgba(0,0,0,0.08)',
+    alignSelf: 'stretch',
   },
-  trackList: { padding: '20px 28px 28px', background: '#f5f2ed' },
-  track: { display: 'flex', gap: '12px', padding: '5px 0', alignItems: 'baseline' },
+  hw: {
+    fontFamily: "'Caveat', cursive",
+  },
+  title: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: '26px',
+    fontWeight: 700,
+    color: '#1a1d24',
+    lineHeight: 1.2,
+    marginBottom: '20px',
+    textAlign: 'center',
+  },
+  note: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: '17px',
+    color: '#4a4a4a',
+    lineHeight: 1.5,
+    textAlign: 'center',
+    marginBottom: '6px',
+  },
+  noteBlock: {
+    marginBottom: '24px',
+    paddingBottom: '16px',
+    borderBottom: '1px solid rgba(0,0,0,0.06)',
+  },
+  track: {
+    display: 'flex',
+    gap: '8px',
+    padding: '2px 0',
+    alignItems: 'baseline',
+  },
   trackNum: {
-    fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', color: '#a09888',
-    width: '22px', textAlign: 'right', flexShrink: 0,
+    fontFamily: "'Caveat', cursive",
+    fontSize: '16px',
+    color: '#888',
+    width: '24px',
+    textAlign: 'right',
+    flexShrink: 0,
   },
-  trackTitle: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px', color: '#2a2520' },
-  trackArtist: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', color: '#8a8070' },
-  gap: { height: '10px', borderBottom: '1px solid rgba(0,0,0,0.05)', marginBottom: '10px' },
-  backCover: {
-    borderTop: '1px solid rgba(0,0,0,0.08)', padding: '20px 28px', background: '#ece8e0',
+  trackTitle: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: '18px',
+    color: '#1a1d24',
+    fontWeight: 500,
+  },
+  trackArtist: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: '16px',
+    color: '#6a6a6a',
+  },
+  gap: {
+    height: '12px',
   },
   scrawl: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '13px',
-    color: '#6a6050', fontStyle: 'italic', textAlign: 'center',
+    fontFamily: "'Caveat', cursive",
+    fontSize: '16px',
+    color: '#6a6a6a',
+    textAlign: 'center',
+    marginTop: 'auto',
+    paddingTop: '20px',
+    fontStyle: 'italic',
+  },
+  foldCrease: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '1px',
+    right: 0,
+    background: 'rgba(0,0,0,0.04)',
   },
 };
 
 const Track = ({ num, title, artist }) => (
   <div style={S.track}>
     <span style={S.trackNum}>{num}.</span>
-    <div><span style={S.trackTitle}>{title}</span>{' '}<span style={S.trackArtist}>{artist}</span></div>
+    <div>
+      <span style={S.trackTitle}>{title}</span>
+      {' '}
+      <span style={S.trackArtist}>- {artist}</span>
+    </div>
   </div>
 );
 
 export default function CdTracklist() {
   return (
     <div style={S.outer}>
-      <div style={S.cdCase}>
-        <div style={S.insert}>
-          <div style={S.insertTitle}>Songs for Cities<br/>That Don't Exist Yet</div>
-          <div style={S.handwritten}>Summer - 2005</div>
-          <div style={S.handwritten}>Don't shuffle. It only makes sense this way.</div>
-          <div style={S.handwritten}>If you find this, it was meant for you.</div>
-        </div>
-        <div style={S.trackList}>
+      <div style={S.insert}>
+        {/* Left panel — front cover */}
+        <div style={{ ...S.panel, display: 'flex', flexDirection: 'column' }}>
+          <div style={S.title}>
+            Songs for Cities<br />That Don't Exist Yet
+          </div>
+          <div style={S.noteBlock}>
+            <div style={S.note}>Summer - 2005</div>
+            <div style={S.note}>Don't shuffle. It only makes sense this way.</div>
+            <div style={S.note}>If you find this, it was meant for you.</div>
+          </div>
           <Track num="1" title="Flim" artist="Aphex Twin" />
           <Track num="2" title="Svefn-g-englar" artist="Sigur Rós" />
           <Track num="3" title="This Place Is a Prison" artist="The Postal Service" />
@@ -64,7 +136,14 @@ export default function CdTracklist() {
           <Track num="6" title="Eye in the Sky" artist="The Alan Parsons Project" />
           <Track num="7" title="3 Libras" artist="A Perfect Circle" />
           <Track num="8" title="Maps" artist="Yeah Yeah Yeahs" />
-          <div style={S.gap} />
+          <div style={S.foldCrease} />
+        </div>
+
+        {/* Divider */}
+        <div style={S.panelDivider} />
+
+        {/* Right panel — inside */}
+        <div style={{ ...S.panel, display: 'flex', flexDirection: 'column' }}>
           <Track num="9" title="Somebody That I Used to Know" artist="Elliott Smith" />
           <Track num="10" title="Float On" artist="Modest Mouse" />
           <Track num="11" title="B.O.B." artist="OutKast" />
@@ -76,9 +155,9 @@ export default function CdTracklist() {
           <Track num="16" title="How to Disappear Completely" artist="Radiohead" />
           <Track num="17" title="All Is Full of Love" artist="Björk" />
           <Track num="18" title="From the Morning" artist="Nick Drake" />
-        </div>
-        <div style={S.backCover}>
-          <div style={S.scrawl}>You can't fast-forward real life. I tried.</div>
+          <div style={S.scrawl}>
+            You can't fast-forward real life. I tried.
+          </div>
         </div>
       </div>
     </div>

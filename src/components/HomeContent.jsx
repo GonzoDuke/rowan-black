@@ -181,26 +181,36 @@ function Description({ returning }) {
   const hint = parts[1] || '';
   const done = charCount >= fullText.length;
 
+  const fullParts = fullText.split('\n\n');
+
   return (
-    <div style={{ marginBottom: '28px', maxWidth: '620px' }}>
-      <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.dim }}>
-        {main}
-        {!hint && !done && <span style={{
-          display: 'inline-block', width: '6px', height: '13px',
-          background: C.dim, animation: 'cursor-blink 1s step-end infinite',
-          verticalAlign: 'text-bottom', marginLeft: '1px',
-        }} />}
+    <div style={{ marginBottom: '28px', maxWidth: '620px', position: 'relative' }}>
+      {/* Invisible placeholder to reserve final size */}
+      <div aria-hidden="true" style={{ visibility: 'hidden' }}>
+        <div style={{ fontSize: '13px', lineHeight: 1.75 }}>{fullParts[0]}</div>
+        <div style={{ fontSize: '13px', lineHeight: 1.75, marginTop: '8px' }}>{fullParts[1]}</div>
       </div>
-      {hint && (
-        <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.accent, fontWeight: 400, marginTop: '8px' }}>
-          {hint}
-          {!done && <span style={{
+      {/* Visible typing layer */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+        <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.dim }}>
+          {main}
+          {!hint && !done && <span style={{
             display: 'inline-block', width: '6px', height: '13px',
-            background: C.accent, opacity: 0.6, animation: 'cursor-blink 1s step-end infinite',
+            background: C.dim, animation: 'cursor-blink 1s step-end infinite',
             verticalAlign: 'text-bottom', marginLeft: '1px',
           }} />}
         </div>
-      )}
+        {hint && (
+          <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.accent, fontWeight: 400, marginTop: '8px' }}>
+            {hint}
+            {!done && <span style={{
+              display: 'inline-block', width: '6px', height: '13px',
+              background: C.accent, opacity: 0.6, animation: 'cursor-blink 1s step-end infinite',
+              verticalAlign: 'text-bottom', marginLeft: '1px',
+            }} />}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
