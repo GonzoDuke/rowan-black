@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import Towers from '../components/poems/Towers.jsx';
+
+const piece = PIECES.find(p => p.id === 'towers');
+---
+
+<PieceLayout piece={piece}>
+  <Towers client:load />
+</PieceLayout>

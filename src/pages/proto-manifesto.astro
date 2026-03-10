@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import ProtoManifesto from '../components/pieces/ProtoManifesto.jsx';
+
+const piece = PIECES.find(p => p.id === 'proto-manifesto');
+---
+
+<PieceLayout piece={piece}>
+  <ProtoManifesto client:load />
+</PieceLayout>

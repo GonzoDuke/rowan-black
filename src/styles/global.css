@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════
+   THE COLLECTED WORKS OF ROWAN BLACK
+   Global Design System
+   ═══════════════════════════════════════════ */
+
+/* --- Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* --- Variables --- */
+:root {
+  /* Background */
+  --bg: #0a0a0c;
+  --bg-surface: #111114;
+  --bg-elevated: #18181c;
+
+  /* Text */
+  --text: #c8c8d0;
+  --text-bright: #e8e8f0;
+  --text-dim: rgba(200,200,208,0.6);
+  --text-ghost: rgba(200,200,208,0.3);
+
+  /* Accents */
+  --accent: #4a9eff;
+  --accent-dim: rgba(74,158,255,0.15);
+  --error: #ff4a4a;
+  --warning: #d4a843;
+  --glitch: #00ff88;
+
+  /* Borders & Rules */
+  --rule: rgba(200,200,208,0.08);
+  --rule-bright: rgba(200,200,208,0.15);
+  --button-border: rgba(200,200,208,0.18);
+  --button-text: rgba(200,200,208,0.5);
+
+  /* Period Colors */
+  --period-teenage: #39ff14;
+  --period-early: #d4a843;
+  --period-transitional: #4a7aaa;
+  --period-mature: #aa4a4a;
+  --period-prophetic: #4a9eff;
+
+  /* Typography */
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --display: 'Space Grotesk', 'Arial', sans-serif;
+
+  /* Spacing */
+  --content-width: 720px;
+  --wide-width: 880px;
+}
+
+/* --- Reset --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--text-bright);
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--text-bright);
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(200,200,208,0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(200,200,208,0.25);
+}
+
+/* --- Noise Overlay --- */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* --- Scan Lines (for found docs) --- */
+.scan-lines::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+}
+
+/* --- Glitch Keyframes --- */
+@keyframes glitch-shift {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, 2px); }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Utility Classes --- */
+.fade-in {
+  animation: fade-in 0.6s ease forwards;
+}
+
+.mono { font-family: var(--mono); }
+.serif { font-family: var(--serif); }
+.display { font-family: var(--display); }
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+  :root {
+    --content-width: 100%;
+  }
+
+  body {
+    font-size: 13px;
+  }
+}

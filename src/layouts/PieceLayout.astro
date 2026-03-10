@@ -1,0 +1,115 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+const { piece } = Astro.props;
+const pageTitle = `${piece.title} — The Collected Works of Rowan Black`;
+const ogImage = `/og/${piece.id}.png`;
+const ogUrl = `https://placeholder.com/${piece.id}`;
+
+const periodColors = {
+  teenage: '#39ff14',
+  early: '#d4a843',
+  transitional: '#4a7aaa',
+  mature: '#aa4a4a',
+  prophetic: '#4a9eff',
+};
+
+const periodColor = periodColors[piece.period] || '#4a9eff';
+---
+
+<BaseLayout title={pageTitle} description={piece.corvidsNote || piece.subtitle || ''} ogImage={ogImage} ogUrl={ogUrl}>
+  <div style="background: var(--bg); min-height: 100vh;">
+    <!-- Top nav -->
+    <nav style={`
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,10,12,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 48px;
+    `}>
+      <a href="/" style={`
+        background: none; border: 1px solid var(--button-border); border-radius: 2px;
+        font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.08em;
+        color: var(--button-text); padding: 5px 14px; text-decoration: none;
+        transition: all 0.15s ease; text-transform: uppercase;
+      `}>&larr; Archive</a>
+      <span style={`
+        font-family: var(--mono); font-size: 10px; font-weight: 300;
+        color: var(--text-ghost); letter-spacing: 0.06em; text-transform: uppercase;
+      `}>Corvids Collective</span>
+    </nav>
+
+    <!-- Header: Title + Corvids Note -->
+    <div style="border-bottom: 1px solid var(--rule);">
+      <div style="max-width: var(--wide-width); margin: 0 auto; padding: 72px 32px 32px;">
+        <!-- Period indicator -->
+        <div style={`
+          font-family: var(--mono); font-size: 9px; font-weight: 500;
+          color: ${periodColor}; letter-spacing: 0.12em; text-transform: uppercase;
+          margin-bottom: 16px; opacity: 0.8;
+        `}>
+          <span style={`display: inline-block; width: 6px; height: 6px; border-radius: 1px; background: ${periodColor}; margin-right: 8px; vertical-align: middle;`}></span>
+          {piece.periodLabel} &middot; {piece.year}
+        </div>
+
+        <!-- Title -->
+        <h1 style={`
+          font-family: var(--serif); font-size: 32px; font-weight: 400;
+          line-height: 1.15; color: var(--text-bright); letter-spacing: -0.01em;
+          margin-bottom: 6px;
+        `}>{piece.title}</h1>
+
+        {piece.subtitle && (
+          <div style={`
+            font-family: var(--serif); font-size: 17px; font-weight: 300;
+            font-style: italic; color: var(--text-dim); line-height: 1.3;
+            margin-bottom: 12px;
+          `}>{piece.subtitle}</div>
+        )}
+
+        <!-- Form label -->
+        <div style={`
+          font-family: var(--mono); font-size: 10px; font-weight: 400;
+          color: var(--text-ghost); letter-spacing: 0.04em;
+          margin-bottom: 20px;
+        `}>{piece.form}</div>
+
+        <!-- Corvids note -->
+        {piece.corvidsNote && (
+          <div style={`
+            border-left: 2px solid var(--rule-bright);
+            padding-left: 20px;
+            margin-top: 20px;
+          `}>
+            <div style={`
+              font-family: var(--mono); font-size: 9px; font-weight: 500;
+              color: var(--text-ghost); letter-spacing: 0.1em; text-transform: uppercase;
+              margin-bottom: 8px;
+            `}>Corvids Collective Note</div>
+            <p style={`
+              font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
+              color: var(--text-dim); font-style: italic; font-weight: 300; margin: 0;
+            `}>{piece.corvidsNote}</p>
+          </div>
+        )}
+
+        <div style="height: 1px; background: var(--rule); margin-top: 28px;"></div>
+      </div>
+    </div>
+
+    <!-- Piece content -->
+    <slot />
+
+    <!-- Return footer -->
+    <div style="padding: 64px 28px 120px; text-align: center;">
+      <a href="/" style={`
+        background: none; border: 1px solid var(--button-border); border-radius: 2px;
+        font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.08em;
+        color: var(--button-text); padding: 7px 20px; text-decoration: none;
+        transition: all 0.15s ease; display: inline-block; text-transform: uppercase;
+      `}>&larr; Back to Archive</a>
+    </div>
+  </div>
+</BaseLayout>

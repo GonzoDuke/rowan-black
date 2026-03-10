@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import CdTracklist from '../components/pieces/CdTracklist.jsx';
+
+const piece = PIECES.find(p => p.id === 'cd-tracklist');
+---
+
+<PieceLayout piece={piece}>
+  <CdTracklist client:load />
+</PieceLayout>
