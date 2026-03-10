@@ -21,10 +21,10 @@ function FileEntry({ piece, index }) {
   const [size] = useState(() => treatmentSize[piece.treatment]?.() || '2.0 KB');
   const [hovered, setHovered] = useState(false);
 
-  const color = piece.treatment === 'capstone' ? '#ff4a4a'
-    : piece.treatment === 'found' ? '#d4a843'
-    : piece.treatment === 'fragment' ? '#6a8a6a'
-    : '#c8c8d0';
+  const color = piece.treatment === 'capstone' ? '#ff4444'
+    : piece.treatment === 'found' ? '#e0e0e0'
+    : piece.treatment === 'fragment' ? '#808898'
+    : '#cccccc';
 
   const fileName = piece.id + ext;
 
@@ -42,21 +42,21 @@ function FileEntry({ piece, index }) {
         cursor: isLive ? 'pointer' : 'default',
         background: hovered && isLive ? 'rgba(74,158,255,0.06)' : 'transparent',
         transition: 'background 0.1s',
-        borderBottom: '1px solid rgba(200,200,208,0.03)',
+        borderBottom: '1px solid rgba(255,255,255,0.03)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <span style={{ fontFamily: 'inherit', fontSize: '12px', color: 'rgba(200,200,208,0.15)', textAlign: 'right', paddingRight: '12px' }}>
+      <span style={{ fontFamily: 'inherit', fontSize: '12px', color: 'rgba(255,255,255,0.15)', textAlign: 'right', paddingRight: '12px' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
       <span style={{ color: hovered && isLive ? '#4a9eff' : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         {fileName}
       </span>
-      <span style={{ color: 'rgba(200,200,208,0.2)', textAlign: 'right' }}>{size}</span>
-      <span style={{ color: 'rgba(200,200,208,0.15)', textAlign: 'right' }}>{piece.year}</span>
+      <span style={{ color: 'rgba(255,255,255,0.2)', textAlign: 'right' }}>{size}</span>
+      <span style={{ color: 'rgba(255,255,255,0.15)', textAlign: 'right' }}>{piece.year}</span>
       <span style={{
-        color: isLive ? '#39ff14' : 'rgba(200,200,208,0.15)',
+        color: isLive ? '#39ff14' : 'rgba(255,255,255,0.15)',
         textAlign: 'right',
         fontSize: '11px',
       }}>
@@ -78,17 +78,17 @@ function DirectoryBlock({ period, pieces, startIndex }) {
           gap: '8px',
           cursor: 'pointer',
           padding: '6px 0',
-          borderBottom: '1px solid rgba(200,200,208,0.06)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
           marginBottom: '4px',
           userSelect: 'none',
         }}
       >
         <span style={{ color: '#4a9eff', fontSize: '12px', width: '14px' }}>{open ? 'v' : '>'}</span>
-        <span style={{ color: period.color, fontSize: '12px' }}>/{period.id}/</span>
-        <span style={{ color: 'rgba(200,200,208,0.2)', fontSize: '11px' }}>
+        <span style={{ color: '#ffffff', fontSize: '12px', opacity: 0.7 }}>/{period.id}/</span>
+        <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>
           {period.label} ({period.years})
         </span>
-        <span style={{ color: 'rgba(200,200,208,0.12)', fontSize: '11px', marginLeft: 'auto' }}>
+        <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '11px', marginLeft: 'auto' }}>
           {pieces.length} items
         </span>
       </div>
@@ -147,7 +147,7 @@ function BootSequence({ onComplete }) {
         fontFamily: "'Space Grotesk', Arial, sans-serif",
         fontSize: 'clamp(22px, 4vw, 34px)',
         fontWeight: 300,
-        color: '#e8e8f0',
+        color: '#ffffff',
         lineHeight: 1.2,
         letterSpacing: '-0.02em',
         textAlign: 'center',
@@ -166,7 +166,7 @@ function BootSequence({ onComplete }) {
           <div key={i} style={{
             fontSize: '12px',
             lineHeight: '2',
-            color: i === lines.length - 1 && line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(200,200,208,0.5)',
+            color: i === lines.length - 1 && line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(255,255,255,0.5)',
             fontWeight: line === 'ARCHIVE READY' ? 500 : 300,
             letterSpacing: line === 'ARCHIVE READY' ? '0.12em' : '0.02em',
           }}>
@@ -177,7 +177,7 @@ function BootSequence({ onComplete }) {
           display: 'inline-block',
           width: '7px',
           height: '14px',
-          background: 'rgba(200,200,208,0.5)',
+          background: 'rgba(255,255,255,0.5)',
           animation: 'cursor-blink 1s step-end infinite',
           verticalAlign: 'text-bottom',
           marginLeft: '2px',
@@ -188,37 +188,89 @@ function BootSequence({ onComplete }) {
 }
 
 function TerminalText() {
-  const [visibleLines, setVisibleLines] = useState(0);
-  const lines = [
+  const [displayed, setDisplayed] = useState('');
+  const [cursorVisible, setCursorVisible] = useState(true);
+
+  const sentences = [
     'Recovered archive.',
-    'Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective.',
-    'Some files are damaged. Some are incomplete.',
-    'All are preserved as found.',
-    '',
-    'Open a directory below to browse the collection.',
+    ' Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective.',
+    ' Some files are damaged. Some are incomplete.',
+    ' All are preserved as found.',
+    '\n\nOpen a directory below to browse the collection.',
   ];
 
+  const fullText = sentences.join('');
+
   useEffect(() => {
-    const timeouts = lines.map((_, i) =>
-      setTimeout(() => setVisibleLines(i + 1), 300 + i * 500)
-    );
-    return () => timeouts.forEach(clearTimeout);
+    let charIndex = 0;
+    let sentenceIndex = 0;
+    let currentPos = 0;
+    let timeout;
+
+    const sentenceEnds = [];
+    let running = 0;
+    for (const s of sentences) {
+      running += s.length;
+      sentenceEnds.push(running);
+    }
+
+    function typeNext() {
+      if (charIndex >= fullText.length) return;
+      charIndex++;
+      setDisplayed(fullText.slice(0, charIndex));
+
+      const isPause = sentenceEnds.includes(charIndex) && charIndex < fullText.length;
+      const delay = isPause ? 400 : 25;
+
+      timeout = setTimeout(typeNext, delay);
+    }
+
+    timeout = setTimeout(typeNext, 500);
+
+    const cursorInterval = setInterval(() => {
+      setCursorVisible(v => !v);
+    }, 530);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(cursorInterval);
+    };
   }, []);
+
+  const parts = displayed.split('\n\n');
+  const mainText = parts[0] || '';
+  const hint = parts[1] || '';
 
   return (
     <div style={{ marginBottom: '32px', maxWidth: '600px' }}>
-      {lines.slice(0, visibleLines).map((line, i) => (
-        <span key={i} style={{
-          display: i === 4 ? 'block' : 'inline',
+      <div style={{
+        fontSize: '12px',
+        lineHeight: 1.7,
+        fontWeight: 300,
+        color: 'rgba(255,255,255,0.45)',
+      }}>
+        {mainText}
+      </div>
+      {hint && (
+        <div style={{
           fontSize: '12px',
           lineHeight: 1.7,
           fontWeight: 300,
-          color: i === lines.length - 1 ? 'rgba(74,158,255,0.5)' : 'rgba(200,200,208,0.35)',
-          height: i === 4 ? '12px' : 'auto',
+          color: '#4a9eff',
+          opacity: 0.6,
+          marginTop: '12px',
         }}>
-          {line}{i < 4 && i !== 3 ? ' ' : ''}
-        </span>
-      ))}
+          {hint}
+        </div>
+      )}
+      <span style={{
+        display: 'inline-block',
+        width: '6px',
+        height: '13px',
+        background: cursorVisible ? 'rgba(255,255,255,0.4)' : 'transparent',
+        verticalAlign: 'text-bottom',
+        marginLeft: '1px',
+      }} />
     </div>
   );
 }
@@ -239,7 +291,7 @@ function Archive() {
       }}>
         <div style={{
           fontSize: '10px',
-          color: 'rgba(200,200,208,0.2)',
+          color: 'rgba(255,255,255,0.2)',
           letterSpacing: '0.08em',
           marginBottom: '20px',
         }}>
@@ -250,7 +302,7 @@ function Archive() {
           fontFamily: "'Space Grotesk', Arial, sans-serif",
           fontSize: 'clamp(24px, 4.5vw, 38px)',
           fontWeight: 300,
-          color: '#e8e8f0',
+          color: '#ffffff',
           lineHeight: 1.1,
           letterSpacing: '-0.02em',
           marginBottom: '12px',
@@ -266,10 +318,10 @@ function Archive() {
           display: 'grid',
           gridTemplateColumns: '32px 1fr 80px 100px 60px',
           padding: '6px 0',
-          borderBottom: '1px solid rgba(200,200,208,0.1)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
           marginBottom: '8px',
           fontSize: '9px',
-          color: 'rgba(200,200,208,0.2)',
+          color: 'rgba(255,255,255,0.25)',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
         }}>
@@ -304,16 +356,16 @@ function Archive() {
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid rgba(200,200,208,0.04)',
+        borderTop: '1px solid rgba(255,255,255,0.04)',
         padding: '24px 32px 48px',
         maxWidth: '900px',
         margin: '0 auto',
       }}>
         <div style={{
           fontSize: '10px',
-          color: 'rgba(200,200,208,0.12)',
+          color: 'rgba(255,255,255,0.12)',
         }}>
-          corvids@archive:~$&nbsp;<span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(200,200,208,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+          corvids@archive:~$&nbsp;<span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(255,255,255,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
         </div>
       </footer>
     </div>
@@ -344,7 +396,7 @@ export default function HomeContent() {
       minHeight: '100vh',
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
       fontSize: '12px',
-      color: '#c8c8d0',
+      color: '#cccccc',
     }}>
       {booted ? <Archive /> : <BootSequence onComplete={handleBootComplete} />}
     </div>
