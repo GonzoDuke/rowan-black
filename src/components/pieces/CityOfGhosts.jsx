@@ -1,81 +1,42 @@
 import React from 'react';
 
 const S = {
-  outer: {
-    maxWidth: '760px',
-    margin: '0 auto',
-    padding: '48px 32px 80px',
-  },
+  outer: { maxWidth: '720px', margin: '0 auto', padding: '40px 36px 60px' },
   notebook: {
-    background: '#10121a',
-    border: '1px solid rgba(255,255,255,0.06)',
-    borderRadius: '2px',
-    overflow: 'hidden',
-    position: 'relative',
+    background: '#faf8f5', border: '1px solid rgba(0,0,0,0.1)',
+    borderRadius: '4px', overflow: 'hidden',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
   },
   notebookHeader: {
-    background: '#14161e',
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
-    padding: '12px 20px',
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '10px',
-    color: 'rgba(255,255,255,0.2)',
-    letterSpacing: '0.06em',
+    background: '#f0ece4', borderBottom: '1px solid rgba(0,0,0,0.08)',
+    padding: '10px 20px',
+    fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px',
+    color: '#8a8070', letterSpacing: '0.04em', fontStyle: 'italic',
   },
-  corvidsIntro: {
-    padding: '20px 28px',
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '11.5px',
-    lineHeight: 1.75,
-    color: 'rgba(255,255,255,0.4)',
-    fontStyle: 'italic',
-  },
-  body: {
-    padding: '32px 28px 40px',
-  },
+  body: { padding: '32px 36px 40px' },
   line: {
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '13px',
-    lineHeight: 1.85,
-    color: 'rgba(255,255,255,0.75)',
-    display: 'block',
+    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '17px',
+    lineHeight: 1.85, color: '#2a2520', display: 'block',
   },
-  stanza: {
-    marginBottom: '24px',
-  },
+  stanza: { marginBottom: '24px' },
   marginNote: {
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '11.5px',
-    lineHeight: 1.7,
-    color: '#e8a030',
-    opacity: 0.7,
-    fontStyle: 'italic',
-    borderLeft: '2px solid rgba(232,160,48,0.2)',
-    paddingLeft: '14px',
-    marginTop: '12px',
-    marginBottom: '12px',
-  },
-  indent: {
-    paddingLeft: '24px',
-  },
-  braces: {
-    color: 'rgba(255,255,255,0.35)',
-  },
-  whisper: {
-    color: 'rgba(255,255,255,0.5)',
+    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '15px',
+    lineHeight: 1.7, color: '#2a2520',
+    marginLeft: '40px', paddingLeft: '16px',
+    borderLeft: '2px solid rgba(0,0,0,0.08)',
+    marginTop: '12px', marginBottom: '12px',
     fontStyle: 'italic',
   },
+  indent: { paddingLeft: '24px' },
+  whisper: { fontStyle: 'italic' },
   social: {
-    fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '12px',
-    color: 'rgba(255,255,255,0.4)',
-    letterSpacing: '0.02em',
+    fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px',
+    color: '#5a5040', display: 'block', lineHeight: 1.7,
   },
+  braces: { color: '#8a8070' },
 };
 
 const L = ({ children, style }) => <span style={{ ...S.line, ...style }}>{children}</span>;
-const Br = ({ children }) => <span style={S.braces}>{children}</span>;
 
 export default function CityOfGhosts() {
   return (
@@ -84,11 +45,6 @@ export default function CityOfGhosts() {
         <div style={S.notebookHeader}>
           Moleskine notebook — unfinished draft — no final version confirmed
         </div>
-
-        <div style={S.corvidsIntro}>
-          This piece was found scrawled in a Moleskine notebook, unfinished. Notes in the margins suggest Rowan intended to expand on its themes but never did. Various revisions exist, but no final version was confirmed.
-        </div>
-
         <div style={S.body}>
           <div style={S.stanza}>
             <L>The city wakes. Alarms pierce the pre-dawn gloom.</L>
@@ -98,75 +54,46 @@ export default function CityOfGhosts() {
             <L>as the great machine of urbanity groans into motion.</L>
             <L>Gears of glass and steel grind against the sky.</L>
           </div>
-
           <div style={S.stanza}>
             <L>The city inhales.</L>
-            <L>In…</L>
-            <L style={S.indent}>Exhaust fumes and stale dreams</L>
-            <L>out…</L>
-            <L style={S.indent}>Hope dissipates like morning mist</L>
+            <L>In…</L><L style={S.indent}>Exhaust fumes and stale dreams</L>
+            <L>out…</L><L style={S.indent}>Hope dissipates like morning mist</L>
           </div>
-
           <div style={S.stanza}>
-            <L>Sirens wail their urgent song.</L>
-            <L>Horns blare a cacophonous chorus.</L>
-            <L>Beneath it all, a hum—</L>
-            <L>the endless drone of lives lived in parallel,</L>
-            <L>never touching.</L>
+            <L>Sirens wail their urgent song.</L><L>Horns blare a cacophonous chorus.</L>
+            <L>Beneath it all, a hum—</L><L>the endless drone of lives lived in parallel,</L><L>never touching.</L>
           </div>
-
           <div style={S.stanza}>
             <L>Whispers float on currents of static:</L>
-            <L style={S.whisper}>"You are here"</L>
-            <L>(but where is here?)</L>
-            <L style={S.whisper}>"You are one of us"</L>
-            <L>(but who are we?)</L>
-            <L style={S.whisper}>"You are alive"</L>
-            <L>(but what is life?)</L>
+            <L style={S.whisper}>"You are here"</L><L>(but where is here?)</L>
+            <L style={S.whisper}>"You are one of us"</L><L>(but who are we?)</L>
+            <L style={S.whisper}>"You are alive"</L><L>(but what is life?)</L>
           </div>
-
           <div style={S.marginNote}>
-            something about the BART's rhythm here:<br />
-            the city's pulse beneath our feet<br />
-            stations like pressure points<br />
-            acupuncture in concre<br />
+            something about the BART's rhythm here:<br/>
+            the city's pulse beneath our feet<br/>
+            stations like pressure points<br/>
+            acupuncture in concre<br/>
             that's shit--don't bother
           </div>
-
           <div style={S.stanza}>
-            <L>Glass towers pierce the sky,</L>
-            <L>mirrors upon mirrors.</L>
-            <L>Your face in every pane,</L>
-            <L>a thousand yous</L>
-            <L>All empty</L>
-            <L>All searching</L>
-            <L>for something real</L>
+            <L>Glass towers pierce the sky,</L><L>mirrors upon mirrors.</L>
+            <L>Your face in every pane,</L><L>a thousand yous</L>
+            <L>All empty</L><L>All searching</L><L>for something real</L>
           </div>
-
           <div style={S.stanza}>
-            <L>Cold glass against your palm,</L>
-            <L>your warmth leaving no trace.</L>
+            <L>Cold glass against your palm,</L><L>your warmth leaving no trace.</L>
             <L>You realize: You might be the ghost.</L>
           </div>
-
           <div style={S.stanza}>
-            <L>Neon dreams flicker in shop windows.</L>
-            <L>Mannequins wear your face,</L>
-            <L>peddling authenticity at discount prices.</L>
-            <L>You window-shop for a self,</L>
-            <L>but every option feels</L>
-            <L>secondhand,</L>
-            <L>pre-worn,</L>
-            <L>Hollow.</L>
+            <L>Neon dreams flicker in shop windows.</L><L>Mannequins wear your face,</L>
+            <L>peddling authenticity at discount prices.</L><L>You window-shop for a self,</L>
+            <L>but every option feels</L><L>secondhand,</L><L>pre-worn,</L><L>Hollow.</L>
           </div>
-
           <div style={S.marginNote}>
-            too on-nose?<br />
-            rework The metaphor.<br />
-            Something about startup pitch<br />
-            decks selling dreams instead?
+            too on-nose?<br/>rework The metaphor.<br/>
+            Something about startup pitch<br/>decks selling dreams instead?
           </div>
-
           <div style={S.stanza}>
             <L>The city's siren song echoes:</L>
             <L style={S.whisper}>"Be yourself" (in our incubator)</L>
@@ -174,106 +101,65 @@ export default function CityOfGhosts() {
             <L style={S.whisper}>"Love yourself" (through our platform)</L>
             <L style={S.whisper}>"Free yourself" (with our chains)</L>
           </div>
-
           <div style={S.stanza}>
-            <L>Wireless signals weave an invisible web.</L>
-            <L>Data flows like lifeblood,</L>
+            <L>Wireless signals weave an invisible web.</L><L>Data flows like lifeblood,</L>
             <L>bits and bytes the new currency of existence.</L>
-            <L>You reach out, touch a screen, feel nothing.</L>
-            <L>Are you transmitting or receiving?</L>
+            <L>You reach out, touch a screen, feel nothing.</L><L>Are you transmitting or receiving?</L>
           </div>
-
           <div style={S.marginNote}>
-            insert section on social media alienation?<br />
-            the dopamine hits of notifications,<br />
-            the endless scroll of other people's happiness,<br />
+            insert section on social media alienation?<br/>
+            the dopamine hits of notifications,<br/>
+            the endless scroll of other people's happiness,<br/>
             curated feeds of artificial joy
           </div>
-
           <div style={S.stanza}>
-            <span style={S.social}>@everyone @no one</span><br />
-            <span style={S.social}>#trending #forgotten</span><br />
-            <span style={S.social}>[LIKE] [DISLIKE]</span><br />
+            <span style={S.social}>@everyone @no one</span>
+            <span style={S.social}>#trending #forgotten</span>
+            <span style={S.social}>[LIKE] [DISLIKE]</span>
             <span style={S.social}>{'{SHARE}'} {'{ISOLATE}'}</span>
           </div>
-
           <div style={S.stanza}>
-            <L>Steel bones rise from concrete wombs.</L>
-            <L>Each new tower a monument to ambition,</L>
+            <L>Steel bones rise from concrete wombs.</L><L>Each new tower a monument to ambition,</L>
             <L>each demolished building a grave for forgotten dreams.</L>
-            <L>You watch the skyline shift, wondering</L>
-            <L>which part of you is being rebuilt,</L>
-            <L>which part torn down.</L>
+            <L>You watch the skyline shift, wondering</L><L>which part of you is being rebuilt,</L><L>which part torn down.</L>
           </div>
-
           <div style={S.marginNote}>
-            too bitter?<br />
-            No, fuck these venture<br />
-            capitalists turning the<br />
-            Mission into their<br />
-            playground
+            too bitter?<br/>No, fuck these venture<br/>capitalists turning the<br/>Mission into their<br/>playground
           </div>
-
           <div style={S.stanza}>
             <L>The city evolves:</L>
-            <L>Higher</L>
-            <L><Br>{'{emptier}'}</Br></L>
-            <L>Faster</L>
-            <L><Br>{'{lonelier}'}</Br></L>
-            <L>Brighter</L>
-            <L><Br>{'{blinder}'}</Br></L>
+            <L>Higher</L><L><span style={S.braces}>{'{emptier}'}</span></L>
+            <L>Faster</L><L><span style={S.braces}>{'{lonelier}'}</span></L>
+            <L>Brighter</L><L><span style={S.braces}>{'{blinder}'}</span></L>
           </div>
-
           <div style={S.marginNote}>
-            This city is eating itself<br />
-            and calling it disruption.
+            This city is eating itself<br/>and calling it disruption.
           </div>
-
           <div style={S.stanza}>
-            <L>Shadows of the past cling to crumbling corners,</L>
-            <L>history paved over for progress.</L>
-            <L>You reach for memories, but they slip through your fingers</L>
-            <L>like smoke,</L>
-            <L>like time,</L>
+            <L>Shadows of the past cling to crumbling corners,</L><L>history paved over for progress.</L>
+            <L>You reach for memories, but they slip through your fingers</L><L>like smoke,</L><L>like time,</L>
           </div>
-
           <div style={S.stanza}>
-            <L>In the Mission, abuelas still sweep their steps</L>
-            <L>like purpose.</L>
+            <L>In the Mission, abuelas still sweep their steps</L><L>like purpose.</L>
             <L>while coders queue for four-dollar toast</L>
           </div>
-
           <div style={S.stanza}>
-            <L>In basement hackerspaces</L>
-            <L>anarchists dream of liberation</L>
-            <L>through lines of code</L>
-            <L>but even revolution</L>
-            <L>has been monetized</L>
-            <L>disruption packaged</L>
-            <L>and sold back to us</L>
-            <L>in monthly subscriptions</L>
+            <L>In basement hackerspaces</L><L>anarchists dream of liberation</L><L>through lines of code</L>
+            <L>but even revolution</L><L>has been monetized</L><L>disruption packaged</L>
+            <L>and sold back to us</L><L>in monthly subscriptions</L>
           </div>
-
           <div style={S.marginNote}>
-            history erased by the stroke<br />
-            of a venture capitalist's pen
+            history erased by the stroke<br/>of a venture capitalist's pen
           </div>
-
           <div style={S.stanza}>
-            <L>In SOMA, tent cities huddle</L>
-            <L>in the shadows of unicorn startups</L>
-            <L>dreams and nightmares</L>
-            <L>sharing the same blocked IP address</L>
+            <L>In SOMA, tent cities huddle</L><L>in the shadows of unicorn startups</L>
+            <L>dreams and nightmares</L><L>sharing the same blocked IP address</L>
           </div>
-
           <div style={S.stanza}>
-            <L>Night falls. Lights flicker out one by one,</L>
-            <L>a reverse constellation.</L>
-            <L>In dark apartments, souls curl around their solitude,</L>
-            <L>dreaming of connection.</L>
+            <L>Night falls. Lights flicker out one by one,</L><L>a reverse constellation.</L>
+            <L>In dark apartments, souls curl around their solitude,</L><L>dreaming of connection.</L>
             <L>You lie awake, listening to the city's heartbeat,</L>
-            <L>a rhythm just out of sync with your own.</L>
-            <L>The dissonance aches in your bones.</L>
+            <L>a rhythm just out of sync with your own.</L><L>The dissonance aches in your bones.</L>
           </div>
         </div>
       </div>

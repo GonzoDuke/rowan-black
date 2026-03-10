@@ -2,379 +2,273 @@ import React from 'react';
 
 const S = {
   container: {
-    maxWidth: '720px',
+    maxWidth: '640px',
     margin: '0 auto',
-    padding: '48px 32px 80px',
+    padding: '40px 36px 60px',
   },
   poem: {
-    fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-    fontSize: '13.5px',
-    lineHeight: '1.8',
-    color: '#d4d4dc',
-    whiteSpace: 'pre-wrap',
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '17px',
+    lineHeight: 1.9,
+    color: '#1a1d24',
   },
-  stanza: {
-    marginBottom: '28px',
-  },
-  line: {
-    display: 'block',
-  },
-  indent: {
-    paddingLeft: '24px',
-  },
-  loud: {
-    fontWeight: 500,
-    color: '#e8e8f0',
-    letterSpacing: '0.04em',
-  },
-  paren: {
-    color: 'rgba(200,200,208,0.45)',
-  },
+  stanza: { marginBottom: '28px' },
+  line: { display: 'block' },
+  indent: { paddingLeft: '24px' },
+  loud: { fontWeight: 600, letterSpacing: '0.03em' },
+  paren: { color: '#7a8090' },
   annotation: {
-    borderTop: '1px solid rgba(200,200,208,0.08)',
+    borderTop: '1px solid rgba(0,0,0,0.08)',
     marginTop: '48px',
     paddingTop: '24px',
   },
   annotationLabel: {
     fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '9px',
-    fontWeight: 500,
-    color: 'rgba(200,200,208,0.3)',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    marginBottom: '12px',
+    fontSize: '10px', fontWeight: 600,
+    color: '#9099a8', letterSpacing: '0.08em',
+    textTransform: 'uppercase', marginBottom: '12px',
   },
   note: {
     fontFamily: "'IBM Plex Mono', monospace",
-    fontSize: '11.5px',
-    lineHeight: '1.75',
-    color: 'rgba(200,200,208,0.4)',
-    fontStyle: 'italic',
-    marginBottom: '8px',
+    fontSize: '12px', lineHeight: 1.75,
+    color: '#6a7080', marginBottom: '8px',
   },
-  noteNumber: {
-    fontStyle: 'normal',
-    color: 'rgba(200,200,208,0.25)',
-    fontSize: '10px',
-    verticalAlign: 'super',
-    marginRight: '4px',
+  noteNum: {
+    color: '#9099a8', fontSize: '10px',
+    verticalAlign: 'super', marginRight: '4px',
+  },
+  sup: {
+    fontSize: '11px', color: '#9099a8',
+    verticalAlign: 'super', marginLeft: '2px',
   },
 };
 
-const Line = ({ children, style }) => (
-  <span style={{ ...S.line, ...style }}>{children}</span>
-);
-
-const Loud = ({ children }) => (
-  <span style={S.loud}>{children}</span>
-);
-
-const Paren = ({ children }) => (
-  <span style={S.paren}>{children}</span>
-);
-
-const Sup = ({ n }) => (
-  <span style={{ fontSize: '9px', color: 'rgba(200,200,208,0.3)', verticalAlign: 'super', marginLeft: '2px' }}>{n}</span>
-);
+const L = ({ children, style }) => <span style={{ ...S.line, ...style }}>{children}</span>;
+const Loud = ({ children }) => <span style={S.loud}>{children}</span>;
+const Paren = ({ children }) => <span style={S.paren}>{children}</span>;
+const Sup = ({ n }) => <span style={S.sup}>{n}</span>;
 
 export default function Towers() {
   return (
     <div style={S.container}>
       <div style={S.poem}>
-        {/* Stanza 1 */}
         <div style={S.stanza}>
-          <Line>mrs walker talking about algebra when</Line>
-          <Line>jason kicks my chair & points at</Line>
-          <Line>karen crying in the hallway holding</Line>
-          <Line>a walkman radio<Sup n="1" /> to her ear</Line>
-          <Line>something about a plane &</Line>
-          <Line>new york &</Line>
-          <Line>accident? &</Line>
-          <Line>karen's cousin works in</Line>
+          <L>mrs walker talking about algebra when</L>
+          <L>jason kicks my chair & points at</L>
+          <L>karen crying in the hallway holding</L>
+          <L>a walkman radio<Sup n="1" /> to her ear</L>
+          <L>something about a plane &</L>
+          <L>new york &</L>
+          <L>accident? &</L>
+          <L>karen's cousin works in</L>
         </div>
-
-        {/* Stanza 2 */}
         <div style={S.stanza}>
-          <Line>principal's voice</Line>
-          <Line>crackling through speakers</Line>
-          <Line>telling teachers to turn on TVs &</Line>
-          <Line>suddenly math doesn't matter because</Line>
-          <Line>sky is too blue on screen &</Line>
-          <Line>smoke climbing like black snakes &</Line>
-          <Line>newscaster's voice breaking like</Line>
-          <Line>chalk when second plane hits &</Line>
+          <L>principal's voice</L>
+          <L>crackling through speakers</L>
+          <L>telling teachers to turn on TVs &</L>
+          <L>suddenly math doesn't matter because</L>
+          <L>sky is too blue on screen &</L>
+          <L>smoke climbing like black snakes &</L>
+          <L>newscaster's voice breaking like</L>
+          <L>chalk when second plane hits &</L>
         </div>
-
-        {/* Stanza 3 */}
         <div style={S.stanza}>
-          <Line><Paren>(not accident</Paren></Line>
-          <Line><Paren>not accident)</Paren></Line>
+          <L><Paren>(not accident</Paren></L>
+          <L><Paren>not accident)</Paren></L>
         </div>
-
-        {/* Stanza 4 */}
         <div style={S.stanza}>
-          <Line><Loud>WHO DID THIS</Loud></Line>
-          <Line><Loud>WHO DID</Loud></Line>
+          <L><Loud>WHO DID THIS</Loud></L>
+          <L><Loud>WHO DID</Loud></L>
         </div>
-
-        {/* Stanza 5 */}
         <div style={S.stanza}>
-          <Line><Paren>(shut up shut up the tv won't</Paren></Line>
-          <Line><Paren>shut up)</Paren></Line>
+          <L><Paren>(shut up shut up the tv won't</Paren></L>
+          <L><Paren>shut up)</Paren></L>
         </div>
-
-        {/* Stanza 6 */}
         <div style={S.stanza}>
-          <Line>watching it again & again &</Line>
-          <Line>again &</Line>
-          <Line>smoking tower</Line>
-          <Line>smoking tower</Line>
-          <Line>smoking</Line>
+          <L>watching it again & again &</L>
+          <L>again &</L>
+          <L>smoking tower</L>
+          <L>smoking tower</L>
+          <L>smoking</L>
         </div>
-
-        {/* Stanza 7 */}
         <div style={S.stanza}>
-          <Line>plane disappears into building like magic</Line>
-          <Line>but</Line>
-          <Line>bad magic</Line>
-          <Line>wrong magic</Line>
-          <Line>black magic</Line>
+          <L>plane disappears into building like magic</L>
+          <L>but</L>
+          <L>bad magic</L>
+          <L>wrong magic</L>
+          <L>black magic</L>
         </div>
-
-        {/* Stanza 8 */}
         <div style={S.stanza}>
-          <Line>between classes everyone running to</Line>
-          <Line>different rooms with TVs like maybe</Line>
-          <Line>different channels will show</Line>
-          <Line>different truth<Sup n="2" /></Line>
+          <L>between classes everyone running to</L>
+          <L>different rooms with TVs like maybe</L>
+          <L>different channels will show</L>
+          <L>different truth<Sup n="2" /></L>
         </div>
-
-        {/* Stanza 9 */}
         <div style={S.stanza}>
-          <Line>jenny martinez puked in homeroom &</Line>
-          <Line>mr collins just stared at the wall &</Line>
-          <Line>someone laughed but then stopped &</Line>
+          <L>jenny martinez puked in homeroom &</L>
+          <L>mr collins just stared at the wall &</L>
+          <L>someone laughed but then stopped &</L>
         </div>
-
-        {/* Stanza 10 */}
         <div style={S.stanza}>
-          <Line><Loud>BREAKING NEWS</Loud></Line>
-          <Line>everything is breaking</Line>
+          <L><Loud>BREAKING NEWS</Loud></L>
+          <L>everything is breaking</L>
         </div>
-
+        <div style={S.stanza}><L><Loud>BREAKING NEWS</Loud></L></div>
+        <div style={S.stanza}><L style={{ textAlign: 'center', letterSpacing: '0.3em' }}><Loud>BREAKING</Loud></L></div>
         <div style={S.stanza}>
-          <Line><Loud>BREAKING NEWS</Loud></Line>
+          <L>mrs peterson calling our classroom</L>
+          <L>voice shaking like</L>
+          <L>earthquakes says</L>
+          <L>pentagon hit</L>
+          <L>pentagon hit &</L>
+          <L>what's happening<Sup n="3" /></L>
+          <L>what's</L>
         </div>
-
+        <div style={S.stanza}><L>second tower falling during history class<Sup n="4" /> &</L></div>
         <div style={S.stanza}>
-          <Line style={{ textAlign: 'center', letterSpacing: '0.3em' }}><Loud>BREAKING</Loud></Line>
+          <L><Loud>TIME</Loud></L>
+          <L><Loud>SLOWS</Loud></L>
+          <L style={{ textAlign: 'right' }}><Loud>DOWN</Loud></L>
         </div>
-
-        {/* Stanza 11 */}
         <div style={S.stanza}>
-          <Line>mrs peterson calling our classroom</Line>
-          <Line>voice shaking like</Line>
-          <Line>earthquakes says</Line>
-          <Line>pentagon hit</Line>
-          <Line>pentagon hit &</Line>
-          <Line>what's happening<Sup n="3" /></Line>
-          <Line>what's</Line>
+          <L>people falling but don't look</L>
+          <L style={S.indent}>don't</L>
+          <L>look but I</L>
+          <L>looked &</L>
         </div>
-
-        {/* Stanza 12 */}
+        <div style={S.stanza}><L><Paren>(can't unwatched it now)</Paren></L></div>
         <div style={S.stanza}>
-          <Line>second tower falling during history class<Sup n="4" /> &</Line>
+          <L>dust clouds eating people on tv</L>
+          <L>dust clouds eating buildings</L>
+          <L>dust clouds eating new york &</L>
+          <L>here in ohio the sky is so blue it hurts</L>
         </div>
-
         <div style={S.stanza}>
-          <Line><Loud>TIME</Loud></Line>
-          <Line><Loud>SLOWS</Loud></Line>
-          <Line style={{ textAlign: 'right' }}><Loud>DOWN</Loud></Line>
+          <L>somewhere whispers about pennsylvania</L>
+          <L>plane crash & plane crash & plane crash</L>
+          <L>how many planes today</L>
+          <L>how many</L>
+          <L>are still up there</L>
+          <L>still</L>
         </div>
-
-        {/* Stanza 13 */}
         <div style={S.stanza}>
-          <Line>people falling but don't look</Line>
-          <Line style={S.indent}>don't</Line>
-          <Line>look but I</Line>
-          <Line>looked &</Line>
+          <L>principal says stay calm but his voice</L>
+          <L>sounds like</L>
+          <L>static</L>
+          <L>sounds like</L>
+          <L>sirens sounds like everything breaking</L>
         </div>
-
+        <div style={S.stanza}><L><Loud>EVERYTHING IS BREAKING</Loud></L></div>
         <div style={S.stanza}>
-          <Line><Paren>(can't unwatched it now)</Paren></Line>
+          <L>first tower won't stop burning &</L>
+          <L>burning & burning &</L>
+          <L>mrs walker crying now too &</L>
+          <L>everything</L>
+          <L>burning</L>
         </div>
-
-        {/* Stanza 14 */}
         <div style={S.stanza}>
-          <Line>dust clouds eating people on tv</Line>
-          <Line>dust clouds eating buildings</Line>
-          <Line>dust clouds eating new york &</Line>
-          <Line>here in ohio the sky is so blue it hurts</Line>
+          <L>want to call mom but phones don't work</L>
+          <L>circuits busy circuits busy</L>
+          <L>everyone trying to reach</L>
+          <L>someone</L>
+          <L>somewhere</L>
         </div>
-
-        {/* Stanza 15 */}
         <div style={S.stanza}>
-          <Line>somewhere whispers about pennsylvania</Line>
-          <Line>plane crash & plane crash & plane crash</Line>
-          <Line>how many planes today</Line>
-          <Line>how many</Line>
-          <Line>are still up there</Line>
-          <Line>still</Line>
+          <L>counting seconds between</L>
+          <L>heartbeats because numbers</L>
+          <L>should still work should still</L>
+          <L>mean something but</L>
         </div>
-
-        {/* Stanza 16 */}
         <div style={S.stanza}>
-          <Line>principal says stay calm but his voice</Line>
-          <Line>sounds like</Line>
-          <Line>static</Line>
-          <Line>sounds like</Line>
-          <Line>sirens sounds like everything breaking</Line>
+          <L>snow in september but not snow</L>
+          <L>ash papers fragments falling</L>
+          <L><Paren>(on tv not here not here but</Paren></L>
+          <L><Paren>feels here feels)</Paren></L>
         </div>
-
         <div style={S.stanza}>
-          <Line><Loud>EVERYTHING IS BREAKING</Loud></Line>
+          <L>tommy says we should bomb them but</L>
+          <L>who is them & where is them &</L>
+          <L>why is them & the questions taste like</L>
+          <L>ashes in my mouth</L>
         </div>
-
-        {/* Stanza 17 */}
         <div style={S.stanza}>
-          <Line>first tower won't stop burning &</Line>
-          <Line>burning & burning &</Line>
-          <Line>mrs walker crying now too &</Line>
-          <Line>everything</Line>
-          <Line>burning</Line>
+          <L>first tower falls between periods<Sup n="5" /> &</L>
+          <L>library frozen &</L>
+          <L>TV flickering too loud &</L>
+          <L>someone whispers oh my god &</L>
+          <L>no one turns the page</L>
         </div>
-
-        {/* Stanza 18 */}
         <div style={S.stanza}>
-          <Line>want to call mom but phones don't work</Line>
-          <Line>circuits busy circuits busy</Line>
-          <Line>everyone trying to reach</Line>
-          <Line>someone</Line>
-          <Line>somewhere</Line>
+          <L>mom comes to get me early like</L>
+          <L>half the school parents</L>
+          <L>running</L>
+          <L>through halls like ghosts like</L>
+          <L>someone's chasing them</L>
         </div>
-
-        {/* Stanza 19 */}
         <div style={S.stanza}>
-          <Line>counting seconds between</Line>
-          <Line>heartbeats because numbers</Line>
-          <Line>should still work should still</Line>
-          <Line>mean something but</Line>
+          <L>car ride home radio all static &</L>
+          <L>mom's hands shaking on wheel &</L>
+          <L>everything feels wrong like</L>
+          <L>world tilted</L>
+          <L style={{ textAlign: 'right' }}>sideways</L>
         </div>
-
-        {/* Stanza 20 */}
         <div style={S.stanza}>
-          <Line>snow in september but not snow</Line>
-          <Line>ash papers fragments falling</Line>
-          <Line><Paren>(on tv not here not here but</Paren></Line>
-          <Line><Paren>feels here feels)</Paren></Line>
+          <L>dad comes home weird tie crooked</L>
+          <L>hair messy speaking words that don't</L>
+          <L>connect like puzzle pieces scattered like</L>
+          <L><Paren>(everything</Paren></L>
+          <L><Paren>scattered)</Paren></L>
         </div>
-
-        {/* Stanza 21 */}
         <div style={S.stanza}>
-          <Line>tommy says we should bomb them but</Line>
-          <Line>who is them & where is them &</Line>
-          <Line>why is them & the questions taste like</Line>
-          <Line>ashes in my mouth</Line>
+          <L><Loud>DEVELOPING STORY DEVELOPING</Loud></L>
+          <L>but nothing develops just same</L>
+          <L>footage loop loop loop loop &</L>
+          <L>loop & loop & my head won't</L>
         </div>
-
-        {/* Stanza 22 */}
         <div style={S.stanza}>
-          <Line>first tower falls between periods<Sup n="5" /> &</Line>
-          <Line>library frozen &</Line>
-          <Line>TV flickering too loud &</Line>
-          <Line>someone whispers oh my god &</Line>
-          <Line>no one turns the page</Line>
+          <L>tonight's homework canceled because</L>
+          <L>how do you subtract when</L>
+          <L>everything's already been</L>
+          <L>taken away</L>
         </div>
-
-        {/* Stanza 23 */}
         <div style={S.stanza}>
-          <Line>mom comes to get me early like</Line>
-          <Line>half the school parents</Line>
-          <Line>running</Line>
-          <Line>through halls like ghosts like</Line>
-          <Line>someone's chasing them</Line>
+          <L>sprinklers still tick tick ticking &</L>
+          <L>grass still growing & sun still</L>
+          <L>setting like it doesn't know</L>
+          <L>like</L>
+          <L>it doesn't care</L>
+          <L>like</L>
         </div>
-
-        {/* Stanza 24 */}
         <div style={S.stanza}>
-          <Line>car ride home radio all static &</Line>
-          <Line>mom's hands shaking on wheel &</Line>
-          <Line>everything feels wrong like</Line>
-          <Line>world tilted</Line>
-          <Line style={{ textAlign: 'right' }}>sideways</Line>
+          <L>static growing louder in my head like</L>
+          <L>tv snow like radio fuzz like</L>
+          <L>space between stations</L>
+          <L>between</L>
+          <L>thoughts between breathsbetweenwords</L>
         </div>
-
-        {/* Stanza 25 */}
         <div style={S.stanza}>
-          <Line>dad comes home weird tie crooked</Line>
-          <Line>hair messy speaking words that don't</Line>
-          <Line>connect like puzzle pieces scattered like</Line>
-          <Line><Paren>(everything</Paren></Line>
-          <Line><Paren>scattered)</Paren></Line>
+          <L>in my head the towers fall &</L>
+          <L>fall & fall & fall &</L>
+          <L>never stop falling &</L>
+          <L>we never stop</L>
+          <L>watching &</L>
         </div>
-
-        {/* Stanza 26 */}
         <div style={S.stanza}>
-          <Line><Loud>DEVELOPING STORY DEVELOPING</Loud></Line>
-          <Line>but nothing develops just same</Line>
-          <Line>footage loop loop loop loop &</Line>
-          <Line>loop & loop & my head won't</Line>
-        </div>
-
-        {/* Stanza 27 */}
-        <div style={S.stanza}>
-          <Line>tonight's homework canceled because</Line>
-          <Line>how do you subtract when</Line>
-          <Line>everything's already been</Line>
-          <Line>taken away</Line>
-        </div>
-
-        {/* Stanza 28 */}
-        <div style={S.stanza}>
-          <Line>sprinklers still tick tick ticking &</Line>
-          <Line>grass still growing & sun still</Line>
-          <Line>setting like it doesn't know</Line>
-          <Line>like</Line>
-          <Line>it doesn't care</Line>
-          <Line>like</Line>
-        </div>
-
-        {/* Stanza 29 */}
-        <div style={S.stanza}>
-          <Line>static growing louder in my head like</Line>
-          <Line>tv snow like radio fuzz like</Line>
-          <Line>space between stations</Line>
-          <Line>between</Line>
-          <Line>thoughts between breathsbetweenwords</Line>
-        </div>
-
-        {/* Stanza 30 */}
-        <div style={S.stanza}>
-          <Line>in my head the towers fall &</Line>
-          <Line>fall & fall & fall &</Line>
-          <Line>never stop falling &</Line>
-          <Line>we never stop</Line>
-          <Line>watching &</Line>
-        </div>
-
-        {/* Stanza 31 */}
-        <div style={S.stanza}>
-          <Line>tomorrow feels like lying</Line>
-          <Line>feels like</Line>
-          <Line>something we tell ourselves when</Line>
-          <Line>today won't end</Line>
-          <Line>today won't</Line>
+          <L>tomorrow feels like lying</L>
+          <L>feels like</L>
+          <L>something we tell ourselves when</L>
+          <L>today won't end</L>
+          <L>today won't</L>
         </div>
       </div>
 
-      {/* Corvids Annotations */}
       <div style={S.annotation}>
         <div style={S.annotationLabel}>Annotations</div>
-        <p style={S.note}><span style={S.noteNumber}>1</span> Walkman radios were portable AM/FM radio players, common in the 1990s and early 2000s.</p>
-        <p style={S.note}><span style={S.noteNumber}>2</span> Many schools turned on televisions in classrooms on September 11, 2001. Major news networks aired footage continuously.</p>
-        <p style={S.note}><span style={S.noteNumber}>3</span> At 9:37 AM EDT, American Airlines Flight 77 crashed into the Pentagon.</p>
-        <p style={S.note}><span style={S.noteNumber}>4</span> The South Tower collapsed at 9:59 AM EDT after burning for 56 minutes.</p>
-        <p style={S.note}><span style={S.noteNumber}>5</span> The North Tower collapsed at 10:28 AM EDT after burning for 102 minutes.</p>
+        <p style={S.note}><span style={S.noteNum}>1</span> Walkman radios were portable AM/FM radio players, common in the 1990s and early 2000s.</p>
+        <p style={S.note}><span style={S.noteNum}>2</span> Many schools turned on televisions in classrooms on September 11, 2001. Major news networks aired footage continuously.</p>
+        <p style={S.note}><span style={S.noteNum}>3</span> At 9:37 AM EDT, American Airlines Flight 77 crashed into the Pentagon.</p>
+        <p style={S.note}><span style={S.noteNum}>4</span> The South Tower collapsed at 9:59 AM EDT after burning for 56 minutes.</p>
+        <p style={S.note}><span style={S.noteNum}>5</span> The North Tower collapsed at 10:28 AM EDT after burning for 102 minutes.</p>
       </div>
     </div>
   );
