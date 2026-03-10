@@ -1,41 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { PIECES, PERIODS } from '../data/pieces.js';
 
-const treatmentExt = {
-  poem: '.txt',
-  found: '.doc',
-  fragment: '.frag',
-  capstone: '.sys',
-};
+/* ══════════════════════════════
+   CONSTANTS
+   ══════════════════════════════ */
 
-const treatmentSize = {
-  poem: () => `${(Math.random() * 12 + 2).toFixed(1)} KB`,
-  found: () => `${(Math.random() * 24 + 4).toFixed(1)} KB`,
-  fragment: () => `${(Math.random() * 3 + 0.4).toFixed(1)} KB`,
-  capstone: () => `${(Math.random() * 80 + 40).toFixed(1)} KB`,
-};
+const FILE_EXT = { poem: '.txt', found: '.doc', fragment: '.frag', capstone: '.sys' };
+
+const BOOT_LINES = [
+  'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1',
+  'Initializing archive protocol...',
+  'Scanning archived media...',
+  'Reconstructing file table...',
+  PIECES.length + ' objects detected',
+  PIECES.filter(p => p.status === 'live').length + ' recovered // ' + PIECES.filter(p => p.status !== 'live').length + ' pending reconstruction',
+  '',
+  'ARCHIVE READY',
+];
+
+const BOOT_DELAYS = [0, 800, 1800, 2800, 4000, 5000, 5800, 6400];
+
+const DESC_SENTENCES = [
+  'Recovered archive.',
+  ' Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective.',
+  ' Some files are damaged. Some are incomplete.',
+  ' All are preserved as found.',
+  '\n\nOpen a directory below to browse the collection.',
+];
+
+/* ══════════════════════════════
+   FILE ENTRY
+   ══════════════════════════════ */
 
 function FileEntry({ piece, index }) {
   const isLive = piece.status === 'live';
-  const ext = treatmentExt[piece.treatment] || '.txt';
-  const [size] = useState(() => treatmentSize[piece.treatment]?.() || '2.0 KB');
+  const ext = FILE_EXT[piece.treatment] || '.txt';
+  const sizeRef = useRef((Math.random() * 14 + 1.5).toFixed(1) + ' KB');
   const [hovered, setHovered] = useState(false);
 
   const color = piece.treatment === 'capstone' ? '#ff4444'
     : piece.treatment === 'found' ? '#e0e0e0'
-    : piece.treatment === 'fragment' ? '#808898'
+    : piece.treatment === 'fragment' ? '#888899'
     : '#cccccc';
-
-  const fileName = piece.id + ext;
 
   return (
     <a
-      href={isLive ? `/${piece.id}` : undefined}
+      href={isLive ? '/' + piece.id : undefined}
       style={{
         display: 'grid',
         gridTemplateColumns: '32px 1fr 80px 100px 60px',
-        gap: '0',
-        alignItems: 'baseline',
         padding: '4px 0',
         textDecoration: 'none',
         opacity: isLive ? 1 : 0.25,
@@ -47,40 +60,36 @@ function FileEntry({ piece, index }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <span style={{ fontFamily: 'inherit', fontSize: '12px', color: 'rgba(255,255,255,0.15)', textAlign: 'right', paddingRight: '12px' }}>
+      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.15)', textAlign: 'right', paddingRight: '12px' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
       <span style={{ color: hovered && isLive ? '#4a9eff' : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {fileName}
+        {piece.id}{ext}
       </span>
-      <span style={{ color: 'rgba(255,255,255,0.2)', textAlign: 'right' }}>{size}</span>
+      <span style={{ color: 'rgba(255,255,255,0.2)', textAlign: 'right' }}>{sizeRef.current}</span>
       <span style={{ color: 'rgba(255,255,255,0.15)', textAlign: 'right' }}>{piece.year}</span>
-      <span style={{
-        color: isLive ? '#39ff14' : 'rgba(255,255,255,0.15)',
-        textAlign: 'right',
-        fontSize: '11px',
-      }}>
+      <span style={{ color: isLive ? '#39ff14' : 'rgba(255,255,255,0.15)', textAlign: 'right', fontSize: '11px' }}>
         {isLive ? 'OK' : '---'}
       </span>
     </a>
   );
 }
 
+/* ══════════════════════════════
+   DIRECTORY BLOCK
+   ══════════════════════════════ */
+
 function DirectoryBlock({ period, pieces, startIndex }) {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ marginBottom: '24px' }}>
       <div
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen(o => !o)}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          cursor: 'pointer',
-          padding: '6px 0',
+          display: 'flex', alignItems: 'center', gap: '8px',
+          cursor: 'pointer', padding: '6px 0',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
-          marginBottom: '4px',
-          userSelect: 'none',
+          marginBottom: '4px', userSelect: 'none',
         }}
       >
         <span style={{ color: '#4a9eff', fontSize: '12px', width: '14px' }}>{open ? 'v' : '>'}</span>
@@ -94,55 +103,63 @@ function DirectoryBlock({ period, pieces, startIndex }) {
       </div>
       {open && (
         <div style={{ paddingLeft: '14px' }}>
-          {pieces.map((p, i) => (
-            <FileEntry key={p.id} piece={p} index={startIndex + i} />
-          ))}
+          {pieces.map((p, i) => <FileEntry key={p.id} piece={p} index={startIndex + i} />)}
         </div>
       )}
     </div>
   );
 }
 
+/* ══════════════════════════════
+   BOOT SEQUENCE
+   ══════════════════════════════ */
+
 function BootSequence({ onComplete }) {
-  const [lines, setLines] = useState([]);
+  const [lineCount, setLineCount] = useState(0);
   const [showTitle, setShowTitle] = useState(false);
-  const bootLines = [
-    { text: 'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1', delay: 0 },
-    { text: 'Initializing archive protocol...', delay: 600 },
-    { text: 'Scanning archived media...', delay: 1400 },
-    { text: 'Reconstructing file table...', delay: 2400 },
-    { text: `${PIECES.length} objects detected`, delay: 3600 },
-    { text: `${PIECES.filter(p => p.status === "live").length} recovered // ${PIECES.filter(p => p.status !== "live").length} pending reconstruction`, delay: 4600 },
-    { text: '', delay: 5400 },
-    { text: 'ARCHIVE READY', delay: 6000 },
-  ];
+  const mountedRef = useRef(true);
 
   useEffect(() => {
-    const titleTimeout = setTimeout(() => setShowTitle(true), 800);
-    const timeouts = bootLines.map((line, i) =>
+    mountedRef.current = true;
+
+    // Show title after 600ms
+    const titleTimer = setTimeout(() => {
+      if (mountedRef.current) setShowTitle(true);
+    }, 600);
+
+    // Schedule each boot line
+    const lineTimers = BOOT_DELAYS.map((delay, i) =>
       setTimeout(() => {
-        setLines(prev => [...prev, line.text]);
-        if (i === bootLines.length - 1) {
-          setTimeout(onComplete, 1200);
-        }
-      }, line.delay)
+        if (mountedRef.current) setLineCount(i + 1);
+      }, delay)
     );
+
+    // Transition to archive after last line
+    const completeTimer = setTimeout(() => {
+      if (mountedRef.current) onComplete();
+    }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1200);
+
+    // Safety valve: force complete after 10s no matter what
+    const safetyTimer = setTimeout(() => {
+      if (mountedRef.current) onComplete();
+    }, 10000);
+
     return () => {
-      clearTimeout(titleTimeout);
-      timeouts.forEach(clearTimeout);
+      mountedRef.current = false;
+      clearTimeout(titleTimer);
+      clearTimeout(completeTimer);
+      clearTimeout(safetyTimer);
+      lineTimers.forEach(clearTimeout);
     };
-  }, []);
+  }, [onComplete]);
 
   return (
     <div style={{
       minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
       padding: '32px',
     }}>
-      {/* Bold title */}
       <div style={{
         fontFamily: "'Space Grotesk', Arial, sans-serif",
         fontSize: 'clamp(22px, 4vw, 34px)',
@@ -160,13 +177,12 @@ function BootSequence({ onComplete }) {
         <span style={{ fontWeight: 600 }}>Rowan Black</span>
       </div>
 
-      {/* Boot log */}
       <div style={{ maxWidth: '520px', width: '100%' }}>
-        {lines.map((line, i) => (
+        {BOOT_LINES.slice(0, lineCount).map((line, i) => (
           <div key={i} style={{
             fontSize: '12px',
             lineHeight: '2',
-            color: i === lines.length - 1 && line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(255,255,255,0.5)',
+            color: line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(255,255,255,0.5)',
             fontWeight: line === 'ARCHIVE READY' ? 500 : 300,
             letterSpacing: line === 'ARCHIVE READY' ? '0.12em' : '0.02em',
           }}>
@@ -174,156 +190,110 @@ function BootSequence({ onComplete }) {
           </div>
         ))}
         <span style={{
-          display: 'inline-block',
-          width: '7px',
-          height: '14px',
+          display: 'inline-block', width: '7px', height: '14px',
           background: 'rgba(255,255,255,0.5)',
           animation: 'cursor-blink 1s step-end infinite',
-          verticalAlign: 'text-bottom',
-          marginLeft: '2px',
+          verticalAlign: 'text-bottom', marginLeft: '2px',
         }} />
       </div>
     </div>
   );
 }
 
+/* ══════════════════════════════
+   TERMINAL TEXT (letter by letter)
+   ══════════════════════════════ */
+
 function TerminalText() {
-  const [displayed, setDisplayed] = useState('');
-  const [cursorVisible, setCursorVisible] = useState(true);
+  const [charCount, setCharCount] = useState(0);
+  const fullText = DESC_SENTENCES.join('');
+  const mountedRef = useRef(true);
 
-  const sentences = [
-    'Recovered archive.',
-    ' Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective.',
-    ' Some files are damaged. Some are incomplete.',
-    ' All are preserved as found.',
-    '\n\nOpen a directory below to browse the collection.',
-  ];
-
-  const fullText = sentences.join('');
+  // Pre-compute sentence end positions for pause logic
+  const sentenceEnds = useRef((() => {
+    const ends = [];
+    let pos = 0;
+    for (const s of DESC_SENTENCES) { pos += s.length; ends.push(pos); }
+    return ends;
+  })());
 
   useEffect(() => {
-    let charIndex = 0;
-    let sentenceIndex = 0;
-    let currentPos = 0;
-    let timeout;
+    mountedRef.current = true;
+    let idx = 0;
+    let timer;
 
-    const sentenceEnds = [];
-    let running = 0;
-    for (const s of sentences) {
-      running += s.length;
-      sentenceEnds.push(running);
+    function tick() {
+      if (!mountedRef.current || idx >= fullText.length) return;
+      idx++;
+      setCharCount(idx);
+      const isPause = sentenceEnds.current.includes(idx) && idx < fullText.length;
+      timer = setTimeout(tick, isPause ? 400 : 25);
     }
 
-    function typeNext() {
-      if (charIndex >= fullText.length) return;
-      charIndex++;
-      setDisplayed(fullText.slice(0, charIndex));
-
-      const isPause = sentenceEnds.includes(charIndex) && charIndex < fullText.length;
-      const delay = isPause ? 400 : 25;
-
-      timeout = setTimeout(typeNext, delay);
-    }
-
-    timeout = setTimeout(typeNext, 500);
-
-    const cursorInterval = setInterval(() => {
-      setCursorVisible(v => !v);
-    }, 530);
-
-    return () => {
-      clearTimeout(timeout);
-      clearInterval(cursorInterval);
-    };
+    timer = setTimeout(tick, 500);
+    return () => { mountedRef.current = false; clearTimeout(timer); };
   }, []);
 
-  const parts = displayed.split('\n\n');
-  const mainText = parts[0] || '';
+  const visible = fullText.slice(0, charCount);
+  const parts = visible.split('\n\n');
+  const main = parts[0] || '';
   const hint = parts[1] || '';
+  const done = charCount >= fullText.length;
 
   return (
     <div style={{ marginBottom: '32px', maxWidth: '600px' }}>
-      <div style={{
-        fontSize: '12px',
-        lineHeight: 1.7,
-        fontWeight: 300,
-        color: 'rgba(255,255,255,0.45)',
-      }}>
-        {mainText}
+      <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: 'rgba(255,255,255,0.45)' }}>
+        {main}
+        {!hint && !done && <span style={{
+          display: 'inline-block', width: '6px', height: '13px',
+          background: 'rgba(255,255,255,0.4)',
+          animation: 'cursor-blink 1s step-end infinite',
+          verticalAlign: 'text-bottom', marginLeft: '1px',
+        }} />}
       </div>
       {hint && (
-        <div style={{
-          fontSize: '12px',
-          lineHeight: 1.7,
-          fontWeight: 300,
-          color: '#4a9eff',
-          opacity: 0.6,
-          marginTop: '12px',
-        }}>
+        <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: '#4a9eff', opacity: 0.6, marginTop: '12px' }}>
           {hint}
+          {!done && <span style={{
+            display: 'inline-block', width: '6px', height: '13px',
+            background: 'rgba(74,158,255,0.5)',
+            animation: 'cursor-blink 1s step-end infinite',
+            verticalAlign: 'text-bottom', marginLeft: '1px',
+          }} />}
         </div>
       )}
-      <span style={{
-        display: 'inline-block',
-        width: '6px',
-        height: '13px',
-        background: cursorVisible ? 'rgba(255,255,255,0.4)' : 'transparent',
-        verticalAlign: 'text-bottom',
-        marginLeft: '1px',
-      }} />
     </div>
   );
 }
 
+/* ══════════════════════════════
+   ARCHIVE (main view)
+   ══════════════════════════════ */
+
 function Archive() {
-  let runningIndex = 0;
+  let idx = 0;
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      animation: 'fade-in 0.8s ease forwards',
-    }}>
-      {/* Header */}
-      <header style={{
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '48px 32px 0',
-      }}>
-        <div style={{
-          fontSize: '10px',
-          color: 'rgba(255,255,255,0.2)',
-          letterSpacing: '0.08em',
-          marginBottom: '20px',
-        }}>
+    <div style={{ minHeight: '100vh', animation: 'fade-in 0.8s ease forwards' }}>
+      <header style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 32px 0' }}>
+        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.08em', marginBottom: '20px' }}>
           corvids@archive:~$ ls -la /collected-works/rowan-black/
         </div>
 
         <h1 style={{
           fontFamily: "'Space Grotesk', Arial, sans-serif",
-          fontSize: 'clamp(24px, 4.5vw, 38px)',
-          fontWeight: 300,
-          color: '#ffffff',
-          lineHeight: 1.1,
-          letterSpacing: '-0.02em',
-          marginBottom: '12px',
+          fontSize: 'clamp(24px, 4.5vw, 38px)', fontWeight: 300,
+          color: '#ffffff', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '12px',
         }}>
-          The Collected Works of{' '}
-          <span style={{ fontWeight: 600 }}>Rowan Black</span>
+          The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
         </h1>
 
         <TerminalText />
 
-        {/* Column headers */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '32px 1fr 80px 100px 60px',
-          padding: '6px 0',
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          marginBottom: '8px',
-          fontSize: '9px',
-          color: 'rgba(255,255,255,0.25)',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
+          display: 'grid', gridTemplateColumns: '32px 1fr 80px 100px 60px',
+          padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '8px',
+          fontSize: '9px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
           <span style={{ textAlign: 'right', paddingRight: '12px' }}>#</span>
           <span>File</span>
@@ -333,72 +303,40 @@ function Archive() {
         </div>
       </header>
 
-      {/* File listing */}
-      <main style={{
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '0 32px 80px',
-      }}>
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '0 32px 80px' }}>
         {PERIODS.map(period => {
-          const periodPieces = PIECES.filter(p => p.period === period.id);
-          const block = (
-            <DirectoryBlock
-              key={period.id}
-              period={period}
-              pieces={periodPieces}
-              startIndex={runningIndex}
-            />
-          );
-          runningIndex += periodPieces.length;
+          const pp = PIECES.filter(p => p.period === period.id);
+          const block = <DirectoryBlock key={period.id} period={period} pieces={pp} startIndex={idx} />;
+          idx += pp.length;
           return block;
         })}
       </main>
 
-      {/* Footer */}
-      <footer style={{
-        borderTop: '1px solid rgba(255,255,255,0.04)',
-        padding: '24px 32px 48px',
-        maxWidth: '900px',
-        margin: '0 auto',
-      }}>
-        <div style={{
-          fontSize: '10px',
-          color: 'rgba(255,255,255,0.12)',
-        }}>
-          corvids@archive:~$&nbsp;<span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(255,255,255,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.04)', padding: '24px 32px 48px', maxWidth: '900px', margin: '0 auto' }}>
+        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.12)' }}>
+          corvids@archive:~$&nbsp;
+          <span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(255,255,255,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
         </div>
       </footer>
     </div>
   );
 }
 
+/* ══════════════════════════════
+   ROOT
+   ══════════════════════════════ */
+
 export default function HomeContent() {
   const [booted, setBooted] = useState(false);
-
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem('rb-booted')) {
-        setBooted(true);
-      }
-    } catch(e) {
-      setBooted(true);
-    }
-  }, []);
-
-  const handleBootComplete = () => {
-    try { sessionStorage.setItem('rb-booted', '1'); } catch(e) {}
-    setBooted(true);
-  };
+  const handleComplete = useCallback(() => setBooted(true), []);
 
   return (
     <div style={{
-      background: '#0a0a0c',
-      minHeight: '100vh',
+      background: '#0a0a0c', minHeight: '100vh',
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-      fontSize: '12px',
-      color: '#cccccc',
+      fontSize: '12px', color: '#cccccc',
     }}>
-      {booted ? <Archive /> : <BootSequence onComplete={handleBootComplete} />}
+      {booted ? <Archive /> : <BootSequence onComplete={handleComplete} />}
     </div>
   );
 }
