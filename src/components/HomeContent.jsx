@@ -5,7 +5,7 @@ import { PIECES, PERIODS } from '../data/pieces.js';
    CONSTANTS
    ══════════════════════════════ */
 
-const FILE_EXT = { poem: '.txt', found: '.doc', fragment: '.frag', capstone: '.sys' };
+const FILE_EXT = { poem: '', found: '.doc', fragment: '.frag', capstone: '.×§∂' };
 
 const BOOT_LINES = [
   'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1',
@@ -373,7 +373,7 @@ export default function HomeContent() {
 
   return (
     <div style={{
-      background: '#0a0a0c', minHeight: '100vh',
+      background: '#0c0e14', minHeight: '100vh',
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
       fontSize: '12px', color: '#cccccc',
     }}>
