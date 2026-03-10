@@ -3,58 +3,61 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Colophon — The Collected Works of Rowan Black">
-  <div style="background: #0c0e14; min-height: 100vh;">
+  <div style="background: #222838; min-height: 100vh;">
     <nav style={`
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(12,14,20,0.95);
+      background: rgba(30,34,48,0.95);
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      padding: 0 28px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 44px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 24px;
+      display: flex; align-items: center;
+      height: 48px;
     `}>
       <a href="/" style={`
-        font-family: var(--mono); font-size: 10px; font-weight: 400;
-        letter-spacing: 0.06em; color: rgba(255,255,255,0.35);
+        font-family: var(--mono); font-size: 12px; font-weight: 400;
+        letter-spacing: 0.04em; color: #8899bb;
         text-decoration: none;
-      `}>← archive</a>
+        padding: 6px 14px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 3px;
+      `}>← Back to Archive</a>
     </nav>
 
     <div style="max-width: 600px; margin: 0 auto; padding: 96px 32px 120px; font-family: var(--mono);">
-      <div style="font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 32px;">
+      <div style="font-size: 10px; color: #8899bb; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 32px;">
         Colophon
       </div>
 
-      <p style="font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.6); margin-bottom: 24px;">
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.75); margin-bottom: 24px;">
         The Collected Works of Rowan Black was written by Dr. Jonathan M. Kelly.
       </p>
 
-      <p style="font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.6); margin-bottom: 24px;">
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.75); margin-bottom: 24px;">
         D.Litt., Creative Writing<br />
         Drew University, 2025
       </p>
 
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin: 32px 0;"></div>
+      <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 32px 0;"></div>
 
-      <div style="font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">
+      <div style="font-size: 10px; color: #8899bb; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">
         Contact
       </div>
 
-      <p style="font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.6); margin-bottom: 24px;">
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.75); margin-bottom: 24px;">
         <a href="mailto:corvids@whoisrowanblack.com" style="color: #4a9eff; text-decoration: none;">corvids@whoisrowanblack.com</a>
       </p>
 
-      <div style="height: 1px; background: rgba(255,255,255,0.06); margin: 32px 0;"></div>
+      <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 32px 0;"></div>
 
-      <div style="font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">
+      <div style="font-size: 10px; color: #8899bb; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">
         Other work
       </div>
 
-      <p style="font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.6); margin-bottom: 8px;">
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.75); margin-bottom: 8px;">
         <a href="https://jonathanmkelly.com" style="color: #4a9eff; text-decoration: none;">jonathanmkelly.com</a>
       </p>
 
-      <p style="font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.6);">
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.75);">
         <a href="https://thebsideofeverything.com" style="color: #4a9eff; text-decoration: none;">The B-Side of Everything</a>
       </p>
     </div>

@@ -18,26 +18,29 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
 ---
 
 <BaseLayout title={pageTitle} description={piece.corvidsNote || piece.subtitle || ''} ogImage={ogImage} ogUrl={ogUrl}>
-  <div id="piece-page" style="background: #0c0e14; min-height: 100vh; position: relative;">
+  <div style="background: #222838; min-height: 100vh;">
 
-    <!-- Top nav: always visible -->
+    <!-- Nav bar -->
     <nav style={`
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(12,14,20,0.95);
+      background: rgba(30,34,48,0.95);
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(200,200,208,0.04);
-      padding: 0 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 24px;
       display: flex; align-items: center; justify-content: space-between;
-      height: 44px;
+      height: 48px;
     `}>
       <a href="/" style={`
-        font-family: var(--mono); font-size: 10px; font-weight: 400;
-        letter-spacing: 0.06em; color: rgba(200,200,208,0.35);
+        font-family: var(--mono); font-size: 12px; font-weight: 400;
+        letter-spacing: 0.04em; color: #8899bb;
         text-decoration: none; transition: color 0.15s;
-      `}>← archive</a>
+        padding: 6px 14px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 3px;
+      `}>← Back to Archive</a>
       <span style={`
-        font-family: var(--mono); font-size: 10px; font-weight: 300;
-        color: rgba(200,200,208,0.15); letter-spacing: 0.04em;
+        font-family: var(--mono); font-size: 11px; font-weight: 300;
+        color: #667799; letter-spacing: 0.03em;
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         max-width: 50%;
       `}>{piece.title}</span>
@@ -45,14 +48,14 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
 
     <!-- Title + Corvids note -->
     <div style={`
-      padding: 64px 32px 48px;
+      padding: 72px 32px 48px;
       max-width: 800px;
       margin: 0 auto;
     `}>
-      <!-- Period indicator: matches homepage directory colors -->
+      <!-- Period indicator -->
       <div style={`
-        font-family: var(--mono); font-size: 9px; font-weight: 400;
-        color: ${periodColor}; letter-spacing: 0.12em; text-transform: uppercase;
+        font-family: var(--mono); font-size: 11px; font-weight: 500;
+        color: ${periodColor}; letter-spacing: 0.1em; text-transform: uppercase;
         margin-bottom: 20px;
       `}>
         {piece.periodLabel} // {piece.year}
@@ -61,49 +64,48 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
       <!-- Title -->
       <h1 style={`
         font-family: var(--serif); font-size: clamp(28px, 5vw, 44px); font-weight: 400;
-        line-height: 1.1; color: #e8e8f0; letter-spacing: -0.01em;
+        line-height: 1.1; color: #ffffff; letter-spacing: -0.01em;
         margin-bottom: 10px;
       `}>{piece.title}</h1>
 
       {piece.subtitle && (
         <div style={`
           font-family: var(--serif); font-size: 18px; font-weight: 300;
-          font-style: italic; color: rgba(255,255,255,0.45); line-height: 1.3;
+          font-style: italic; color: rgba(255,255,255,0.55); line-height: 1.3;
           margin-bottom: 16px;
         `}>{piece.subtitle}</div>
       )}
 
       <!-- Form label -->
       <div style={`
-        font-family: var(--mono); font-size: 10px;
-        color: rgba(255,255,255,0.3); letter-spacing: 0.04em;
+        font-family: var(--mono); font-size: 11px;
+        color: #8899bb; letter-spacing: 0.04em;
         margin-bottom: 32px;
       `}>{piece.form}</div>
 
       <!-- Corvids note -->
       {piece.corvidsNote && (
         <div style={`
-          border-left: 1px solid rgba(255,255,255,0.12);
+          border-left: 2px solid rgba(255,255,255,0.1);
           padding-left: 20px;
-          max-width: 540px;
+          max-width: 560px;
         `}>
           <div style={`
-            font-family: var(--mono); font-size: 9px; font-weight: 500;
-            color: rgba(255,255,255,0.35); letter-spacing: 0.08em;
+            font-family: var(--mono); font-size: 10px; font-weight: 500;
+            color: #8899bb; letter-spacing: 0.08em;
             text-transform: uppercase; margin-bottom: 10px;
           `}>Corvids Collective</div>
           <p style={`
-            font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
-            color: rgba(255,255,255,0.55); font-weight: 300; margin: 0;
+            font-family: var(--mono); font-size: 13px; line-height: 1.8;
+            color: rgba(255,255,255,0.65); font-weight: 300; margin: 0;
           `}>{piece.corvidsNote}</p>
         </div>
       )}
-
     </div>
 
-    <!-- Piece content: emerges on scroll -->
+    <!-- Piece content -->
     <div style={`
-      border-top: 1px solid rgba(200,200,208,0.04);
+      border-top: 1px solid rgba(255,255,255,0.06);
       position: relative;
     `}>
       <slot />
@@ -112,18 +114,16 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
     <!-- Return footer -->
     <div style={`
       padding: 80px 28px 120px; text-align: center;
-      border-top: 1px solid rgba(200,200,208,0.04);
+      border-top: 1px solid rgba(255,255,255,0.06);
     `}>
       <a href="/" style={`
-        font-family: var(--mono); font-size: 10px; font-weight: 400;
-        letter-spacing: 0.06em; color: rgba(200,200,208,0.2);
+        font-family: var(--mono); font-size: 12px; font-weight: 400;
+        letter-spacing: 0.04em; color: #8899bb;
         text-decoration: none; transition: color 0.15s;
-        border: 1px solid rgba(200,200,208,0.08);
-        padding: 8px 20px; border-radius: 2px;
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 8px 20px; border-radius: 3px;
         display: inline-block;
-      `}>← archive</a>
+      `}>← Back to Archive</a>
     </div>
   </div>
-
-
 </BaseLayout>

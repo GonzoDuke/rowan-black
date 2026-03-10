@@ -7,6 +7,11 @@ import { PIECES, PERIODS } from '../data/pieces.js';
 
 const FILE_EXT = { poem: '', found: '.doc', fragment: '.frag', capstone: '.×§∂' };
 
+function getExt(treatment) {
+  if (treatment in FILE_EXT) return FILE_EXT[treatment];
+  return '.txt';
+}
+
 const BOOT_LINES = [
   'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1',
   'Initializing archive protocol...',
@@ -28,35 +33,41 @@ const DESC_SENTENCES = [
   '\n\nOpen a directory below to browse the collection.',
 ];
 
+/* ── Colors ── */
+const C = {
+  bg: '#222838',
+  title: '#ffffff',
+  body: '#f0f0f5',
+  secondary: 'rgba(255,255,255,0.65)',
+  meta: '#8899bb',
+  metaDim: '#667799',
+  ghost: 'rgba(255,255,255,0.25)',
+  rule: 'rgba(255,255,255,0.08)',
+  hover: 'rgba(74,158,255,0.08)',
+  accent: '#4a9eff',
+  green: '#39ff14',
+};
+
 /* ══════════════════════════════
    GLITCH SYSTEM
    ══════════════════════════════ */
 
-// How aggressively to glitch filenames by period
 const GLITCH_INTENSITY = {
-  teenage: 0,
-  early: 0,
-  transitional: 0,
-  mature: 0,
-  prophetic: 0.18,
+  teenage: 0, early: 0, transitional: 0, mature: 0, prophetic: 0.18,
 };
 
-// Corrupted characters: broken letterforms, not blocks
 const GLITCH_CHARS = ['¿', '×', '¤', '§', '¬', 'ƒ', '†', '‡', '∞', '≠', '∂', '√', '∑', 'Ω', '¶'];
 
 function glitchText(text, period) {
   const intensity = GLITCH_INTENSITY[period] || 0;
   if (intensity === 0) return text;
-
   let seed = 0;
   for (let i = 0; i < text.length; i++) seed += text.charCodeAt(i);
-
   return text.split('').map((char, i) => {
     if (char === '.' || char === '/') return char;
-    const pseudoRandom = ((seed * (i + 1) * 9301 + 49297) % 233280) / 233280;
-    if (pseudoRandom > intensity) return char;
-    const pick = GLITCH_CHARS[Math.floor(pseudoRandom * GLITCH_CHARS.length * 4) % GLITCH_CHARS.length];
-    return pick;
+    const r = ((seed * (i + 1) * 9301 + 49297) % 233280) / 233280;
+    if (r > intensity) return char;
+    return GLITCH_CHARS[Math.floor(r * GLITCH_CHARS.length * 4) % GLITCH_CHARS.length];
   }).join('');
 }
 
@@ -66,14 +77,14 @@ function glitchText(text, period) {
 
 function FileEntry({ piece, index }) {
   const isLive = piece.status === 'live';
-  const ext = FILE_EXT[piece.treatment] || '.txt';
+  const ext = getExt(piece.treatment);
   const sizeRef = useRef((Math.random() * 14 + 1.5).toFixed(1) + ' KB');
   const [hovered, setHovered] = useState(false);
 
-  const color = piece.treatment === 'capstone' ? '#ff4444'
+  const color = piece.treatment === 'capstone' ? '#ff5555'
     : piece.treatment === 'found' ? '#e8a030'
-    : piece.treatment === 'fragment' ? '#50b080'
-    : '#4a9eff';
+    : piece.treatment === 'fragment' ? '#50c088'
+    : '#7ab8ff';
 
   const fileName = glitchText(piece.id, piece.period) + ext;
 
@@ -83,26 +94,26 @@ function FileEntry({ piece, index }) {
       style={{
         display: 'grid',
         gridTemplateColumns: '32px 1fr 80px 100px 60px',
-        padding: '4px 0',
+        padding: '5px 0',
         textDecoration: 'none',
-        opacity: isLive ? 1 : 0.25,
+        opacity: isLive ? 1 : 0.3,
         cursor: isLive ? 'pointer' : 'default',
-        background: hovered && isLive ? 'rgba(74,158,255,0.06)' : 'transparent',
+        background: hovered && isLive ? C.hover : 'transparent',
         transition: 'background 0.1s',
-        borderBottom: '1px solid rgba(255,255,255,0.03)',
+        borderBottom: '1px solid ' + C.rule,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.15)', textAlign: 'right', paddingRight: '12px' }}>
+      <span style={{ fontSize: '12px', color: C.metaDim, textAlign: 'right', paddingRight: '12px' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
-      <span style={{ color: hovered && isLive ? '#4a9eff' : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <span style={{ color: hovered && isLive ? C.accent : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
         {fileName}
       </span>
-      <span style={{ color: 'rgba(255,255,255,0.2)', textAlign: 'right' }}>{sizeRef.current}</span>
-      <span style={{ color: 'rgba(255,255,255,0.15)', textAlign: 'right' }}>{piece.year}</span>
-      <span style={{ color: isLive ? '#39ff14' : 'rgba(255,255,255,0.15)', textAlign: 'right', fontSize: '11px' }}>
+      <span style={{ color: C.meta, textAlign: 'right' }}>{sizeRef.current}</span>
+      <span style={{ color: C.metaDim, textAlign: 'right' }}>{piece.year}</span>
+      <span style={{ color: isLive ? C.green : C.ghost, textAlign: 'right', fontSize: '11px' }}>
         {isLive ? 'OK' : '---'}
       </span>
     </a>
@@ -121,17 +132,17 @@ function DirectoryBlock({ period, pieces, startIndex }) {
         onClick={() => setOpen(o => !o)}
         style={{
           display: 'flex', alignItems: 'center', gap: '8px',
-          cursor: 'pointer', padding: '6px 0',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          cursor: 'pointer', padding: '7px 0',
+          borderBottom: '1px solid ' + C.rule,
           marginBottom: '4px', userSelect: 'none',
         }}
       >
-        <span style={{ color: '#4a9eff', fontSize: '12px', width: '14px' }}>{open ? 'v' : '>'}</span>
-        <span style={{ color: period.color, fontSize: '12px' }}>/{period.id}/</span>
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>
+        <span style={{ color: C.accent, fontSize: '13px', width: '14px', fontWeight: 500 }}>{open ? 'v' : '>'}</span>
+        <span style={{ color: period.color, fontSize: '13px', fontWeight: 500 }}>/{period.id}/</span>
+        <span style={{ color: C.meta, fontSize: '12px' }}>
           {period.label} ({period.years})
         </span>
-        <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '11px', marginLeft: 'auto' }}>
+        <span style={{ color: C.metaDim, fontSize: '11px', marginLeft: 'auto' }}>
           {pieces.length} items
         </span>
       </div>
@@ -155,56 +166,30 @@ function BootSequence({ onComplete }) {
 
   useEffect(() => {
     mountedRef.current = true;
-
-    // Show title after 600ms
-    const titleTimer = setTimeout(() => {
-      if (mountedRef.current) setShowTitle(true);
-    }, 600);
-
-    // Schedule each boot line
+    const titleTimer = setTimeout(() => { if (mountedRef.current) setShowTitle(true); }, 600);
     const lineTimers = BOOT_DELAYS.map((delay, i) =>
-      setTimeout(() => {
-        if (mountedRef.current) setLineCount(i + 1);
-      }, delay)
+      setTimeout(() => { if (mountedRef.current) setLineCount(i + 1); }, delay)
     );
-
-    // Transition to archive after last line
-    const completeTimer = setTimeout(() => {
-      if (mountedRef.current) onComplete();
-    }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1200);
-
-    // Safety valve: force complete after 10s no matter what
-    const safetyTimer = setTimeout(() => {
-      if (mountedRef.current) onComplete();
-    }, 10000);
-
+    const completeTimer = setTimeout(() => { if (mountedRef.current) onComplete(); }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1200);
+    const safetyTimer = setTimeout(() => { if (mountedRef.current) onComplete(); }, 10000);
     return () => {
       mountedRef.current = false;
-      clearTimeout(titleTimer);
-      clearTimeout(completeTimer);
-      clearTimeout(safetyTimer);
+      clearTimeout(titleTimer); clearTimeout(completeTimer); clearTimeout(safetyTimer);
       lineTimers.forEach(clearTimeout);
     };
   }, [onComplete]);
 
   return (
     <div style={{
-      minHeight: '100vh',
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      padding: '32px',
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', padding: '32px',
     }}>
       <div style={{
         fontFamily: "'Space Grotesk', Arial, sans-serif",
-        fontSize: 'clamp(22px, 4vw, 34px)',
-        fontWeight: 300,
-        color: '#ffffff',
-        lineHeight: 1.2,
-        letterSpacing: '-0.02em',
-        textAlign: 'center',
-        marginBottom: '48px',
-        opacity: showTitle ? 1 : 0,
-        transform: showTitle ? 'translateY(0)' : 'translateY(8px)',
+        fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 300,
+        color: C.title, lineHeight: 1.2, letterSpacing: '-0.02em',
+        textAlign: 'center', marginBottom: '48px',
+        opacity: showTitle ? 1 : 0, transform: showTitle ? 'translateY(0)' : 'translateY(8px)',
         transition: 'opacity 0.8s ease, transform 0.8s ease',
       }}>
         The Collected Works of<br />
@@ -214,19 +199,15 @@ function BootSequence({ onComplete }) {
       <div style={{ maxWidth: '520px', width: '100%' }}>
         {BOOT_LINES.slice(0, lineCount).map((line, i) => (
           <div key={i} style={{
-            fontSize: '12px',
-            lineHeight: '2',
-            color: line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(255,255,255,0.5)',
+            fontSize: '12px', lineHeight: '2',
+            color: line === 'ARCHIVE READY' ? C.green : C.secondary,
             fontWeight: line === 'ARCHIVE READY' ? 500 : 300,
             letterSpacing: line === 'ARCHIVE READY' ? '0.12em' : '0.02em',
-          }}>
-            {line || '\u00A0'}
-          </div>
+          }}>{line || '\u00A0'}</div>
         ))}
         <span style={{
           display: 'inline-block', width: '7px', height: '14px',
-          background: 'rgba(255,255,255,0.5)',
-          animation: 'cursor-blink 1s step-end infinite',
+          background: C.secondary, animation: 'cursor-blink 1s step-end infinite',
           verticalAlign: 'text-bottom', marginLeft: '2px',
         }} />
       </div>
@@ -244,8 +225,7 @@ function TerminalText({ skipAnimation }) {
   const mountedRef = useRef(true);
 
   const sentenceEnds = useRef((() => {
-    const ends = [];
-    let pos = 0;
+    const ends = []; let pos = 0;
     for (const s of DESC_SENTENCES) { pos += s.length; ends.push(pos); }
     return ends;
   })());
@@ -253,17 +233,13 @@ function TerminalText({ skipAnimation }) {
   useEffect(() => {
     if (skipAnimation) return;
     mountedRef.current = true;
-    let idx = 0;
-    let timer;
-
+    let idx = 0; let timer;
     function tick() {
       if (!mountedRef.current || idx >= fullText.length) return;
-      idx++;
-      setCharCount(idx);
+      idx++; setCharCount(idx);
       const isPause = sentenceEnds.current.includes(idx) && idx < fullText.length;
       timer = setTimeout(tick, isPause ? 400 : 25);
     }
-
     timer = setTimeout(tick, 500);
     return () => { mountedRef.current = false; clearTimeout(timer); };
   }, [skipAnimation]);
@@ -276,22 +252,20 @@ function TerminalText({ skipAnimation }) {
 
   return (
     <div style={{ marginBottom: '32px', maxWidth: '600px' }}>
-      <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: 'rgba(255,255,255,0.65)' }}>
+      <div style={{ fontSize: '13px', lineHeight: 1.7, fontWeight: 300, color: C.secondary }}>
         {main}
         {!hint && !done && <span style={{
           display: 'inline-block', width: '6px', height: '13px',
-          background: 'rgba(255,255,255,0.4)',
-          animation: 'cursor-blink 1s step-end infinite',
+          background: C.secondary, animation: 'cursor-blink 1s step-end infinite',
           verticalAlign: 'text-bottom', marginLeft: '1px',
         }} />}
       </div>
       {hint && (
-        <div style={{ fontSize: '12px', lineHeight: 1.7, fontWeight: 300, color: '#4a9eff', opacity: 0.6, marginTop: '12px' }}>
+        <div style={{ fontSize: '13px', lineHeight: 1.7, fontWeight: 400, color: C.accent, opacity: 0.75, marginTop: '12px' }}>
           {hint}
           {!done && <span style={{
             display: 'inline-block', width: '6px', height: '13px',
-            background: 'rgba(74,158,255,0.5)',
-            animation: 'cursor-blink 1s step-end infinite',
+            background: 'rgba(74,158,255,0.5)', animation: 'cursor-blink 1s step-end infinite',
             verticalAlign: 'text-bottom', marginLeft: '1px',
           }} />}
         </div>
@@ -310,14 +284,14 @@ function Archive({ returning }) {
   return (
     <div style={{ minHeight: '100vh', animation: 'fade-in 0.8s ease forwards' }}>
       <header style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 32px 0' }}>
-        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.08em', marginBottom: '20px' }}>
+        <div style={{ fontSize: '11px', color: C.metaDim, letterSpacing: '0.06em', marginBottom: '20px' }}>
           corvids@archive:~$ ls -la /collected-works/rowan-black/
         </div>
 
         <h1 style={{
           fontFamily: "'Space Grotesk', Arial, sans-serif",
           fontSize: 'clamp(24px, 4.5vw, 38px)', fontWeight: 300,
-          color: '#ffffff', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '12px',
+          color: C.title, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '12px',
         }}>
           The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
         </h1>
@@ -326,8 +300,8 @@ function Archive({ returning }) {
 
         <div style={{
           display: 'grid', gridTemplateColumns: '32px 1fr 80px 100px 60px',
-          padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '8px',
-          fontSize: '9px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', textTransform: 'uppercase',
+          padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.12)', marginBottom: '8px',
+          fontSize: '10px', color: C.meta, letterSpacing: '0.08em', textTransform: 'uppercase',
         }}>
           <span style={{ textAlign: 'right', paddingRight: '12px' }}>#</span>
           <span>File</span>
@@ -346,10 +320,10 @@ function Archive({ returning }) {
         })}
       </main>
 
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.04)', padding: '24px 32px 48px', maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.12)' }}>
+      <footer style={{ borderTop: '1px solid ' + C.rule, padding: '24px 32px 48px', maxWidth: '900px', margin: '0 auto' }}>
+        <div style={{ fontSize: '11px', color: C.metaDim }}>
           corvids@archive:~$&nbsp;
-          <span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(255,255,255,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+          <span style={{ display: 'inline-block', width: '6px', height: '13px', background: C.metaDim, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
         </div>
       </footer>
     </div>
@@ -373,9 +347,9 @@ export default function HomeContent() {
 
   return (
     <div style={{
-      background: '#0c0e14', minHeight: '100vh',
+      background: C.bg, minHeight: '100vh',
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
-      fontSize: '12px', color: '#cccccc',
+      fontSize: '12px', color: C.body,
     }}>
       {booted ? <Archive returning={returning} /> : <BootSequence onComplete={handleComplete} />}
     </div>

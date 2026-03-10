@@ -9,15 +9,15 @@
 /* --- Variables --- */
 :root {
   /* Background */
-  --bg: #0c0e14;
-  --bg-surface: #111114;
-  --bg-elevated: #18181c;
+  --bg: #222838;
+  --bg-surface: #282e40;
+  --bg-elevated: #2e3448;
 
   /* Text */
-  --text: #c8c8d0;
-  --text-bright: #e8e8f0;
-  --text-dim: rgba(200,200,208,0.6);
-  --text-ghost: rgba(200,200,208,0.3);
+  --text: #f0f0f5;
+  --text-bright: #ffffff;
+  --text-dim: rgba(255,255,255,0.65);
+  --text-ghost: rgba(255,255,255,0.3);
 
   /* Accents */
   --accent: #4a9eff;
