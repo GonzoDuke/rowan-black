@@ -43,22 +43,17 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
       `}>{piece.title}</span>
     </nav>
 
-    <!-- Full-screen entry: title + Corvids note -->
+    <!-- Title + Corvids note -->
     <div style={`
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 60px 32px 80px;
+      padding: 64px 32px 48px;
       max-width: 800px;
       margin: 0 auto;
-      position: relative;
     `}>
-      <!-- Period indicator: subtle, top-left area -->
+      <!-- Period indicator: matches homepage directory colors -->
       <div style={`
         font-family: var(--mono); font-size: 9px; font-weight: 400;
         color: ${periodColor}; letter-spacing: 0.12em; text-transform: uppercase;
-        margin-bottom: 20px; opacity: 0.5;
+        margin-bottom: 20px;
       `}>
         {piece.periodLabel} // {piece.year}
       </div>
@@ -104,13 +99,6 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
         </div>
       )}
 
-      <!-- Scroll indicator -->
-      <div style={`
-        position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-        font-family: var(--mono); font-size: 9px; color: rgba(200,200,208,0.1);
-        letter-spacing: 0.1em; animation: fade-in 2s ease forwards;
-        animation-delay: 1s; opacity: 0;
-      `}>↓</div>
     </div>
 
     <!-- Piece content: emerges on scroll -->

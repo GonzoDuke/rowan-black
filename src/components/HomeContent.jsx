@@ -39,9 +39,9 @@ function FileEntry({ piece, index }) {
   const [hovered, setHovered] = useState(false);
 
   const color = piece.treatment === 'capstone' ? '#ff4444'
-    : piece.treatment === 'found' ? '#e0e0e0'
-    : piece.treatment === 'fragment' ? '#888899'
-    : '#cccccc';
+    : piece.treatment === 'found' ? '#e8a030'
+    : piece.treatment === 'fragment' ? '#50b080'
+    : '#4a9eff';
 
   return (
     <a
@@ -93,8 +93,8 @@ function DirectoryBlock({ period, pieces, startIndex }) {
         }}
       >
         <span style={{ color: '#4a9eff', fontSize: '12px', width: '14px' }}>{open ? 'v' : '>'}</span>
-        <span style={{ color: '#ffffff', fontSize: '12px', opacity: 0.7 }}>/{period.id}/</span>
-        <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>
+        <span style={{ color: period.color, fontSize: '12px' }}>/{period.id}/</span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>
           {period.label} ({period.years})
         </span>
         <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '11px', marginLeft: 'auto' }}>
@@ -327,8 +327,14 @@ function Archive() {
    ══════════════════════════════ */
 
 export default function HomeContent() {
-  const [booted, setBooted] = useState(false);
-  const handleComplete = useCallback(() => setBooted(true), []);
+  const [booted, setBooted] = useState(() => {
+    try { return sessionStorage.getItem('rb-booted') === '1'; } catch(e) { return false; }
+  });
+
+  const handleComplete = useCallback(() => {
+    try { sessionStorage.setItem('rb-booted', '1'); } catch(e) {}
+    setBooted(true);
+  }, []);
 
   return (
     <div style={{
