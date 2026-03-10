@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PIECES, PERIODS } from '../data/pieces.js';
 
 /* ── Constants ── */
@@ -15,7 +15,7 @@ const BOOT_LINES = [
   PIECES.filter(p => p.status === 'live').length + ' recovered // ' + PIECES.filter(p => p.status !== 'live').length + ' pending reconstruction',
   'ARCHIVE READY',
 ];
-const BOOT_DELAYS = [0, 600, 1200, 1800, 2600, 3400, 4000];
+const BOOT_DELAYS = [0, 600, 1200, 1800, 2600, 3400, 4200];
 
 const DESC_SENTENCES = [
   'Recovered archive.',
@@ -40,11 +40,9 @@ const C = {
   hover: 'rgba(42,109,212,0.06)',
 };
 
-/* ── Glitch ── */
-const GLITCH_INTENSITY = { teenage:0, early:0, transitional:0, mature:0, prophetic:0.18 };
+/* ── Glitch (hover only) ── */
 const GLITCH_CHARS = ['¿','×','¤','§','¬','ƒ','†','‡','∞','≠','∂','√','∑','Ω','¶'];
-function glitchText(text, period) {
-  const intensity = GLITCH_INTENSITY[period] || 0;
+function glitchText(text, intensity) {
   if (!intensity) return text;
   let seed = 0;
   for (let i = 0; i < text.length; i++) seed += text.charCodeAt(i);
@@ -71,7 +69,11 @@ function FileEntry({ piece, index }) {
     : piece.treatment === 'fragment' ? '#2a7a50'
     : C.accent;
 
-  const fileName = glitchText(piece.id, piece.period) + ext;
+  // Clean by default, glitch on hover for prophetic only
+  const canGlitch = piece.period === 'prophetic';
+  const displayName = canGlitch && hovered && isLive
+    ? glitchText(piece.id, 0.15) + ext
+    : piece.id + ext;
 
   return (
     <a
@@ -95,7 +97,7 @@ function FileEntry({ piece, index }) {
         {String(index + 1).padStart(2, '0')}
       </span>
       <span style={{ color: hovered && isLive ? C.accent : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 400 }}>
-        {fileName}
+        {displayName}
       </span>
       <span style={{ color: C.ghost, textAlign: 'right' }}>{sizeRef.current}</span>
       <span style={{ color: C.ghost, textAlign: 'right' }}>{piece.year}</span>
@@ -145,15 +147,13 @@ function DirectoryBlock({ period, pieces, startIndex }) {
 }
 
 /* ══════════════════════════════
-   BOOT + TYPEWRITER (inline)
+   DESCRIPTION (typewriter)
    ══════════════════════════════ */
 
-function InlineIntro({ returning }) {
-  const [phase, setPhase] = useState(returning ? 'done' : 'boot');
-  const [bootCount, setBootCount] = useState(0);
-  const [charCount, setCharCount] = useState(0);
-  const mountedRef = useRef(true);
+function Description({ returning }) {
   const fullText = DESC_SENTENCES.join('');
+  const [charCount, setCharCount] = useState(returning ? fullText.length : 0);
+  const mountedRef = useRef(true);
 
   const sentenceEnds = useRef((() => {
     const ends = []; let pos = 0;
@@ -164,83 +164,28 @@ function InlineIntro({ returning }) {
   useEffect(() => {
     if (returning) return;
     mountedRef.current = true;
-
-    // Phase 1: boot lines
-    const bootTimers = BOOT_DELAYS.map((d, i) =>
-      setTimeout(() => { if (mountedRef.current) setBootCount(i + 1); }, d)
-    );
-
-    // Phase 2: pause, then clear boot, start typing
-    const transitionTimer = setTimeout(() => {
-      if (mountedRef.current) setPhase('typing');
-    }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1000);
-
-    return () => {
-      mountedRef.current = false;
-      bootTimers.forEach(clearTimeout);
-      clearTimeout(transitionTimer);
-    };
-  }, [returning]);
-
-  // Typing phase
-  useEffect(() => {
-    if (phase !== 'typing') return;
-    mountedRef.current = true;
     let idx = 0; let timer;
     function tick() {
-      if (!mountedRef.current || idx >= fullText.length) {
-        if (mountedRef.current) setPhase('done');
-        return;
-      }
+      if (!mountedRef.current || idx >= fullText.length) return;
       idx++; setCharCount(idx);
       const isPause = sentenceEnds.current.includes(idx) && idx < fullText.length;
       timer = setTimeout(tick, isPause ? 400 : 25);
     }
     timer = setTimeout(tick, 300);
     return () => { mountedRef.current = false; clearTimeout(timer); };
-  }, [phase]);
+  }, [returning]);
 
-  if (phase === 'done' || returning) {
-    const parts = fullText.split('\n\n');
-    return (
-      <div style={{ marginBottom: '28px', maxWidth: '620px' }}>
-        <p style={{ fontSize: '13px', lineHeight: 1.75, color: C.dim, marginBottom: '8px' }}>{parts[0]}</p>
-        <p style={{ fontSize: '13px', lineHeight: 1.75, color: C.accent, fontWeight: 400 }}>{parts[1]}</p>
-      </div>
-    );
-  }
-
-  if (phase === 'boot') {
-    return (
-      <div style={{ marginBottom: '28px', maxWidth: '620px', minHeight: '120px' }}>
-        {BOOT_LINES.slice(0, bootCount).map((line, i) => (
-          <div key={i} style={{
-            fontSize: '11px', lineHeight: 2, fontFamily: "'IBM Plex Mono', monospace",
-            color: line === 'ARCHIVE READY' ? C.green : C.ghost,
-            fontWeight: line === 'ARCHIVE READY' ? 600 : 400,
-            letterSpacing: line === 'ARCHIVE READY' ? '0.08em' : '0.02em',
-          }}>{line}</div>
-        ))}
-        <span style={{
-          display: 'inline-block', width: '7px', height: '13px',
-          background: C.ghost, animation: 'cursor-blink 1s step-end infinite',
-          verticalAlign: 'text-bottom',
-        }} />
-      </div>
-    );
-  }
-
-  // Typing phase
   const visible = fullText.slice(0, charCount);
   const parts = visible.split('\n\n');
   const main = parts[0] || '';
   const hint = parts[1] || '';
+  const done = charCount >= fullText.length;
 
   return (
-    <div style={{ marginBottom: '28px', maxWidth: '620px', minHeight: '80px' }}>
+    <div style={{ marginBottom: '28px', maxWidth: '620px' }}>
       <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.dim }}>
         {main}
-        {!hint && <span style={{
+        {!hint && !done && <span style={{
           display: 'inline-block', width: '6px', height: '13px',
           background: C.dim, animation: 'cursor-blink 1s step-end infinite',
           verticalAlign: 'text-bottom', marginLeft: '1px',
@@ -249,12 +194,73 @@ function InlineIntro({ returning }) {
       {hint && (
         <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.accent, fontWeight: 400, marginTop: '8px' }}>
           {hint}
-          <span style={{
+          {!done && <span style={{
             display: 'inline-block', width: '6px', height: '13px',
             background: C.accent, opacity: 0.6, animation: 'cursor-blink 1s step-end infinite',
             verticalAlign: 'text-bottom', marginLeft: '1px',
-          }} />
+          }} />}
         </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════
+   BOOT PROMPT (footer area)
+   ══════════════════════════════ */
+
+function BootPrompt({ returning }) {
+  const [lineIndex, setLineIndex] = useState(-1);
+  const [done, setDone] = useState(returning);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    if (returning) return;
+    mountedRef.current = true;
+
+    const timers = BOOT_DELAYS.map((d, i) =>
+      setTimeout(() => { if (mountedRef.current) setLineIndex(i); }, d)
+    );
+
+    const doneTimer = setTimeout(() => {
+      if (mountedRef.current) setDone(true);
+    }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1200);
+
+    return () => {
+      mountedRef.current = false;
+      timers.forEach(clearTimeout);
+      clearTimeout(doneTimer);
+    };
+  }, [returning]);
+
+  const currentLine = lineIndex >= 0 && lineIndex < BOOT_LINES.length ? BOOT_LINES[lineIndex] : null;
+  const isReady = currentLine === 'ARCHIVE READY';
+
+  return (
+    <div style={{
+      borderTop: '1px solid ' + C.rule, padding: '12px 36px',
+      fontSize: '11px', color: C.ghost, minHeight: '40px',
+      display: 'flex', alignItems: 'center',
+    }}>
+      {done ? (
+        <span>
+          corvids@archive:~$&nbsp;
+          <span style={{ display: 'inline-block', width: '7px', height: '13px', background: C.ghost, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+        </span>
+      ) : currentLine !== null ? (
+        <span style={{
+          color: isReady ? C.green : C.ghost,
+          fontWeight: isReady ? 600 : 400,
+          letterSpacing: isReady ? '0.06em' : '0.02em',
+          transition: 'opacity 0.15s',
+        }}>
+          {'> '}{currentLine}
+          <span style={{ display: 'inline-block', width: '7px', height: '13px', background: isReady ? C.green : C.ghost, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom', marginLeft: '4px' }} />
+        </span>
+      ) : (
+        <span>
+          <span style={{ display: 'inline-block', width: '7px', height: '13px', background: C.ghost, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+        </span>
       )}
     </div>
   );
@@ -310,7 +316,7 @@ function Archive({ returning }) {
             The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
           </h1>
 
-          <InlineIntro returning={returning} />
+          <Description returning={returning} />
 
           {/* Column headers */}
           <div style={{
@@ -334,14 +340,8 @@ function Archive({ returning }) {
           })}
         </div>
 
-        {/* Footer prompt */}
-        <div style={{
-          borderTop: '1px solid ' + C.rule, padding: '12px 36px',
-          fontSize: '11px', color: C.ghost,
-        }}>
-          corvids@archive:~$&nbsp;
-          <span style={{ display: 'inline-block', width: '7px', height: '13px', background: C.ghost, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
-        </div>
+        {/* Boot prompt in footer */}
+        <BootPrompt returning={returning} />
       </div>
     </div>
   );
@@ -355,13 +355,10 @@ export default function HomeContent() {
   const [returning] = useState(() => {
     try { return sessionStorage.getItem('rb-booted') === '1'; } catch(e) { return false; }
   });
-  const [booted] = useState(true); // always show archive immediately now
 
-  const setBooted = useCallback(() => {
+  useEffect(() => {
     try { sessionStorage.setItem('rb-booted', '1'); } catch(e) {}
   }, []);
-
-  useEffect(() => { setBooted(); }, [setBooted]);
 
   return (
     <div style={{
