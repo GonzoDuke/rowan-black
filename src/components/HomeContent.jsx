@@ -29,6 +29,54 @@ const DESC_SENTENCES = [
 ];
 
 /* ══════════════════════════════
+   GLITCH SYSTEM
+   ══════════════════════════════ */
+
+// How aggressively to glitch filenames by period
+const GLITCH_INTENSITY = {
+  teenage: 0,
+  early: 0,
+  transitional: 0.08,
+  mature: 0.14,
+  prophetic: 0.22,
+};
+
+// Character substitutions: subtle diacritics and unicode corruption
+const GLITCH_MAP = {
+  'a': ['å', 'ä', 'à', 'â'],
+  'e': ['ë', 'è', 'ê', 'é'],
+  'i': ['ï', 'ì', 'î'],
+  'o': ['ö', 'ò', 'ô', 'ø'],
+  'u': ['ü', 'ù', 'û'],
+  'n': ['ñ', 'ń'],
+  's': ['ś', 'š'],
+  't': ['ţ', 'ŧ'],
+  'c': ['ç', 'ć'],
+  'l': ['ł'],
+  'r': ['ŗ'],
+  'd': ['đ'],
+  '-': ['–', '¬', '~'],
+};
+
+function glitchText(text, period) {
+  const intensity = GLITCH_INTENSITY[period] || 0;
+  if (intensity === 0) return text;
+
+  // Use piece id as seed for consistent glitching
+  let seed = 0;
+  for (let i = 0; i < text.length; i++) seed += text.charCodeAt(i);
+
+  return text.split('').map((char, i) => {
+    const pseudoRandom = ((seed * (i + 1) * 9301 + 49297) % 233280) / 233280;
+    if (pseudoRandom > intensity) return char;
+    const replacements = GLITCH_MAP[char.toLowerCase()];
+    if (!replacements) return char;
+    const pick = replacements[Math.floor(pseudoRandom * replacements.length * 4) % replacements.length];
+    return char === char.toUpperCase() ? pick.toUpperCase() : pick;
+  }).join('');
+}
+
+/* ══════════════════════════════
    FILE ENTRY
    ══════════════════════════════ */
 
@@ -42,6 +90,8 @@ function FileEntry({ piece, index }) {
     : piece.treatment === 'found' ? '#e8a030'
     : piece.treatment === 'fragment' ? '#50b080'
     : '#4a9eff';
+
+  const fileName = glitchText(piece.id, piece.period) + ext;
 
   return (
     <a
@@ -64,7 +114,7 @@ function FileEntry({ piece, index }) {
         {String(index + 1).padStart(2, '0')}
       </span>
       <span style={{ color: hovered && isLive ? '#4a9eff' : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {piece.id}{ext}
+        {fileName}
       </span>
       <span style={{ color: 'rgba(255,255,255,0.2)', textAlign: 'right' }}>{sizeRef.current}</span>
       <span style={{ color: 'rgba(255,255,255,0.15)', textAlign: 'right' }}>{piece.year}</span>
@@ -204,12 +254,11 @@ function BootSequence({ onComplete }) {
    TERMINAL TEXT (letter by letter)
    ══════════════════════════════ */
 
-function TerminalText() {
-  const [charCount, setCharCount] = useState(0);
+function TerminalText({ skipAnimation }) {
   const fullText = DESC_SENTENCES.join('');
+  const [charCount, setCharCount] = useState(skipAnimation ? fullText.length : 0);
   const mountedRef = useRef(true);
 
-  // Pre-compute sentence end positions for pause logic
   const sentenceEnds = useRef((() => {
     const ends = [];
     let pos = 0;
@@ -218,6 +267,7 @@ function TerminalText() {
   })());
 
   useEffect(() => {
+    if (skipAnimation) return;
     mountedRef.current = true;
     let idx = 0;
     let timer;
@@ -232,7 +282,7 @@ function TerminalText() {
 
     timer = setTimeout(tick, 500);
     return () => { mountedRef.current = false; clearTimeout(timer); };
-  }, []);
+  }, [skipAnimation]);
 
   const visible = fullText.slice(0, charCount);
   const parts = visible.split('\n\n');
@@ -270,7 +320,7 @@ function TerminalText() {
    ARCHIVE (main view)
    ══════════════════════════════ */
 
-function Archive() {
+function Archive({ returning }) {
   let idx = 0;
 
   return (
@@ -288,7 +338,7 @@ function Archive() {
           The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
         </h1>
 
-        <TerminalText />
+        <TerminalText skipAnimation={returning} />
 
         <div style={{
           display: 'grid', gridTemplateColumns: '32px 1fr 80px 100px 60px',
@@ -327,9 +377,10 @@ function Archive() {
    ══════════════════════════════ */
 
 export default function HomeContent() {
-  const [booted, setBooted] = useState(() => {
+  const [returning] = useState(() => {
     try { return sessionStorage.getItem('rb-booted') === '1'; } catch(e) { return false; }
   });
+  const [booted, setBooted] = useState(returning);
 
   const handleComplete = useCallback(() => {
     try { sessionStorage.setItem('rb-booted', '1'); } catch(e) {}
@@ -342,7 +393,7 @@ export default function HomeContent() {
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
       fontSize: '12px', color: '#cccccc',
     }}>
-      {booted ? <Archive /> : <BootSequence onComplete={handleComplete} />}
+      {booted ? <Archive returning={returning} /> : <BootSequence onComplete={handleComplete} />}
     </div>
   );
 }
