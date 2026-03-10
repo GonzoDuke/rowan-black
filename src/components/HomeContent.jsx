@@ -36,24 +36,23 @@ const DESC_SENTENCES = [
 const GLITCH_INTENSITY = {
   teenage: 0,
   early: 0,
-  transitional: 0.08,
-  mature: 0.14,
-  prophetic: 0.22,
+  transitional: 0,
+  mature: 0,
+  prophetic: 0.18,
 };
 
-// Character corruptions: broken unicode, blocks, strikethrough, missing data
-const GLITCH_CHARS = ['░', '▒', '▓', '█', '̸', '̶', '̷', '_', '¿', '×', '·', '∎', '▪', '⌧', '⊘'];
+// Corrupted characters: broken letterforms, not blocks
+const GLITCH_CHARS = ['¿', '×', '¤', '§', '¬', 'ƒ', '†', '‡', '∞', '≠', '∂', '√', '∑', 'Ω', '¶'];
 
 function glitchText(text, period) {
   const intensity = GLITCH_INTENSITY[period] || 0;
   if (intensity === 0) return text;
 
-  // Use piece id as seed for consistent glitching
   let seed = 0;
   for (let i = 0; i < text.length; i++) seed += text.charCodeAt(i);
 
   return text.split('').map((char, i) => {
-    if (char === '.' || char === '/') return char; // preserve extensions and paths
+    if (char === '.' || char === '/') return char;
     const pseudoRandom = ((seed * (i + 1) * 9301 + 49297) % 233280) / 233280;
     if (pseudoRandom > intensity) return char;
     const pick = GLITCH_CHARS[Math.floor(pseudoRandom * GLITCH_CHARS.length * 4) % GLITCH_CHARS.length];

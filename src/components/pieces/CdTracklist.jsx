@@ -174,11 +174,7 @@ export default function CdTracklist() {
         </div>
       </div>
 
-      {/* Corvids Annotation */}
-      <div style={S.annotation}>
-        <div style={S.annotationLabel}>Annotation</div>
-        <p style={S.note}>The tracklist appears to be divided into three movements, separated by blank spaces on the original insert. The first eight tracks trend toward atmospheric introspection. The middle six shift between urgency and disorientation. The final four descend into dissolution and, possibly, acceptance. Full song details are available in the appendix.</p>
-      </div>
+      {/* Corvids Annotation - to be provided */}
     </div>
   );
 }

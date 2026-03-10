@@ -21,7 +21,7 @@ export const PIECES = [
     treatment: "poem",
     status: "live",
     sortKey: 2001.01,
-    corvidsNote: "Written during the school day on September 11, 2001. The earliest piece in the archive. Found in a composition notebook with the cover torn off, filed between algebra notes and a cafeteria menu. Rowan was fifteen.",
+    corvidsNote: null,
   },
   {
     id: "proto-manifesto",
@@ -34,7 +34,7 @@ export const PIECES = [
     treatment: "found",
     status: "live",
     sortKey: 2001.08,
-    corvidsNote: "Recovered from a Gateway 2000 hard drive acquired at a Goodwill in Columbus, Ohio, in 2019. The file was last modified at 2:37 AM on August 15, 2001. It appears to have been written for a class but addressed to no one in particular. Ten numbered sections. The final line suggests Rowan knew someone might find it.",
+    corvidsNote: null,
   },
   {
     id: "field-notes",
@@ -86,7 +86,7 @@ export const PIECES = [
     treatment: "fragment",
     status: "live",
     sortKey: 2005.01,
-    corvidsNote: "The disc was found in 2010 by a library volunteer shelving returns. The case was tucked inside a copy of Slaughterhouse-Five that had been checked out and returned without the CD being noticed. The volunteer contacted us after reading about the Collective's work. The tracklist is handwritten. The disc itself was blank.",
+    corvidsNote: null,
   },
   // ═══════════════════════════════════
   // EARLY CAREER (2006–2011)
