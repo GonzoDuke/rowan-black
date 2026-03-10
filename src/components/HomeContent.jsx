@@ -1,299 +1,299 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PIECES, PERIODS } from '../data/pieces.js';
 
-const SORT_MODES = [
-  { id: 'collection', label: 'Collection' },
-  { id: 'chronological', label: 'Oldest' },
-  { id: 'reverse', label: 'Newest' },
-];
-
-const periodColors = {
-  teenage: '#39ff14',
-  early: '#d4a843',
-  transitional: '#4a7aaa',
-  mature: '#aa4a4a',
-  prophetic: '#4a9eff',
+const treatmentExt = {
+  poem: '.txt',
+  found: '.doc',
+  fragment: '.frag',
+  capstone: '.sys',
 };
 
-const treatmentLabels = {
-  poem: null,
-  found: 'FOUND',
-  fragment: 'FRGMT',
-  capstone: 'SIGNAL',
+const treatmentSize = {
+  poem: () => `${(Math.random() * 12 + 2).toFixed(1)} KB`,
+  found: () => `${(Math.random() * 24 + 4).toFixed(1)} KB`,
+  fragment: () => `${(Math.random() * 3 + 0.4).toFixed(1)} KB`,
+  capstone: () => `${(Math.random() * 80 + 40).toFixed(1)} KB`,
 };
 
-function PieceCard({ piece }) {
-  const color = periodColors[piece.period] || '#4a9eff';
-  const badge = treatmentLabels[piece.treatment];
+function FileEntry({ piece, index }) {
   const isLive = piece.status === 'live';
+  const ext = treatmentExt[piece.treatment] || '.txt';
+  const [size] = useState(() => treatmentSize[piece.treatment]?.() || '2.0 KB');
+  const [hovered, setHovered] = useState(false);
+
+  const color = piece.treatment === 'capstone' ? '#ff4a4a'
+    : piece.treatment === 'found' ? '#d4a843'
+    : piece.treatment === 'fragment' ? '#6a8a6a'
+    : '#c8c8d0';
+
+  const fileName = piece.id + ext;
 
   return (
     <a
       href={isLive ? `/${piece.id}` : undefined}
       style={{
-        display: 'block',
-        background: '#111114',
-        border: '1px solid rgba(200,200,208,0.06)',
-        borderLeft: `2px solid ${color}`,
-        borderRadius: '2px',
-        padding: '16px 20px',
+        display: 'grid',
+        gridTemplateColumns: '32px 1fr 80px 100px 60px',
+        gap: '0',
+        alignItems: 'baseline',
+        padding: '4px 0',
         textDecoration: 'none',
-        transition: 'all 0.2s ease',
-        opacity: isLive ? 1 : 0.4,
+        opacity: isLive ? 1 : 0.25,
         cursor: isLive ? 'pointer' : 'default',
-        position: 'relative',
+        background: hovered && isLive ? 'rgba(74,158,255,0.06)' : 'transparent',
+        transition: 'background 0.1s',
+        borderBottom: '1px solid rgba(200,200,208,0.03)',
       }}
-      onMouseEnter={e => {
-        if (isLive) {
-          e.currentTarget.style.background = '#161619';
-          e.currentTarget.style.borderColor = 'rgba(200,200,208,0.12)';
-          e.currentTarget.style.borderLeftColor = color;
-        }
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.background = '#111114';
-        e.currentTarget.style.borderColor = 'rgba(200,200,208,0.06)';
-        e.currentTarget.style.borderLeftColor = color;
-      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {badge && (
-        <span style={{
-          position: 'absolute',
-          top: '12px',
-          right: '12px',
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '8px',
-          fontWeight: 500,
-          letterSpacing: '0.12em',
-          color: piece.treatment === 'capstone' ? '#ff4a4a' : 'rgba(200,200,208,0.3)',
-          textTransform: 'uppercase',
-          background: piece.treatment === 'capstone' ? 'rgba(255,74,74,0.08)' : 'rgba(200,200,208,0.04)',
-          padding: '2px 6px',
-          borderRadius: '1px',
-        }}>{badge}</span>
-      )}
-
-      <div style={{
-        fontFamily: "'Cormorant Garamond', Georgia, serif",
-        fontSize: '16px',
-        fontWeight: 400,
-        color: '#e8e8f0',
-        lineHeight: 1.25,
-        marginBottom: '6px',
-        paddingRight: badge ? '48px' : 0,
-      }}>{piece.title}</div>
-
-      {piece.subtitle && (
-        <div style={{
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
-          fontSize: '13px',
-          fontWeight: 300,
-          fontStyle: 'italic',
-          color: 'rgba(200,200,208,0.45)',
-          lineHeight: 1.3,
-          marginBottom: '6px',
-        }}>{piece.subtitle}</div>
-      )}
-
-      <div style={{
-        fontFamily: "'IBM Plex Mono', monospace",
-        fontSize: '10px',
-        color: 'rgba(200,200,208,0.25)',
-        letterSpacing: '0.02em',
+      <span style={{ fontFamily: 'inherit', fontSize: '12px', color: 'rgba(200,200,208,0.15)', textAlign: 'right', paddingRight: '12px' }}>
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span style={{ color: hovered && isLive ? '#4a9eff' : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        {fileName}
+      </span>
+      <span style={{ color: 'rgba(200,200,208,0.2)', textAlign: 'right' }}>{size}</span>
+      <span style={{ color: 'rgba(200,200,208,0.15)', textAlign: 'right' }}>{piece.year}</span>
+      <span style={{
+        color: isLive ? '#39ff14' : 'rgba(200,200,208,0.15)',
+        textAlign: 'right',
+        fontSize: '11px',
       }}>
-        {piece.form} &middot; {piece.year}
-      </div>
+        {isLive ? 'OK' : '---'}
+      </span>
     </a>
   );
 }
 
-function PeriodGroup({ period, pieces }) {
+function DirectoryBlock({ period, pieces, startIndex }) {
+  const [open, setOpen] = useState(true);
   return (
-    <div style={{ marginBottom: '48px' }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginBottom: '16px',
-        paddingBottom: '10px',
-        borderBottom: `1px solid rgba(200,200,208,0.06)`,
-      }}>
+    <div style={{ marginBottom: '24px' }}>
+      <div
+        onClick={() => setOpen(!open)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          cursor: 'pointer',
+          padding: '6px 0',
+          borderBottom: '1px solid rgba(200,200,208,0.06)',
+          marginBottom: '4px',
+          userSelect: 'none',
+        }}
+      >
+        <span style={{ color: '#4a9eff', fontSize: '12px', width: '14px' }}>{open ? 'v' : '>'}</span>
+        <span style={{ color: period.color, fontSize: '12px' }}>/{period.id}/</span>
+        <span style={{ color: 'rgba(200,200,208,0.2)', fontSize: '11px' }}>
+          {period.label} ({period.years})
+        </span>
+        <span style={{ color: 'rgba(200,200,208,0.12)', fontSize: '11px', marginLeft: 'auto' }}>
+          {pieces.length} items
+        </span>
+      </div>
+      {open && (
+        <div style={{ paddingLeft: '14px' }}>
+          {pieces.map((p, i) => (
+            <FileEntry key={p.id} piece={p} index={startIndex + i} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BootSequence({ onComplete }) {
+  const [lines, setLines] = useState([]);
+  const bootLines = [
+    { text: 'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1', delay: 0 },
+    { text: 'Scanning archived media...', delay: 400 },
+    { text: 'Reconstructing file table...', delay: 800 },
+    { text: `${PIECES.length} objects detected`, delay: 1200 },
+    { text: `${PIECES.filter(p => p.status === "live").length} recovered // ${PIECES.filter(p => p.status !== "live").length} pending`, delay: 1600 },
+    { text: '', delay: 1900 },
+    { text: 'ARCHIVE READY', delay: 2100 },
+  ];
+
+  useEffect(() => {
+    const timeouts = bootLines.map((line, i) =>
+      setTimeout(() => {
+        setLines(prev => [...prev, line.text]);
+        if (i === bootLines.length - 1) {
+          setTimeout(onComplete, 600);
+        }
+      }, line.delay)
+    );
+    return () => timeouts.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '32px',
+    }}>
+      <div style={{ maxWidth: '520px', width: '100%' }}>
+        {lines.map((line, i) => (
+          <div key={i} style={{
+            fontSize: '12px',
+            lineHeight: '2',
+            color: i === lines.length - 1 && line === 'ARCHIVE READY' ? '#39ff14' : 'rgba(200,200,208,0.5)',
+            fontWeight: line === 'ARCHIVE READY' ? 500 : 300,
+            letterSpacing: line === 'ARCHIVE READY' ? '0.12em' : '0.02em',
+          }}>
+            {line || '\u00A0'}
+          </div>
+        ))}
         <span style={{
           display: 'inline-block',
-          width: '6px',
-          height: '6px',
-          borderRadius: '1px',
-          background: period.color,
-          opacity: 0.8,
+          width: '7px',
+          height: '14px',
+          background: 'rgba(200,200,208,0.5)',
+          animation: 'cursor-blink 1s step-end infinite',
+          verticalAlign: 'text-bottom',
+          marginLeft: '2px',
         }} />
-        <span style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '10px',
-          fontWeight: 500,
-          color: period.color,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          opacity: 0.8,
-        }}>{period.label}</span>
-        <span style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '10px',
-          color: 'rgba(200,200,208,0.2)',
-          letterSpacing: '0.04em',
-        }}>{period.years}</span>
-      </div>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: '8px',
-      }}>
-        {pieces.map(p => <PieceCard key={p.id} piece={p} />)}
       </div>
     </div>
   );
 }
 
-export default function HomeContent() {
-  const [sort, setSort] = useState('collection');
-
-  const livePieces = PIECES.filter(p => p.status !== 'hidden');
-
-  const sortedPieces = [...livePieces].sort((a, b) => {
-    if (sort === 'chronological') return a.sortKey - b.sortKey;
-    if (sort === 'reverse') return b.sortKey - a.sortKey;
-    return 0; // collection order = array order
-  });
-
-  const grouped = sort === 'collection';
+function Archive() {
+  let runningIndex = 0;
 
   return (
     <div style={{
-      background: 'var(--bg)',
       minHeight: '100vh',
-      color: 'var(--text)',
+      animation: 'fade-in 0.8s ease forwards',
     }}>
       {/* Header */}
       <header style={{
-        maxWidth: '880px',
+        maxWidth: '900px',
         margin: '0 auto',
-        padding: '80px 32px 48px',
+        padding: '48px 32px 0',
       }}>
         <div style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '9px',
-          fontWeight: 500,
-          color: 'rgba(200,200,208,0.25)',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          marginBottom: '16px',
-        }}>Corvids Collective // Archive</div>
+          fontSize: '10px',
+          color: 'rgba(200,200,208,0.2)',
+          letterSpacing: '0.08em',
+          marginBottom: '20px',
+        }}>
+          corvids@archive:~$ ls -la /collected-works/rowan-black/
+        </div>
 
         <h1 style={{
           fontFamily: "'Space Grotesk', Arial, sans-serif",
-          fontSize: 'clamp(28px, 5vw, 42px)',
+          fontSize: 'clamp(24px, 4.5vw, 38px)',
           fontWeight: 300,
           color: '#e8e8f0',
           lineHeight: 1.1,
           letterSpacing: '-0.02em',
-          marginBottom: '16px',
+          marginBottom: '12px',
         }}>
-          The Collected Works of<br />
-          <span style={{ fontWeight: 500 }}>Rowan Black</span>
+          The Collected Works of{' '}
+          <span style={{ fontWeight: 600 }}>Rowan Black</span>
         </h1>
 
         <p style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '12.5px',
+          fontSize: '12px',
           lineHeight: 1.7,
-          color: 'rgba(200,200,208,0.5)',
-          maxWidth: '560px',
+          color: 'rgba(200,200,208,0.35)',
+          maxWidth: '600px',
           fontWeight: 300,
+          marginBottom: '32px',
         }}>
-          Poems, essays, fragments, and digital artifacts recovered from the scattered archive of Rowan Black. Assembled and annotated by the Corvids Collective.
+          Recovered archive. Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective. Some files are damaged. Some are incomplete. All are preserved as found.
         </p>
 
-        <div style={{ height: '1px', background: 'var(--rule)', marginTop: '32px' }} />
+        {/* Column headers */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '32px 1fr 80px 100px 60px',
+          padding: '6px 0',
+          borderBottom: '1px solid rgba(200,200,208,0.1)',
+          marginBottom: '8px',
+          fontSize: '9px',
+          color: 'rgba(200,200,208,0.2)',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+        }}>
+          <span style={{ textAlign: 'right', paddingRight: '12px' }}>#</span>
+          <span>File</span>
+          <span style={{ textAlign: 'right' }}>Size</span>
+          <span style={{ textAlign: 'right' }}>Date</span>
+          <span style={{ textAlign: 'right' }}>Status</span>
+        </div>
       </header>
 
-      {/* Controls */}
-      <div style={{
-        maxWidth: '880px',
-        margin: '0 auto',
-        padding: '0 32px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '12px',
-      }}>
-        <div style={{
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '10px',
-          color: 'rgba(200,200,208,0.3)',
-        }}>
-          {livePieces.filter(p => p.status === 'live').length} of {livePieces.length} works available
-        </div>
-
-        <div style={{ display: 'flex', gap: '4px' }}>
-          {SORT_MODES.map(mode => (
-            <button
-              key={mode.id}
-              onClick={() => setSort(mode.id)}
-              style={{
-                background: sort === mode.id ? 'rgba(200,200,208,0.08)' : 'none',
-                border: '1px solid',
-                borderColor: sort === mode.id ? 'rgba(200,200,208,0.15)' : 'rgba(200,200,208,0.08)',
-                borderRadius: '2px',
-                fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: '10px',
-                color: sort === mode.id ? '#c8c8d0' : 'rgba(200,200,208,0.35)',
-                padding: '5px 12px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                letterSpacing: '0.04em',
-              }}
-            >{mode.label}</button>
-          ))}
-        </div>
-      </div>
-
-      {/* Content */}
+      {/* File listing */}
       <main style={{
-        maxWidth: '880px',
+        maxWidth: '900px',
         margin: '0 auto',
-        padding: '0 32px 120px',
+        padding: '0 32px 80px',
       }}>
-        {grouped ? (
-          PERIODS.map(period => {
-            const periodPieces = sortedPieces.filter(p => p.period === period.id);
-            if (periodPieces.length === 0) return null;
-            return <PeriodGroup key={period.id} period={period} pieces={periodPieces} />;
-          })
-        ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '8px',
-          }}>
-            {sortedPieces.map(p => <PieceCard key={p.id} piece={p} />)}
-          </div>
-        )}
+        {PERIODS.map(period => {
+          const periodPieces = PIECES.filter(p => p.period === period.id);
+          const block = (
+            <DirectoryBlock
+              key={period.id}
+              period={period}
+              pieces={periodPieces}
+              startIndex={runningIndex}
+            />
+          );
+          runningIndex += periodPieces.length;
+          return block;
+        })}
       </main>
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid var(--rule)',
-        padding: '32px',
-        textAlign: 'center',
+        borderTop: '1px solid rgba(200,200,208,0.04)',
+        padding: '24px 32px 48px',
+        maxWidth: '900px',
+        margin: '0 auto',
       }}>
-        <span style={{
-          fontFamily: "'IBM Plex Mono', monospace",
+        <div style={{
           fontSize: '10px',
-          color: 'rgba(200,200,208,0.2)',
-          letterSpacing: '0.04em',
-        }}>Corvids Collective &middot; The Collected Works of Rowan Black</span>
+          color: 'rgba(200,200,208,0.12)',
+        }}>
+          corvids@archive:~$&nbsp;<span style={{ display: 'inline-block', width: '6px', height: '13px', background: 'rgba(200,200,208,0.2)', animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom' }} />
+        </div>
       </footer>
+    </div>
+  );
+}
+
+export default function HomeContent() {
+  const [booted, setBooted] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('rb-booted')) {
+        setBooted(true);
+      }
+    } catch(e) {
+      setBooted(true);
+    }
+  }, []);
+
+  const handleBootComplete = () => {
+    try { sessionStorage.setItem('rb-booted', '1'); } catch(e) {}
+    setBooted(true);
+  };
+
+  return (
+    <div style={{
+      background: '#0a0a0c',
+      minHeight: '100vh',
+      fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
+      fontSize: '12px',
+      color: '#c8c8d0',
+    }}>
+      {booted ? <Archive /> : <BootSequence onComplete={handleBootComplete} />}
     </div>
   );
 }

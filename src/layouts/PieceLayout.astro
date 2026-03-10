@@ -2,7 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 
 const { piece } = Astro.props;
-const pageTitle = `${piece.title} — The Collected Works of Rowan Black`;
+const pageTitle = `${piece.title} — Rowan Black`;
 const ogImage = `/og/${piece.id}.png`;
 const ogUrl = `https://placeholder.com/${piece.id}`;
 
@@ -18,98 +18,143 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
 ---
 
 <BaseLayout title={pageTitle} description={piece.corvidsNote || piece.subtitle || ''} ogImage={ogImage} ogUrl={ogUrl}>
-  <div style="background: var(--bg); min-height: 100vh;">
-    <!-- Top nav -->
-    <nav style={`
+  <div id="piece-page" style="background: #0a0a0c; min-height: 100vh; position: relative;">
+
+    <!-- Floating nav: hidden until scroll -->
+    <nav id="piece-nav" style={`
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(10,10,12,0.92);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--rule);
+      background: rgba(10,10,12,0.95);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(200,200,208,0.04);
       padding: 0 28px;
       display: flex; align-items: center; justify-content: space-between;
-      height: 48px;
+      height: 44px;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
     `}>
       <a href="/" style={`
-        background: none; border: 1px solid var(--button-border); border-radius: 2px;
-        font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.08em;
-        color: var(--button-text); padding: 5px 14px; text-decoration: none;
-        transition: all 0.15s ease; text-transform: uppercase;
-      `}>&larr; Archive</a>
+        font-family: var(--mono); font-size: 10px; font-weight: 400;
+        letter-spacing: 0.06em; color: rgba(200,200,208,0.35);
+        text-decoration: none; transition: color 0.15s;
+      `}>← archive</a>
       <span style={`
         font-family: var(--mono); font-size: 10px; font-weight: 300;
-        color: var(--text-ghost); letter-spacing: 0.06em; text-transform: uppercase;
-      `}>Corvids Collective</span>
+        color: rgba(200,200,208,0.15); letter-spacing: 0.04em;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        max-width: 50%;
+      `}>{piece.title}</span>
     </nav>
 
-    <!-- Header: Title + Corvids Note -->
-    <div style="border-bottom: 1px solid var(--rule);">
-      <div style="max-width: var(--wide-width); margin: 0 auto; padding: 72px 32px 32px;">
-        <!-- Period indicator -->
-        <div style={`
-          font-family: var(--mono); font-size: 9px; font-weight: 500;
-          color: ${periodColor}; letter-spacing: 0.12em; text-transform: uppercase;
-          margin-bottom: 16px; opacity: 0.8;
-        `}>
-          <span style={`display: inline-block; width: 6px; height: 6px; border-radius: 1px; background: ${periodColor}; margin-right: 8px; vertical-align: middle;`}></span>
-          {piece.periodLabel} &middot; {piece.year}
-        </div>
-
-        <!-- Title -->
-        <h1 style={`
-          font-family: var(--serif); font-size: 32px; font-weight: 400;
-          line-height: 1.15; color: var(--text-bright); letter-spacing: -0.01em;
-          margin-bottom: 6px;
-        `}>{piece.title}</h1>
-
-        {piece.subtitle && (
-          <div style={`
-            font-family: var(--serif); font-size: 17px; font-weight: 300;
-            font-style: italic; color: var(--text-dim); line-height: 1.3;
-            margin-bottom: 12px;
-          `}>{piece.subtitle}</div>
-        )}
-
-        <!-- Form label -->
-        <div style={`
-          font-family: var(--mono); font-size: 10px; font-weight: 400;
-          color: var(--text-ghost); letter-spacing: 0.04em;
-          margin-bottom: 20px;
-        `}>{piece.form}</div>
-
-        <!-- Corvids note -->
-        {piece.corvidsNote && (
-          <div style={`
-            border-left: 2px solid var(--rule-bright);
-            padding-left: 20px;
-            margin-top: 20px;
-          `}>
-            <div style={`
-              font-family: var(--mono); font-size: 9px; font-weight: 500;
-              color: var(--text-ghost); letter-spacing: 0.1em; text-transform: uppercase;
-              margin-bottom: 8px;
-            `}>Corvids Collective Note</div>
-            <p style={`
-              font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
-              color: var(--text-dim); font-style: italic; font-weight: 300; margin: 0;
-            `}>{piece.corvidsNote}</p>
-          </div>
-        )}
-
-        <div style="height: 1px; background: var(--rule); margin-top: 28px;"></div>
+    <!-- Full-screen entry: title + Corvids note -->
+    <div style={`
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 32px 80px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    `}>
+      <!-- Period indicator: subtle, top-left area -->
+      <div style={`
+        font-family: var(--mono); font-size: 9px; font-weight: 400;
+        color: ${periodColor}; letter-spacing: 0.12em; text-transform: uppercase;
+        margin-bottom: 20px; opacity: 0.5;
+      `}>
+        {piece.periodLabel} // {piece.year}
       </div>
+
+      <!-- Title -->
+      <h1 style={`
+        font-family: var(--serif); font-size: clamp(28px, 5vw, 44px); font-weight: 400;
+        line-height: 1.1; color: #e8e8f0; letter-spacing: -0.01em;
+        margin-bottom: 10px;
+      `}>{piece.title}</h1>
+
+      {piece.subtitle && (
+        <div style={`
+          font-family: var(--serif); font-size: 18px; font-weight: 300;
+          font-style: italic; color: rgba(200,200,208,0.4); line-height: 1.3;
+          margin-bottom: 16px;
+        `}>{piece.subtitle}</div>
+      )}
+
+      <!-- Form label -->
+      <div style={`
+        font-family: var(--mono); font-size: 10px;
+        color: rgba(200,200,208,0.15); letter-spacing: 0.04em;
+        margin-bottom: 32px;
+      `}>{piece.form}</div>
+
+      <!-- Corvids note -->
+      {piece.corvidsNote && (
+        <div style={`
+          border-left: 1px solid rgba(200,200,208,0.06);
+          padding-left: 20px;
+          max-width: 540px;
+        `}>
+          <div style={`
+            font-family: var(--mono); font-size: 9px; font-weight: 400;
+            color: rgba(200,200,208,0.15); letter-spacing: 0.08em;
+            text-transform: uppercase; margin-bottom: 10px;
+          `}>Corvids Collective</div>
+          <p style={`
+            font-family: var(--mono); font-size: 12px; line-height: 1.8;
+            color: rgba(200,200,208,0.35); font-weight: 300; margin: 0;
+          `}>{piece.corvidsNote}</p>
+        </div>
+      )}
+
+      <!-- Scroll indicator -->
+      <div style={`
+        position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+        font-family: var(--mono); font-size: 9px; color: rgba(200,200,208,0.1);
+        letter-spacing: 0.1em; animation: fade-in 2s ease forwards;
+        animation-delay: 1s; opacity: 0;
+      `}>↓</div>
     </div>
 
-    <!-- Piece content -->
-    <slot />
+    <!-- Piece content: emerges on scroll -->
+    <div style={`
+      border-top: 1px solid rgba(200,200,208,0.04);
+      position: relative;
+    `}>
+      <slot />
+    </div>
 
     <!-- Return footer -->
-    <div style="padding: 64px 28px 120px; text-align: center;">
+    <div style={`
+      padding: 80px 28px 120px; text-align: center;
+      border-top: 1px solid rgba(200,200,208,0.04);
+    `}>
       <a href="/" style={`
-        background: none; border: 1px solid var(--button-border); border-radius: 2px;
-        font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.08em;
-        color: var(--button-text); padding: 7px 20px; text-decoration: none;
-        transition: all 0.15s ease; display: inline-block; text-transform: uppercase;
-      `}>&larr; Back to Archive</a>
+        font-family: var(--mono); font-size: 10px; font-weight: 400;
+        letter-spacing: 0.06em; color: rgba(200,200,208,0.2);
+        text-decoration: none; transition: color 0.15s;
+        border: 1px solid rgba(200,200,208,0.08);
+        padding: 8px 20px; border-radius: 2px;
+        display: inline-block;
+      `}>← archive</a>
     </div>
   </div>
+
+  <script>
+    // Show nav bar after scrolling past the first viewport
+    const nav = document.getElementById('piece-nav');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > window.innerHeight * 0.6) {
+            nav.style.transform = 'translateY(0)';
+          } else {
+            nav.style.transform = 'translateY(-100%)';
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  </script>
 </BaseLayout>
