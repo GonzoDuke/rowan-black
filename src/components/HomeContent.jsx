@@ -67,7 +67,7 @@ function FileEntry({ piece, index }) {
 }
 
 function DirectoryBlock({ period, pieces, startIndex }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <div style={{ marginBottom: '24px' }}>
       <div
@@ -105,36 +105,62 @@ function DirectoryBlock({ period, pieces, startIndex }) {
 
 function BootSequence({ onComplete }) {
   const [lines, setLines] = useState([]);
+  const [showTitle, setShowTitle] = useState(false);
   const bootLines = [
     { text: 'CORVIDS COLLECTIVE // RECOVERY SYSTEM v3.1', delay: 0 },
-    { text: 'Scanning archived media...', delay: 400 },
-    { text: 'Reconstructing file table...', delay: 800 },
-    { text: `${PIECES.length} objects detected`, delay: 1200 },
-    { text: `${PIECES.filter(p => p.status === "live").length} recovered // ${PIECES.filter(p => p.status !== "live").length} pending`, delay: 1600 },
-    { text: '', delay: 1900 },
-    { text: 'ARCHIVE READY', delay: 2100 },
+    { text: 'Initializing archive protocol...', delay: 600 },
+    { text: 'Scanning archived media...', delay: 1400 },
+    { text: 'Reconstructing file table...', delay: 2400 },
+    { text: `${PIECES.length} objects detected`, delay: 3600 },
+    { text: `${PIECES.filter(p => p.status === "live").length} recovered // ${PIECES.filter(p => p.status !== "live").length} pending reconstruction`, delay: 4600 },
+    { text: '', delay: 5400 },
+    { text: 'ARCHIVE READY', delay: 6000 },
   ];
 
   useEffect(() => {
+    const titleTimeout = setTimeout(() => setShowTitle(true), 800);
     const timeouts = bootLines.map((line, i) =>
       setTimeout(() => {
         setLines(prev => [...prev, line.text]);
         if (i === bootLines.length - 1) {
-          setTimeout(onComplete, 600);
+          setTimeout(onComplete, 1200);
         }
       }, line.delay)
     );
-    return () => timeouts.forEach(clearTimeout);
+    return () => {
+      clearTimeout(titleTimeout);
+      timeouts.forEach(clearTimeout);
+    };
   }, []);
 
   return (
     <div style={{
       minHeight: '100vh',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '32px',
     }}>
+      {/* Bold title */}
+      <div style={{
+        fontFamily: "'Space Grotesk', Arial, sans-serif",
+        fontSize: 'clamp(22px, 4vw, 34px)',
+        fontWeight: 300,
+        color: '#e8e8f0',
+        lineHeight: 1.2,
+        letterSpacing: '-0.02em',
+        textAlign: 'center',
+        marginBottom: '48px',
+        opacity: showTitle ? 1 : 0,
+        transform: showTitle ? 'translateY(0)' : 'translateY(8px)',
+        transition: 'opacity 0.8s ease, transform 0.8s ease',
+      }}>
+        The Collected Works of<br />
+        <span style={{ fontWeight: 600 }}>Rowan Black</span>
+      </div>
+
+      {/* Boot log */}
       <div style={{ maxWidth: '520px', width: '100%' }}>
         {lines.map((line, i) => (
           <div key={i} style={{
@@ -157,6 +183,42 @@ function BootSequence({ onComplete }) {
           marginLeft: '2px',
         }} />
       </div>
+    </div>
+  );
+}
+
+function TerminalText() {
+  const [visibleLines, setVisibleLines] = useState(0);
+  const lines = [
+    'Recovered archive.',
+    'Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective.',
+    'Some files are damaged. Some are incomplete.',
+    'All are preserved as found.',
+    '',
+    'Open a directory below to browse the collection.',
+  ];
+
+  useEffect(() => {
+    const timeouts = lines.map((_, i) =>
+      setTimeout(() => setVisibleLines(i + 1), 300 + i * 500)
+    );
+    return () => timeouts.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div style={{ marginBottom: '32px', maxWidth: '600px' }}>
+      {lines.slice(0, visibleLines).map((line, i) => (
+        <span key={i} style={{
+          display: i === 4 ? 'block' : 'inline',
+          fontSize: '12px',
+          lineHeight: 1.7,
+          fontWeight: 300,
+          color: i === lines.length - 1 ? 'rgba(74,158,255,0.5)' : 'rgba(200,200,208,0.35)',
+          height: i === 4 ? '12px' : 'auto',
+        }}>
+          {line}{i < 4 && i !== 3 ? ' ' : ''}
+        </span>
+      ))}
     </div>
   );
 }
@@ -197,16 +259,7 @@ function Archive() {
           <span style={{ fontWeight: 600 }}>Rowan Black</span>
         </h1>
 
-        <p style={{
-          fontSize: '12px',
-          lineHeight: 1.7,
-          color: 'rgba(200,200,208,0.35)',
-          maxWidth: '600px',
-          fontWeight: 300,
-          marginBottom: '32px',
-        }}>
-          Recovered archive. Poems, essays, fragments, and digital artifacts assembled by the Corvids Collective. Some files are damaged. Some are incomplete. All are preserved as found.
-        </p>
+        <TerminalText />
 
         {/* Column headers */}
         <div style={{

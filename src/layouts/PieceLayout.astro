@@ -20,8 +20,8 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
 <BaseLayout title={pageTitle} description={piece.corvidsNote || piece.subtitle || ''} ogImage={ogImage} ogUrl={ogUrl}>
   <div id="piece-page" style="background: #0a0a0c; min-height: 100vh; position: relative;">
 
-    <!-- Floating nav: hidden until scroll -->
-    <nav id="piece-nav" style={`
+    <!-- Top nav: always visible -->
+    <nav style={`
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       background: rgba(10,10,12,0.95);
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -29,8 +29,6 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
       padding: 0 28px;
       display: flex; align-items: center; justify-content: space-between;
       height: 44px;
-      transform: translateY(-100%);
-      transition: transform 0.3s ease;
     `}>
       <a href="/" style={`
         font-family: var(--mono); font-size: 10px; font-weight: 400;
@@ -51,7 +49,7 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 0 32px 80px;
+      padding: 60px 32px 80px;
       max-width: 800px;
       margin: 0 auto;
       position: relative;
@@ -139,22 +137,5 @@ const periodColor = periodColors[piece.period] || '#4a9eff';
     </div>
   </div>
 
-  <script>
-    // Show nav bar after scrolling past the first viewport
-    const nav = document.getElementById('piece-nav');
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.scrollY > window.innerHeight * 0.6) {
-            nav.style.transform = 'translateY(0)';
-          } else {
-            nav.style.transform = 'translateY(-100%)';
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-  </script>
+
 </BaseLayout>
