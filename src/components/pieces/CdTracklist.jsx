@@ -1,4 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+function useIsMobile(bp = 640) {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp}px)`);
+    setM(mq.matches);
+    const h = (e) => setM(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, [bp]);
+  return m;
+}
 
 const RULED_BG = `repeating-linear-gradient(
   to bottom,
@@ -9,7 +21,7 @@ const RULED_BG = `repeating-linear-gradient(
 )`;
 
 const S = {
-  outer: { maxWidth: '760px', margin: '0 auto', padding: '40px 24px 60px' },
+  outer: { maxWidth: '760px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(8px, 3vw, 24px) clamp(40px, 8vw, 60px)' },
   insert: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -119,11 +131,21 @@ const Track = ({ num, title, artist }) => (
 );
 
 export default function CdTracklist() {
+  const mobile = useIsMobile();
+  const panelStyle = {
+    ...S.panel,
+    aspectRatio: mobile ? 'auto' : '1 / 1',
+    maxWidth: mobile ? '100%' : '380px',
+    flex: mobile ? '1 1 100%' : '1 1 320px',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   return (
     <div style={S.outer}>
       <div style={S.insert}>
         {/* Left panel — front cover */}
-        <div style={{ ...S.panel, display: 'flex', flexDirection: 'column' }}>
+        <div style={panelStyle}>
           <div style={S.title}>
             Songs for Cities<br />That Don't Exist Yet
           </div>
@@ -147,7 +169,7 @@ export default function CdTracklist() {
         <div style={S.panelDivider} />
 
         {/* Right panel — inside */}
-        <div style={{ ...S.panel, display: 'flex', flexDirection: 'column' }}>
+        <div style={panelStyle}>
           <Track num="9" title="Somebody That I Used to Know" artist="Elliott Smith" />
           <Track num="10" title="Float On" artist="Modest Mouse" />
           <Track num="11" title="B.O.B." artist="OutKast" />

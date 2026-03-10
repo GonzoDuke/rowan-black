@@ -1,8 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PIECES, PERIODS } from '../data/pieces.js';
 
-/* ── Constants ── */
+/* ── Responsive hook ── */
+function useIsMobile(breakpoint = 640) {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setMobile(mq.matches);
+    const handler = (e) => setMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return mobile;
+}
 
+/* ── Constants ── */
 const FILE_EXT = { poem: '', found: '.doc', fragment: '.frag', capstone: '.×§∂' };
 function getExt(t) { return t in FILE_EXT ? FILE_EXT[t] : ''; }
 
@@ -29,7 +41,6 @@ const DESC_SENTENCES = [
 const C = {
   bg: '#eef0f4',
   surface: '#ffffff',
-  chrome: '#e2e4ea',
   text: '#1a1d24',
   dim: '#5a6070',
   ghost: '#9099a8',
@@ -58,7 +69,7 @@ function glitchText(text, intensity) {
    FILE ENTRY
    ══════════════════════════════ */
 
-function FileEntry({ piece, index }) {
+function FileEntry({ piece, index, mobile }) {
   const isLive = piece.status === 'live';
   const ext = getExt(piece.treatment);
   const sizeRef = useRef((Math.random() * 14 + 1.5).toFixed(1) + ' KB');
@@ -69,38 +80,41 @@ function FileEntry({ piece, index }) {
     : piece.treatment === 'fragment' ? '#2a7a50'
     : C.accent;
 
-  // Clean by default, glitch on hover for prophetic only
   const canGlitch = piece.period === 'prophetic';
   const displayName = canGlitch && hovered && isLive
     ? glitchText(piece.id, 0.15) + ext
     : piece.id + ext;
+
+  const gridCols = mobile
+    ? '24px 1fr 44px'
+    : '32px 1fr 80px 100px 60px';
 
   return (
     <a
       href={isLive ? '/' + piece.id : undefined}
       style={{
         display: 'grid',
-        gridTemplateColumns: '32px 1fr 80px 100px 60px',
-        padding: '5px 8px',
+        gridTemplateColumns: gridCols,
+        padding: mobile ? '6px 4px' : '5px 8px',
         textDecoration: 'none',
         opacity: isLive ? 1 : 0.35,
         cursor: isLive ? 'pointer' : 'default',
         background: hovered && isLive ? C.hover : (index % 2 === 0 ? 'rgba(0,0,0,0.02)' : 'transparent'),
         transition: 'background 0.1s',
         borderRadius: '3px',
-        fontSize: '12px',
+        fontSize: mobile ? '11px' : '12px',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <span style={{ color: C.ghost, textAlign: 'right', paddingRight: '12px' }}>
+      <span style={{ color: C.ghost, textAlign: 'right', paddingRight: mobile ? '8px' : '12px' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
       <span style={{ color: hovered && isLive ? C.accent : color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 400 }}>
         {displayName}
       </span>
-      <span style={{ color: C.ghost, textAlign: 'right' }}>{sizeRef.current}</span>
-      <span style={{ color: C.ghost, textAlign: 'right' }}>{piece.year}</span>
+      {!mobile && <span style={{ color: C.ghost, textAlign: 'right' }}>{sizeRef.current}</span>}
+      {!mobile && <span style={{ color: C.ghost, textAlign: 'right' }}>{piece.year}</span>}
       <span style={{ color: isLive ? C.green : C.ghost, textAlign: 'right', fontSize: '11px', fontWeight: 500 }}>
         {isLive ? 'OK' : '---'}
       </span>
@@ -112,15 +126,15 @@ function FileEntry({ piece, index }) {
    DIRECTORY BLOCK
    ══════════════════════════════ */
 
-function DirectoryBlock({ period, pieces, startIndex }) {
+function DirectoryBlock({ period, pieces, startIndex, mobile }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ marginBottom: '16px' }}>
+    <div style={{ marginBottom: mobile ? '12px' : '16px' }}>
       <div
         onClick={() => setOpen(o => !o)}
         style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          cursor: 'pointer', padding: '8px 8px',
+          display: 'flex', alignItems: 'center', gap: mobile ? '6px' : '8px',
+          cursor: 'pointer', padding: mobile ? '8px 4px' : '8px 8px',
           background: open ? 'rgba(0,0,0,0.03)' : 'transparent',
           borderRadius: '4px',
           borderBottom: '1px solid ' + C.rule,
@@ -129,17 +143,19 @@ function DirectoryBlock({ period, pieces, startIndex }) {
         }}
       >
         <span style={{ color: C.accent, fontSize: '11px', width: '14px', fontWeight: 600 }}>{open ? '▼' : '▶'}</span>
-        <span style={{ color: period.color, fontSize: '13px', fontWeight: 600 }}>/{period.id}/</span>
-        <span style={{ color: C.dim, fontSize: '12px' }}>
-          {period.label} ({period.years})
-        </span>
+        <span style={{ color: period.color, fontSize: mobile ? '12px' : '13px', fontWeight: 600 }}>/{period.id}/</span>
+        {!mobile && (
+          <span style={{ color: C.dim, fontSize: '12px' }}>
+            {period.label} ({period.years})
+          </span>
+        )}
         <span style={{ color: C.ghost, fontSize: '11px', marginLeft: 'auto' }}>
           {pieces.length} items
         </span>
       </div>
       {open && (
-        <div style={{ padding: '4px 0 8px 22px' }}>
-          {pieces.map((p, i) => <FileEntry key={p.id} piece={p} index={startIndex + i} />)}
+        <div style={{ padding: mobile ? '4px 0 8px 12px' : '4px 0 8px 22px' }}>
+          {pieces.map((p, i) => <FileEntry key={p.id} piece={p} index={startIndex + i} mobile={mobile} />)}
         </div>
       )}
     </div>
@@ -180,17 +196,14 @@ function Description({ returning }) {
   const main = parts[0] || '';
   const hint = parts[1] || '';
   const done = charCount >= fullText.length;
-
   const fullParts = fullText.split('\n\n');
 
   return (
     <div style={{ marginBottom: '28px', maxWidth: '620px', position: 'relative' }}>
-      {/* Invisible placeholder to reserve final size */}
       <div aria-hidden="true" style={{ visibility: 'hidden' }}>
         <div style={{ fontSize: '13px', lineHeight: 1.75 }}>{fullParts[0]}</div>
         <div style={{ fontSize: '13px', lineHeight: 1.75, marginTop: '8px' }}>{fullParts[1]}</div>
       </div>
-      {/* Visible typing layer */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
         <div style={{ fontSize: '13px', lineHeight: 1.75, color: C.dim }}>
           {main}
@@ -219,7 +232,7 @@ function Description({ returning }) {
    BOOT PROMPT (footer area)
    ══════════════════════════════ */
 
-function BootPrompt({ returning }) {
+function BootPrompt({ returning, mobile }) {
   const [lineIndex, setLineIndex] = useState(-1);
   const [done, setDone] = useState(returning);
   const mountedRef = useRef(true);
@@ -227,15 +240,12 @@ function BootPrompt({ returning }) {
   useEffect(() => {
     if (returning) return;
     mountedRef.current = true;
-
     const timers = BOOT_DELAYS.map((d, i) =>
       setTimeout(() => { if (mountedRef.current) setLineIndex(i); }, d)
     );
-
     const doneTimer = setTimeout(() => {
       if (mountedRef.current) setDone(true);
     }, BOOT_DELAYS[BOOT_DELAYS.length - 1] + 1200);
-
     return () => {
       mountedRef.current = false;
       timers.forEach(clearTimeout);
@@ -248,9 +258,10 @@ function BootPrompt({ returning }) {
 
   return (
     <div style={{
-      borderTop: '1px solid ' + C.rule, padding: '12px 36px',
-      fontSize: '11px', color: C.ghost, minHeight: '40px',
+      borderTop: '1px solid ' + C.rule, padding: mobile ? '10px 16px' : '12px 36px',
+      fontSize: mobile ? '10px' : '11px', color: C.ghost, minHeight: '40px',
       display: 'flex', alignItems: 'center',
+      overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
     }}>
       {done ? (
         <span>
@@ -262,7 +273,6 @@ function BootPrompt({ returning }) {
           color: isReady ? C.green : C.ghost,
           fontWeight: isReady ? 600 : 400,
           letterSpacing: isReady ? '0.06em' : '0.02em',
-          transition: 'opacity 0.15s',
         }}>
           {'> '}{currentLine}
           <span style={{ display: 'inline-block', width: '7px', height: '13px', background: isReady ? C.green : C.ghost, animation: 'cursor-blink 1s step-end infinite', verticalAlign: 'text-bottom', marginLeft: '4px' }} />
@@ -280,47 +290,52 @@ function BootPrompt({ returning }) {
    ARCHIVE (main view)
    ══════════════════════════════ */
 
-function Archive({ returning }) {
+function Archive({ returning, mobile }) {
   let idx = 0;
+  const gridCols = mobile
+    ? '24px 1fr 44px'
+    : '32px 1fr 80px 100px 60px';
 
   return (
     <div style={{ minHeight: '100vh' }}>
-      {/* Window chrome */}
       <div style={{
         background: C.surface,
-        border: '1px solid ' + C.border,
-        borderRadius: '8px',
+        border: mobile ? 'none' : '1px solid ' + C.border,
+        borderRadius: mobile ? '0' : '8px',
         maxWidth: '940px',
-        margin: '32px auto',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08)',
+        margin: mobile ? '0' : '32px auto',
+        boxShadow: mobile ? 'none' : '0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08)',
         overflow: 'hidden',
+        minHeight: mobile ? '100vh' : 'auto',
       }}>
         {/* Title bar */}
         <div style={{
           background: 'linear-gradient(180deg, #f0f1f5 0%, #e4e5ea 100%)',
           borderBottom: '1px solid ' + C.border,
-          padding: '10px 16px',
+          padding: mobile ? '8px 12px' : '10px 16px',
           display: 'flex', alignItems: 'center', gap: '8px',
         }}>
           <div style={{ display: 'flex', gap: '6px' }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f57' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#febc2e' }} />
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28c840' }} />
+            <div style={{ width: mobile ? '10px' : '12px', height: mobile ? '10px' : '12px', borderRadius: '50%', background: '#ff5f57' }} />
+            <div style={{ width: mobile ? '10px' : '12px', height: mobile ? '10px' : '12px', borderRadius: '50%', background: '#febc2e' }} />
+            <div style={{ width: mobile ? '10px' : '12px', height: mobile ? '10px' : '12px', borderRadius: '50%', background: '#28c840' }} />
           </div>
-          <div style={{
-            flex: 1, textAlign: 'center',
-            fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px',
-            color: C.ghost, fontWeight: 400,
-          }}>
-            corvids@archive: ~/collected-works/rowan-black
-          </div>
+          {!mobile && (
+            <div style={{
+              flex: 1, textAlign: 'center',
+              fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px',
+              color: C.ghost, fontWeight: 400,
+            }}>
+              corvids@archive: ~/collected-works/rowan-black
+            </div>
+          )}
         </div>
 
         {/* Content area */}
-        <div style={{ padding: '32px 36px 24px' }}>
+        <div style={{ padding: mobile ? '20px 16px 16px' : '32px 36px 24px' }}>
           <h1 style={{
             fontFamily: "'Space Grotesk', Arial, sans-serif",
-            fontSize: 'clamp(24px, 4.5vw, 36px)', fontWeight: 300,
+            fontSize: mobile ? '22px' : 'clamp(24px, 4.5vw, 36px)', fontWeight: 300,
             color: C.text, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '16px',
           }}>
             The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
@@ -330,28 +345,27 @@ function Archive({ returning }) {
 
           {/* Column headers */}
           <div style={{
-            display: 'grid', gridTemplateColumns: '32px 1fr 80px 100px 60px',
-            padding: '6px 8px', borderBottom: '2px solid ' + C.rule, marginBottom: '6px',
+            display: 'grid', gridTemplateColumns: gridCols,
+            padding: mobile ? '6px 4px' : '6px 8px',
+            borderBottom: '2px solid ' + C.rule, marginBottom: '6px',
             fontSize: '10px', color: C.ghost, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500,
           }}>
-            <span style={{ textAlign: 'right', paddingRight: '12px' }}>#</span>
+            <span style={{ textAlign: 'right', paddingRight: mobile ? '8px' : '12px' }}>#</span>
             <span>File</span>
-            <span style={{ textAlign: 'right' }}>Size</span>
-            <span style={{ textAlign: 'right' }}>Date</span>
+            {!mobile && <span style={{ textAlign: 'right' }}>Size</span>}
+            {!mobile && <span style={{ textAlign: 'right' }}>Date</span>}
             <span style={{ textAlign: 'right' }}>Status</span>
           </div>
 
-          {/* Directories */}
           {PERIODS.map(period => {
             const pp = PIECES.filter(p => p.period === period.id);
-            const block = <DirectoryBlock key={period.id} period={period} pieces={pp} startIndex={idx} />;
+            const block = <DirectoryBlock key={period.id} period={period} pieces={pp} startIndex={idx} mobile={mobile} />;
             idx += pp.length;
             return block;
           })}
         </div>
 
-        {/* Boot prompt in footer */}
-        <BootPrompt returning={returning} />
+        <BootPrompt returning={returning} mobile={mobile} />
       </div>
     </div>
   );
@@ -362,6 +376,7 @@ function Archive({ returning }) {
    ══════════════════════════════ */
 
 export default function HomeContent() {
+  const mobile = useIsMobile();
   const [returning] = useState(() => {
     try { return sessionStorage.getItem('rb-booted') === '1'; } catch(e) { return false; }
   });
@@ -375,9 +390,9 @@ export default function HomeContent() {
       background: C.bg, minHeight: '100vh',
       fontFamily: "'IBM Plex Mono', 'Courier New', monospace",
       fontSize: '12px', color: C.text,
-      padding: '0 16px',
+      padding: mobile ? '0' : '0 16px',
     }}>
-      <Archive returning={returning} />
+      <Archive returning={returning} mobile={mobile} />
     </div>
   );
 }

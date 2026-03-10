@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  outer: { maxWidth: '620px', margin: '0 auto', padding: '40px 36px 60px' },
+  outer: { maxWidth: '620px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(12px, 4vw, 36px) clamp(40px, 8vw, 60px)' },
   emailChrome: {
     background: '#ffffff', border: '1px solid rgba(0,0,0,0.12)', borderRadius: '6px',
     overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
@@ -20,12 +20,12 @@ const S = {
   headerLabel: { color: '#9099a8', width: '60px', flexShrink: 0, fontWeight: 500 },
   headerValue: { color: '#1a1d24' },
   body: {
-    padding: '28px 24px 36px', fontFamily: "'Cormorant Garamond', Georgia, serif",
+    padding: 'clamp(20px, 5vw, 28px) clamp(16px, 4vw, 24px) clamp(24px, 5vw, 36px)', fontFamily: "'Cormorant Garamond', Georgia, serif",
     fontSize: '16px', lineHeight: 1.85, color: '#1a1d24',
   },
   redacted: {
     display: 'inline-block', background: '#1a1d24', borderRadius: '2px',
-    height: '14px', margin: '0 3px', verticalAlign: 'middle',
+    height: '14px', margin: '0 3px', verticalAlign: 'middle', maxWidth: '30vw',
   },
   salutation: { marginBottom: '18px' },
   closing: { marginTop: '22px' },

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  outer: { maxWidth: '700px', margin: '0 auto', padding: '40px 36px 60px' },
+  outer: { maxWidth: '700px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(12px, 4vw, 36px) clamp(40px, 8vw, 60px)' },
   reddit: {
     background: '#1a1a1b', border: '1px solid #343536', borderRadius: '6px',
     overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
@@ -23,7 +23,7 @@ const S = {
   },
   voteArrow: { fontSize: '16px', color: '#818384', cursor: 'default', lineHeight: 1 },
   voteCount: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', fontWeight: 600, color: '#d7dadc' },
-  postBody: { flex: 1, padding: '14px 16px 24px 8px' },
+  postBody: { flex: 1, padding: 'clamp(10px, 2vw, 14px) clamp(8px, 2vw, 16px) clamp(16px, 3vw, 24px) clamp(4px, 1vw, 8px)' },
   postMeta: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', color: '#818384', marginBottom: '8px' },
   postTitle: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '17px', fontWeight: 600, color: '#d7dadc', lineHeight: 1.3, marginBottom: '16px' },
   text: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px', lineHeight: 1.8, color: '#d7dadc', marginBottom: '14px' },

@@ -107,3 +107,23 @@ a:hover {
 @media (max-width: 768px) {
   body { font-size: 13px; }
 }
+
+/* ── Responsive piece containers ── */
+.piece-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 36px 60px;
+}
+
+.piece-container-wide {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 36px 60px;
+}
+
+@media (max-width: 640px) {
+  .piece-container,
+  .piece-container-wide {
+    padding: 24px 16px 40px;
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  container: { maxWidth: '680px', margin: '0 auto', padding: '40px 36px 60px' },
+  container: { maxWidth: '680px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(16px, 5vw, 36px) clamp(40px, 8vw, 60px)' },
   poem: { fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '17px', lineHeight: 1.9, color: '#1a1d24' },
   stanza: { marginBottom: '28px' },
   line: { display: 'block' },

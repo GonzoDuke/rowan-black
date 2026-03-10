@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  outer: { maxWidth: '680px', margin: '0 auto', padding: '40px 36px 60px' },
+  outer: { maxWidth: '680px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(12px, 4vw, 36px) clamp(40px, 8vw, 60px)' },
   fileChrome: {
     background: '#ffffff', border: '1px solid rgba(0,0,0,0.12)',
     borderRadius: '6px', overflow: 'hidden',
@@ -23,10 +23,10 @@ const S = {
   dot: (c) => ({ width: '12px', height: '12px', borderRadius: '50%', background: c }),
   toolbar: {
     background: '#f8f9fb', borderBottom: '1px solid rgba(0,0,0,0.06)',
-    padding: '5px 14px', display: 'flex', gap: '16px',
+    padding: '5px 14px', display: 'flex', gap: '12px', flexWrap: 'wrap',
   },
   toolbarItem: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', color: '#9099a8' },
-  docBody: { padding: '36px 44px', background: '#ffffff' },
+  docBody: { padding: 'clamp(20px, 5vw, 36px) clamp(20px, 5vw, 44px)', background: '#ffffff' },
   section: { marginBottom: '28px' },
   sectionNum: {
     fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px',

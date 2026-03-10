@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  outer: { maxWidth: '720px', margin: '0 auto', padding: '40px 36px 60px' },
+  outer: { maxWidth: '720px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(12px, 4vw, 36px) clamp(40px, 8vw, 60px)' },
   notebook: {
     background: '#faf8f5', border: '1px solid rgba(0,0,0,0.1)',
     borderRadius: '4px', overflow: 'hidden',
@@ -13,7 +13,7 @@ const S = {
     fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px',
     color: '#8a8070', letterSpacing: '0.04em', fontStyle: 'italic',
   },
-  body: { padding: '32px 36px 40px' },
+  body: { padding: 'clamp(20px, 5vw, 32px) clamp(16px, 5vw, 36px) clamp(28px, 5vw, 40px)' },
   line: {
     fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '17px',
     lineHeight: 1.85, color: '#2a2520', display: 'block',
@@ -22,7 +22,7 @@ const S = {
   marginNote: {
     fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '15px',
     lineHeight: 1.7, color: '#2a2520',
-    marginLeft: '40px', paddingLeft: '16px',
+    marginLeft: 'clamp(12px, 5vw, 40px)', paddingLeft: '14px',
     borderLeft: '2px solid rgba(0,0,0,0.08)',
     marginTop: '12px', marginBottom: '12px',
     fontStyle: 'italic',

@@ -4,7 +4,7 @@ const S = {
   container: {
     maxWidth: '640px',
     margin: '0 auto',
-    padding: '40px 36px 60px',
+    padding: 'clamp(24px, 5vw, 40px) clamp(16px, 5vw, 36px) clamp(40px, 8vw, 60px)',
   },
   poem: {
     fontFamily: "'Cormorant Garamond', Georgia, serif",

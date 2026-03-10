@@ -1,7 +1,7 @@
 import React from 'react';
 
 const S = {
-  outer: { maxWidth: '720px', margin: '0 auto', padding: '40px 36px 60px' },
+  outer: { maxWidth: '720px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(12px, 4vw, 36px) clamp(40px, 8vw, 60px)' },
   terminal: {
     background: '#0c0e14', border: '1px solid #2a2e3a', borderRadius: '6px',
     overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
@@ -14,7 +14,7 @@ const S = {
   termDots: { display: 'flex', gap: '6px' },
   termDot: (c) => ({ width: '12px', height: '12px', borderRadius: '50%', background: c }),
   termTitle: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', color: '#6a7088' },
-  body: { padding: '28px 28px 40px' },
+  body: { padding: 'clamp(16px, 4vw, 28px) clamp(12px, 3vw, 28px) clamp(24px, 5vw, 40px)' },
   section: { marginBottom: '36px' },
   sectionHead: {
     fontFamily: "'IBM Plex Mono', monospace", fontSize: '14px', fontWeight: 500,
