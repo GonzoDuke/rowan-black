@@ -343,6 +343,18 @@ function Archive({ returning, mobile }) {
 
           <Description returning={returning} />
 
+          {/* About links */}
+          <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <a href="/who-is-rowan-black" style={{
+              fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace",
+              color: C.accent, textDecoration: 'none', fontWeight: 400,
+            }}>Who is Rowan Black</a>
+            <a href="/about" style={{
+              fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace",
+              color: C.accent, textDecoration: 'none', fontWeight: 400,
+            }}>About this archive</a>
+          </div>
+
           {/* Column headers */}
           <div style={{
             display: 'grid', gridTemplateColumns: gridCols,
