@@ -334,6 +334,7 @@ export const PIECES = [
   {
     id: "you-might-be-the-ghost",
     title: "Re: You Might Be the Ghost",
+    fileDisplay: "re: you-might-be-the-ghost",
     subtitle: null,
     form: "Meta-essay",
     period: "mature",

@@ -81,9 +81,10 @@ function FileEntry({ piece, index, mobile }) {
     : C.accent;
 
   const canGlitch = piece.period === 'prophetic';
+  const baseName = piece.fileDisplay || piece.id;
   const displayName = canGlitch && hovered && isLive
-    ? glitchText(piece.id, 0.15) + ext
-    : piece.id + ext;
+    ? glitchText(baseName, 0.15) + ext
+    : baseName + ext;
 
   const gridCols = mobile
     ? '24px 1fr 44px'
