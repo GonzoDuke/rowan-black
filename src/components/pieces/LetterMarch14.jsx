@@ -37,8 +37,8 @@ const S = {
   paraFirst: { marginBottom: '14px' },
   closing: { marginTop: '24px' },
   signature: {
-    fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '18px',
-    fontStyle: 'italic', color: '#1a1d24', marginTop: '6px',
+    fontFamily: "'Nothing You Could Do', cursive", fontSize: '18px',
+    color: '#1a1d24', marginTop: '6px',
   },
   // Reply on yellow legal pad
   replyContainer: {

@@ -48,10 +48,10 @@ const S = {
     alignSelf: 'stretch',
   },
   hw: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
   },
   title: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '22px',
     fontWeight: 700,
     color: '#1a1d24',
@@ -60,7 +60,7 @@ const S = {
     textAlign: 'center',
   },
   note: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '15px',
     color: '#4a4a4a',
     lineHeight: 1.4,
@@ -79,7 +79,7 @@ const S = {
     alignItems: 'baseline',
   },
   trackNum: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '14px',
     color: '#888',
     width: '22px',
@@ -87,13 +87,13 @@ const S = {
     flexShrink: 0,
   },
   trackTitle: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '16px',
     color: '#1a1d24',
     fontWeight: 500,
   },
   trackArtist: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '14px',
     color: '#6a6a6a',
   },
@@ -101,7 +101,7 @@ const S = {
     height: '8px',
   },
   scrawl: {
-    fontFamily: "'Caveat', cursive",
+    fontFamily: "'Reenie Beanie', cursive",
     fontSize: '15px',
     color: '#6a6a6a',
     textAlign: 'center',

@@ -13,7 +13,7 @@ const S = {
     padding: '14px 20px',
   },
   blogTitle: {
-    fontFamily: "'Caveat', cursive", fontSize: '18px', fontWeight: 600,
+    fontFamily: "'Reenie Beanie', cursive", fontSize: '18px', fontWeight: 600,
     color: '#4a4040', marginBottom: '2px',
   },
   blogSubtitle: {

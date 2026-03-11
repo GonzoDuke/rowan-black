@@ -47,11 +47,11 @@ const S = {
     padding: 'clamp(20px, 4vw, 28px) clamp(20px, 5vw, 32px) clamp(20px, 4vw, 28px) clamp(56px, 10vw, 64px)',
   },
   text: {
-    fontFamily: "'Caveat', cursive", fontSize: '18px',
+    fontFamily: "'Reenie Beanie', cursive", fontSize: '18px',
     lineHeight: 1.65, color: '#1a1d24', marginBottom: '14px',
   },
   listItem: {
-    fontFamily: "'Caveat', cursive", fontSize: '17px',
+    fontFamily: "'Reenie Beanie', cursive", fontSize: '17px',
     lineHeight: 1.6, color: '#1a1d24', paddingLeft: '12px', marginBottom: '2px',
   },
   listBlock: { marginBottom: '14px' },

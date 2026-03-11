@@ -54,7 +54,7 @@ const S = {
     lineHeight: 1.6, fontWeight: 500,
   },
   handwritten: {
-    fontFamily: "'Caveat', cursive", fontSize: '16px',
+    fontFamily: "'Nothing You Could Do', cursive", fontSize: '16px',
     color: '#3a3530', paddingLeft: '20px', lineHeight: 1.5,
   },
   bullet: {
