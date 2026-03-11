@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import ReYouMightBeTheGhost from '../components/pieces/ReYouMightBeTheGhost.jsx';
+
+const piece = PIECES.find(p => p.id === 'you-might-be-the-ghost');
+---
+
+<PieceLayout piece={piece}>
+  <ReYouMightBeTheGhost client:load />
+</PieceLayout>
