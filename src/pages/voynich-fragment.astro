@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import VoynichManuscript from '../components/pieces/VoynichManuscript.jsx';
+
+const piece = PIECES.find(p => p.id === 'voynich-fragment');
+---
+
+<PieceLayout piece={piece}>
+  <VoynichManuscript client:load />
+</PieceLayout>

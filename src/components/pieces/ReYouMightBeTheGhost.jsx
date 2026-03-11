@@ -121,7 +121,7 @@ export default function ReYouMightBeTheGhost() {
         {/* Rowan's reblog */}
         <div style={S.reblogHeader}>
           <div style={{ ...S.avatar, background: '#4a6a8a' }}>r</div>
-          <span style={S.username}>rowanblack-signal</span>
+          <span style={S.username}>rowan-black</span>
         </div>
         <div style={S.reblogBody}>
           <p style={S.para}>Someone quoted me today.</p>

@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import GameOfUno from '../components/pieces/GameOfUno.jsx';
+
+const piece = PIECES.find(p => p.id === 'uno-fragment');
+---
+
+<PieceLayout piece={piece}>
+  <GameOfUno client:load />
+</PieceLayout>
