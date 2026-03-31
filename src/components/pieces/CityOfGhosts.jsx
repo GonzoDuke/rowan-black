@@ -40,7 +40,7 @@ export default function CityOfGhosts() {
       <div style={S.stanza}><L>The city's siren song echoes:</L><L style={S.whisper}>"Be yourself" (in our incubator)</L><L style={S.whisper}>"Find yourself" (in our API)</L><L style={S.whisper}>"Love yourself" (through our platform)</L><L style={S.whisper}>"Free yourself" (with our chains)</L></div>
       <div style={S.stanza}><L>Wireless signals weave an invisible web.</L><L>Data flows like lifeblood,</L><L>bits and bytes the new currency of existence.</L><L>You reach out, touch a screen, feel nothing.</L><L>Are you transmitting or receiving?</L></div>
       <div style={S.marginNote}>insert section on social media alienation?<br/>the dopamine hits of notifications,<br/>the endless scroll of other people's happiness,<br/>curated feeds of artificial joy</div>
-      <div style={S.stanza}><L>@everyone @no one#trending #forgotten[LIKE] [DISLIKE]{'{SHARE}'} {'{ISOLATE}'}</L></div>
+      <div style={S.stanza}><L>@everyone @no one</L><L>#trending #forgotten</L><L>[LIKE] [DISLIKE]</L><L>{'{SHARE}'} {'{ISOLATE}'}</L></div>
       <div style={S.stanza}><L>Steel bones rise from concrete wombs.</L><L>Each new tower a monument to ambition,</L><L>each demolished building a grave for forgotten dreams.</L><L>You watch the skyline shift, wondering</L><L>which part of you is being rebuilt,</L><L>which part torn down.</L></div>
       <div style={S.marginNote}>too bitter?<br/>No, fuck these venture<br/>capitalists turning the<br/>Mission into their<br/>playground</div>
       <div style={S.stanza}><L>The city evolves:</L><L>Higher</L><L><span style={S.braces}>{'{emptier}'}</span></L><L>Faster</L><L><span style={S.braces}>{'{lonelier}'}</span></L><L>Brighter</L><L><span style={S.braces}>{'{blinder}'}</span></L></div>
