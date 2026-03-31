@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import RazorsEdge from '../components/pieces/RazorsEdge.jsx';
+
+const piece = PIECES.find(p => p.id === 'the-razors-edge');
+---
+
+<PieceLayout piece={piece}>
+  <RazorsEdge client:load />
+</PieceLayout>

@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="A Letter from the Corvids Collective - The Collected Works of Rowan Black">
+  <div class="info-page">
+    <nav class="info-nav">
+      <a href="/" class="info-back">← Archive</a>
+    </nav>
+    <div class="info-wrap">
+      <div class="info-card">
+        <div class="info-label">A Letter from the Corvids Collective</div>
+
+        <p class="letter-salutation">To those who have found their way here,</p>
+
+        <p class="letter-text">Rowan Black never assembled his work into a single, definitive volume. He never sought to. His writing was not composed for a fixed audience or bound to a single medium. His words were published in the unsteady, ephemeral spaces of the internet - buried in abandoned forums, scattered across obscure message boards, archived in databases no one was meant to find. However, much of his work was never published at all. It was found: a poem scribbled onto the back of a receipt; a draft recovered from a failing hard drive; a note, never sent, tucked between the pages of a library book in Greenwich Village.</p>
+
+        <p class="letter-text">The Corvids Collective did not set out to become archivists. There was no formal beginning, no stated objective - only a growing recognition that Rowan Black's work, fragmented as it was, needed to be gathered before it was lost entirely. We came together organically, through shared discoveries, through chance encounters with texts that had slipped outside the usual boundaries of preservation.</p>
+
+        <p class="letter-text">What you hold now is not a complete collection. It is not an attempt to define Rowan Black's legacy, nor to arrange his writing into something as artificial as a final form. It is, instead, an archive in motion - an ongoing effort to document, to annotate, to hold something together that resists containment.</p>
+
+        <div class="letter-section">The Structure of the Archive</div>
+
+        <p class="letter-text">This volume has been arranged chronologically, not thematically. This is deliberate. To impose an external order on Rowan Black's work would be to misunderstand its nature. His writing is a living thing, evolving in real time, moving in patterns that often seemed recursive - ideas resurfacing years later, refracted through new experience, shaped by new contexts.</p>
+
+        <p class="letter-text">We begin with his earliest known works, dating from the years 2001 to 2005. These are raw, immediate pieces - sometimes unfinished, sometimes written in the unfiltered language of adolescence.</p>
+
+        <p class="letter-text">As his work progresses into the late 2000s, a shift occurs. The themes remain, but the form sharpens.</p>
+
+        <p class="letter-text">His later work is more precise in its dissection of modern anxieties.</p>
+
+        <p class="letter-text">And then there are the fragments. These are not secondary works. They are integral to this collection. Some were found in physical form - a letter left in a cafe, handwritten notes slipped inside the pages of used books. Others existed only digitally, extracted from decaying files, their data partially corrupted. Each fragment is presented with as much context as we could determine - when and where it was found, any visible annotations or edits, any connections to other known works. Some of these pieces may have been abandoned by their author, never meant for recovery. But once a text is written, it begins to exist independently of intent.</p>
+
+        <div class="letter-section">On Annotation and Interpretation</div>
+
+        <p class="letter-text">We should clarify the role we have taken in this collection. We are not literary critics. We do not attempt to analyze Rowan Black's work, nor do we speculate on meaning. The act of preservation is different from the act of interpretation.</p>
+
+        <p class="letter-text">Our annotations serve three primary functions:</p>
+
+        <p class="letter-text">Documentation: providing factual details on the origins of a piece, including its date, known publication history (if any), and the circumstances of its discovery.</p>
+
+        <p class="letter-text">Cross-referencing: identifying where certain phrases, themes, or images appear elsewhere in Black's work. His writing was recursive, self-referential; ideas often resurfaced years apart in altered forms.</p>
+
+        <p class="letter-text">Historical context: offering relevant background where necessary. Certain works - particularly those responding to contemporary events - may benefit from minimal clarification, especially where digital history is concerned. However, we have been careful not to impose external readings.</p>
+
+        <p class="letter-text">What we do not do is editorialize. Rowan Black's work does not require explanation. His writing is often layered, sometimes deliberately opaque, but it is never inaccessible to those willing to engage with it on its own terms.</p>
+
+        <div class="letter-rule"></div>
+
+        <p class="letter-text">This is not a completed project. It cannot be.</p>
+
+        <p class="letter-text">We suspect there are more pieces still out there. A missing notebook, a hard drive stored in a box somewhere, a handwritten page left behind in a library yet to be found. Rowan Black did not write for a single audience, nor for a fixed future. His work has always existed in motion, and so must its preservation. If you have come across a piece of his writing in the world - if you have held in your hands a note, a page, a file that does not appear in this collection - we ask only that you consider its place in the archive.</p>
+
+        <p class="letter-text">This collection will never be definitive, nor should it be. What we present here is a record of what has been found, gathered with care, preserved without interference. It is, like Black's work itself, an unfinished thing.</p>
+
+        <p class="letter-text">And so we leave it in your hands.</p>
+
+        <div class="letter-closing">
+          <p>With careful attention to the details,</p>
+          <p class="letter-sig">The Corvids Collective</p>
+          <p class="letter-location">Princeton, NJ<br />May 17th, 2025</p>
+        </div>
+
+        <p class="letter-ps">P.S. If you should discover any additional fragments of Rowan's work, please contact us at <a href="mailto:corvids@whoisrowanblack.com">corvids@whoisrowanblack.com</a>.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .info-page { background: #dedad4; min-height: 100vh; }
+  .info-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(222,218,212,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 24px; display: flex; align-items: center; height: 48px;
+  }
+  .info-back {
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: #2a6dd4; text-decoration: none;
+    padding: 6px 16px; background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.1); border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .info-wrap { max-width: 640px; margin: 0 auto; padding: 96px 16px 120px; }
+  .info-card {
+    background: #e2e0db; border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    padding: 36px;
+  }
+  .info-label {
+    font-family: var(--mono); font-size: 10px; color: #9099a8;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 28px;
+  }
+  .letter-salutation {
+    font-family: var(--mono); font-size: 14px; line-height: 1.8;
+    color: #1a1d24; margin-bottom: 20px; font-style: italic;
+  }
+  .letter-text {
+    font-family: var(--mono); font-size: 13px; line-height: 1.85;
+    color: #1a1d24; margin-bottom: 16px;
+  }
+  .letter-text a { color: #2a6dd4; text-decoration: none; }
+  .letter-section {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    color: #1a1d24; letter-spacing: 0.04em;
+    margin-top: 28px; margin-bottom: 16px;
+  }
+  .letter-rule { height: 1px; background: rgba(0,0,0,0.06); margin: 28px 0; }
+  .letter-closing {
+    margin-top: 28px; font-family: var(--mono); font-size: 13px;
+    line-height: 1.8; color: #1a1d24;
+  }
+  .letter-sig { font-weight: 600; margin-top: 8px; }
+  .letter-location { color: #5a6070; margin-top: 4px; font-size: 12px; }
+  .letter-ps {
+    font-family: var(--mono); font-size: 12px; line-height: 1.8;
+    color: #5a6070; margin-top: 28px; font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .info-nav { padding: 0 12px; height: 44px; }
+    .info-back { font-size: 12px; padding: 5px 12px; }
+    .info-wrap { padding: 60px 0 80px; }
+    .info-card { border-radius: 0; border-left: none; border-right: none; padding: 24px 16px; }
+    .letter-text { font-size: 12px; }
+  }
+</style>

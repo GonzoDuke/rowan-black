@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import EmailRejection from '../components/pieces/EmailRejection.jsx';
+
+const piece = PIECES.find(p => p.id === 'email-rejection');
+---
+
+<PieceLayout piece={piece}>
+  <EmailRejection client:load />
+</PieceLayout>

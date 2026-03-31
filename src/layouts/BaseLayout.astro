@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+
+const {
+  title = "The Collected Works of Rowan Black",
+  description = "A recovered archive of poems, essays, fragments, and digital artifacts. Curated by the Corvids Collective.",
+  ogImage = "/og-image.png",
+  ogUrl = "https://placeholder.com"
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="The Collected Works of Rowan Black" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+  </body>
+</html>

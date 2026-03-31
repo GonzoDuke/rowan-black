@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import TornEnvelope from '../components/pieces/TornEnvelope.jsx';
+
+const piece = PIECES.find(p => p.id === 'torn-envelope');
+---
+
+<PieceLayout piece={piece}>
+  <TornEnvelope client:load />
+</PieceLayout>

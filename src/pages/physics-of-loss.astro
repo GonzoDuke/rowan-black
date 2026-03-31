@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import PhysicsOfLoss from '../components/poems/PhysicsOfLoss.jsx';
+
+const piece = PIECES.find(p => p.id === 'physics-of-loss');
+---
+
+<PieceLayout piece={piece}>
+  <PhysicsOfLoss client:load />
+</PieceLayout>

@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import RCollapse from '../components/pieces/RCollapse.jsx';
+
+const piece = PIECES.find(p => p.id === 'r-collapse');
+---
+
+<PieceLayout piece={piece}>
+  <RCollapse client:load />
+</PieceLayout>

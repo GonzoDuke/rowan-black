@@ -1,0 +1,10 @@
+---
+import NoSignalLayout from '../../layouts/NoSignalLayout.astro';
+import NoSignalSection from '../../components/nosignal/NoSignalSection.jsx';
+import S8 from '../../components/nosignal/S8_Postscript.jsx';
+---
+<NoSignalLayout title="Postscript — No_Signal_Found">
+  <NoSignalSection sectionSlug="postscript" client:load>
+    <S8 />
+  </NoSignalSection>
+</NoSignalLayout>

@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import HymnToTheAlgorithm from '../components/poems/HymnToTheAlgorithm.jsx';
+
+const piece = PIECES.find(p => p.id === 'hymn-to-the-algorithm');
+---
+
+<PieceLayout piece={piece}>
+  <HymnToTheAlgorithm client:load />
+</PieceLayout>

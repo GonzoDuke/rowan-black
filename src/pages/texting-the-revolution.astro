@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import TextingTheRevolution from '../components/poems/TextingTheRevolution.jsx';
+
+const piece = PIECES.find(p => p.id === 'texting-the-revolution');
+---
+
+<PieceLayout piece={piece}>
+  <TextingTheRevolution client:load />
+</PieceLayout>

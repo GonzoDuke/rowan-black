@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Who is Rowan Black — The Collected Works of Rowan Black">
+  <div class="info-page">
+    <nav class="info-nav">
+      <a href="/" class="info-back">← Archive</a>
+    </nav>
+    <div class="info-wrap">
+      <div class="info-card">
+        <div class="info-label">Who is Rowan Black</div>
+        <p class="info-text">Rowan Black is an American writer who has been active since approximately 2001, with pieces found as recently as 2024.</p>
+        <p class="info-text">The earliest recovered pieces suggest an adolescence in suburban Ohio. Later work places him in the New York and New Jersey corridor, then San Francisco, with subsequent references to locations in Utah, upstate New York, and the Pacific Northwest. References to specific technologies, cultural events, and local details allow rough dating of most texts, though gaps remain.</p>
+        <p class="info-text">The work collected here is what remains.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .info-page { background: #dedad4; min-height: 100vh; }
+  .info-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(222,218,212,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 24px; display: flex; align-items: center; height: 48px;
+  }
+  .info-back {
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: #2a6dd4; text-decoration: none;
+    padding: 6px 16px; background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.1); border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .info-wrap { max-width: 620px; margin: 0 auto; padding: 96px 16px 120px; }
+  .info-card {
+    background: #e2e0db; border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    padding: 36px;
+  }
+  .info-label {
+    font-family: var(--mono); font-size: 10px; color: #9099a8;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .info-text {
+    font-family: var(--mono); font-size: 14px; line-height: 1.8;
+    color: #1a1d24; margin-bottom: 16px;
+  }
+  .info-text:last-child { margin-bottom: 0; }
+
+  @media (max-width: 640px) {
+    .info-nav { padding: 0 12px; height: 44px; }
+    .info-back { font-size: 12px; padding: 5px 12px; }
+    .info-wrap { padding: 60px 0 80px; }
+    .info-card { border-radius: 0; border-left: none; border-right: none; padding: 24px 16px; }
+    .info-text { font-size: 13px; }
+  }
+</style>

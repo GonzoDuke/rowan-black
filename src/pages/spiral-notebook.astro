@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import SpiralNotebook from '../components/pieces/SpiralNotebook.jsx';
+
+const piece = PIECES.find(p => p.id === 'spiral-notebook');
+---
+
+<PieceLayout piece={piece}>
+  <SpiralNotebook client:load />
+</PieceLayout>

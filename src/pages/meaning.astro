@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import Meaning from '../components/poems/Meaning.jsx';
+
+const piece = PIECES.find(p => p.id === 'meaning');
+---
+
+<PieceLayout piece={piece}>
+  <Meaning client:load />
+</PieceLayout>

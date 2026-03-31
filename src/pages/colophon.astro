@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Colophon — The Collected Works of Rowan Black">
+  <div class="colophon-page">
+    <nav class="colophon-nav">
+      <a href="/" class="colophon-back">← Archive</a>
+    </nav>
+    <div class="colophon-wrap">
+      <div class="colophon-card">
+        <div class="colophon-label">Colophon</div>
+        <p class="colophon-text">The Collected Works of Rowan Black was written by Dr. Jonathan M. Kelly.</p>
+        <p class="colophon-text">D.Litt., Creative Writing<br />Drew University, 2025</p>
+        <div class="colophon-rule"></div>
+        <div class="colophon-label">Contact</div>
+        <p class="colophon-text"><a href="mailto:corvids@whoisrowanblack.com">corvids@whoisrowanblack.com</a></p>
+        <div class="colophon-rule"></div>
+        <div class="colophon-label">Other work</div>
+        <p class="colophon-text"><a href="https://jonathanmkelly.com">jonathanmkelly.com</a></p>
+        <p class="colophon-text"><a href="https://thebsideofeverything.com">The B-Side of Everything</a></p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .colophon-page { background: #dedad4; min-height: 100vh; }
+  .colophon-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(222,218,212,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 24px; display: flex; align-items: center; height: 48px;
+  }
+  .colophon-back {
+    font-family: var(--mono); font-size: 13px; font-weight: 500;
+    color: #2a6dd4; text-decoration: none;
+    padding: 6px 16px; background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.1); border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .colophon-wrap { max-width: 600px; margin: 0 auto; padding: 96px 16px 120px; }
+  .colophon-card {
+    background: #e2e0db; border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    padding: 36px;
+  }
+  .colophon-label {
+    font-family: var(--mono); font-size: 10px; color: #9099a8;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .colophon-text {
+    font-family: var(--mono); font-size: 14px; line-height: 1.8;
+    color: #1a1d24; margin-bottom: 16px;
+  }
+  .colophon-text a { color: #2a6dd4; text-decoration: none; }
+  .colophon-rule { height: 1px; background: rgba(0,0,0,0.06); margin: 24px 0; }
+
+  @media (max-width: 640px) {
+    .colophon-nav { padding: 0 12px; height: 44px; }
+    .colophon-back { font-size: 12px; padding: 5px 12px; }
+    .colophon-wrap { padding: 60px 0 80px; }
+    .colophon-card { border-radius: 0; border-left: none; border-right: none; padding: 24px 16px; }
+    .colophon-text { font-size: 13px; }
+  }
+</style>

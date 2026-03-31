@@ -1,0 +1,60 @@
+import React from 'react';
+
+const S = {
+  outer: { maxWidth: '640px', margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(16px, 5vw, 36px) clamp(40px, 8vw, 60px)' },
+  headnoteLabel: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', fontWeight: 600, color: '#9099a8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' },
+  headnote: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', lineHeight: 1.75, color: '#5a6070', marginBottom: '32px', paddingBottom: '20px', borderBottom: '1px solid rgba(0,0,0,0.06)' },
+  stanza: { marginBottom: '24px' },
+  line: { fontFamily: "'Nothing You Could Do', cursive", fontSize: '16px', lineHeight: 1.35, color: '#1a1d24', display: 'block' },
+  marginNote: { fontFamily: "'Nothing You Could Do', cursive", fontSize: '16px', lineHeight: 1.35, color: '#5a6070', marginLeft: 'clamp(12px, 5vw, 36px)', paddingLeft: '12px', borderLeft: '2px solid rgba(0,0,0,0.06)', marginTop: '10px', marginBottom: '20px' },
+  strikethrough: { textDecoration: 'line-through', color: '#9099a8', fontFamily: "'Nothing You Could Do', cursive", fontSize: '16px', lineHeight: 1.35, display: 'block' },
+  receiptLabel: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', fontWeight: 600, color: '#9099a8', letterSpacing: '0.06em', textTransform: 'uppercase', marginTop: '32px', marginBottom: '12px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.06)' },
+  receiptLine: { fontFamily: "'Nothing You Could Do', cursive", fontSize: '16px', lineHeight: 1.35, color: '#5a6070', marginBottom: '2px' },
+  sup: { fontSize: '10px', color: '#9099a8', verticalAlign: 'super', marginLeft: '2px' },
+  annotation: { borderTop: '1px solid rgba(0,0,0,0.08)', marginTop: '40px', paddingTop: '20px' },
+  annotationLabel: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', fontWeight: 600, color: '#9099a8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' },
+  note: { fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', lineHeight: 1.75, color: '#6a7080', marginBottom: '8px' },
+  noteNum: { color: '#9099a8', fontSize: '10px', verticalAlign: 'super', marginRight: '4px' },
+};
+
+const L = ({ children }) => <span style={S.line}>{children}</span>;
+const Sup = ({ n }) => <span style={S.sup}>{n}</span>;
+
+export default function RazorsEdge() {
+  return (
+    <div style={S.outer}>
+      <div style={S.headnoteLabel}>Digitized Object</div>
+      <div style={S.headnote}>Recovered from a composition notebook purchased at a garage sale in the Outer Sunset, San Francisco. An ATM receipt with additional notes was found tucked between the pages. Both documents are digitized here as a single entry.</div>
+
+      <div style={S.stanza}><L>Night peels back like startup promises,</L><L>layer by layer of venture capital dreams.</L><L>Silence cuts deep in the Mission—</L><L>a scalpel carving thought from noise,</L><L>authentic from artificial,</L><L>displacement from disruption.</L></div>
+      <div style={S.stanza}><L>We build our lives on fictions</L><L>(the city built on fault lines knows this).</L><L>On borrowed truths and borrowed time,</L><L>on words varnished smooth as iPhone glass,</L><L>polished to hide the human grain beneath.</L><L>But varnish cracks in the dark</L><L>of boarded Mission storefronts.</L></div>
+      <div style={S.marginNote}>check B. re: simulation/simulacra</div>
+      <div style={S.stanza}><L>Scrape it away.</L><L>The stories—</L><L>about innovation,</L><L>about progress,</L><L>about changing the world</L><L>one app at a time—</L><L>cling like moss to Victorian stone.<Sup n="1" /></L><L>You scratch at equity packages,</L><L>you pull at stock options,</L><L>and still they hold.</L></div>
+      <div style={S.stanza}><L>Once, I built a website in high school.</L><L>HTML scraped together like a mixtape,</L><L>cursor blinking like a heartbeat.</L><L>The code bent to my hands,</L><L>a small, bright kingdom</L><L>where nothing was for sale.</L></div>
+      <div style={S.stanza}><L>I still remember an AIM chat—</L><L>midnight, blue glow,</L><L>a screen name I only knew as a voice in the dark.<Sup n="2" /></L><L>No algorithms, no engagement metrics,</L><L>just two ghosts typing toward morning,</L><L>untethered, untracked, real.</L></div>
+      <div style={S.stanza}><L>A summer night, dial-up humming,</L><L>the modem speaking in static tongues.</L><L>Outside, fireflies signaled to each other—</L><L>bright, brief, unrepeatable.</L><L>Inside, I wrote my first blog post,</L><L>believing words could change something.</L><L>I was wrong.</L></div>
+      <div style={S.stanza}><L>The world is not what it seems</L><L>(especially here, especially now).</L><L>It hums with illusions:</L><L>laws as fragile as terms of service,</L><L>norms as fleeting as battery life.</L><L>Beneath the IPOs and ICOs,</L><L>you find nothing solid.</L></div>
+      <div style={S.marginNote}>Digital feudalism —</div>
+      <div style={S.stanza}><span style={S.strikethrough}>All empires fall the same way</span><span style={S.strikethrough}>bytes to bits to nothing</span><span style={S.strikethrough}>servers humming their own requiem</span></div>
+      <div style={S.marginNote}>Z's critique of ideology??</div>
+      <div style={S.stanza}><L>There is beauty in destruction—</L><L>in watching unicorns fall,</L><L>in terminal velocity,</L><L>in the splinters and dust</L><L>of disrupted expectations.</L></div>
+      <div style={S.stanza}><L>The ruins of Web 2.0 whisper:</L><L>all this was built to bind you.</L></div>
+      <div style={S.marginNote}>parallel w/ real estate?</div>
+      <div style={S.stanza}><L>Strip it all bare.</L><L>You are left with weight:</L><L>the heavy truth of irrelevance,</L><L>the ache of obsolescence,</L><L>the sharp clarity of</L><L>how little your code controls.</L></div>
+      <div style={S.stanza}><L>Only this remains:</L><L>you are not free—</L><L>but you could be.</L></div>
+      <div style={S.marginNote}>come back to systemic collapse</div>
+
+      <div style={S.receiptLabel}>ATM receipt found tucked in notebook</div>
+      <div style={S.receiptLine}>- automation -{'>'} alienation</div>
+      <div style={S.receiptLine}>- check Baudrillard quote re: desert of the real</div>
+      <div style={S.receiptLine}>- something about the ghost in the machine?</div>
+      <div style={S.receiptLine}>- what happens when the servers go dark?</div>
+
+      <div style={S.annotation}>
+        <div style={S.annotationLabel}>Annotations</div>
+        <p style={S.note}><span style={S.noteNum}>1</span> San Francisco's Mission District contains many Victorian-era buildings, now surrounded by rapid tech-driven change.</p>
+        <p style={S.note}><span style={S.noteNum}>2</span> AOL Instant Messenger (AIM) was a major platform for digital communication in the late 1990s and early 2000s.</p>
+      </div>
+    </div>
+  );
+}

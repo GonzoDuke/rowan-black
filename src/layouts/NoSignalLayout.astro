@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+const { title = 'No_Signal_Found — Rowan Black' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" style="background:#1a1a1e">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content="No_Signal_Found — Rowan Black" />
+    <style>html,body{background:#1a1a1e!important;margin:0;padding:0}</style>
+  </head>
+  <body style="background:#1a1a1e;margin:0">
+    <div class="nsf-page">
+      <div class="nsf-content">
+        <slot />
+      </div>
+    </div>
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+  </body>
+</html>
+
+<style>
+  .nsf-page {
+    background: #1a1a1e;
+    min-height: 100vh;
+    color: #d4d0c8;
+  }
+  .nsf-content {
+    padding-top: 0;
+  }
+</style>

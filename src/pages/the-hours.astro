@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import TheHoursWeCannotName from '../components/poems/TheHoursWeCannotName.jsx';
+
+const piece = PIECES.find(p => p.id === 'the-hours');
+---
+
+<PieceLayout piece={piece}>
+  <TheHoursWeCannotName client:load />
+</PieceLayout>

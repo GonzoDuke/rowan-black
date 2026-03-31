@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════
+   THE COLLECTED WORKS OF ROWAN BLACK
+   Global Design System — Light Terminal
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nothing+You+Could+Do&family=Syne:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Background */
+  --bg: #dedad4;
+  --bg-surface: #e2e0db;
+  --bg-chrome: #d8dae2;
+
+  /* Text */
+  --text: #1a1d24;
+  --text-bright: #000000;
+  --text-dim: #5a6070;
+  --text-ghost: #9099a8;
+
+  /* Accents */
+  --accent: #2a6dd4;
+  --accent-light: #3b82f6;
+  --error: #d44;
+  --green: #2a8a40;
+
+  /* Borders */
+  --rule: rgba(0,0,0,0.08);
+  --border: rgba(0,0,0,0.12);
+
+  /* Typography */
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --display: 'Space Grotesk', 'Arial', sans-serif;
+
+  /* Spacing */
+  --content-width: 720px;
+  --wide-width: 880px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent-light);
+}
+
+::selection {
+  background: rgba(42,109,212,0.15);
+  color: var(--text-bright);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-in { animation: fade-in 0.6s ease forwards; }
+
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+}
+
+/* ── Responsive piece containers ── */
+.piece-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 36px 60px;
+}
+
+.piece-container-wide {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 36px 60px;
+}
+
+@media (max-width: 640px) {
+  .piece-container,
+  .piece-container-wide {
+    padding: 24px 16px 40px;
+  }
+}

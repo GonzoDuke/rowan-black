@@ -1,0 +1,10 @@
+---
+import NoSignalLayout from '../../layouts/NoSignalLayout.astro';
+import NoSignalSection from '../../components/nosignal/NoSignalSection.jsx';
+import S7 from '../../components/nosignal/S7_DenialOfSonder.jsx';
+---
+<NoSignalLayout title="Denial of Sonder — No_Signal_Found">
+  <NoSignalSection sectionSlug="denial-of-sonder" client:load>
+    <S7 />
+  </NoSignalSection>
+</NoSignalLayout>

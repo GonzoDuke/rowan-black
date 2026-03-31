@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import BeatingAndBare from '../components/poems/BeatingAndBare.jsx';
+
+const piece = PIECES.find(p => p.id === 'beating-and-bare');
+---
+
+<PieceLayout piece={piece}>
+  <BeatingAndBare client:load />
+</PieceLayout>

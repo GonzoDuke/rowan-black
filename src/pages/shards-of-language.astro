@@ -1,0 +1,11 @@
+---
+import PieceLayout from '../layouts/PieceLayout.astro';
+import { PIECES } from '../data/pieces.js';
+import ShardsOfLanguage from '../components/pieces/ShardsOfLanguage.jsx';
+
+const piece = PIECES.find(p => p.id === 'shards-of-language');
+---
+
+<PieceLayout piece={piece}>
+  <ShardsOfLanguage client:load />
+</PieceLayout>
