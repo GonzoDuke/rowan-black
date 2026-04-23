@@ -1,10 +1,11 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { PIECES, PERIODS } from '../data/pieces.js';
 
 const { piece } = Astro.props;
 const pageTitle = `${piece.title} — Rowan Black`;
 const ogImage = `/og/${piece.id}.png`;
-const ogUrl = `https://placeholder.com/${piece.id}`;
+const ogUrl = `https://www.whoisrowanblack.com/${piece.id}`;
 
 const periodColors = {
   teenage: '#2d8a3e',
@@ -16,6 +17,48 @@ const periodColors = {
 };
 
 const periodColor = periodColors[piece.period] || '#2a6dd4';
+
+const EXCLUDED_IDS = new Set(['the-archive-of-almost']);
+const EXCLUDED_PERIODS = new Set(['unconfirmed']);
+
+const isNavigable = (p) =>
+  !EXCLUDED_IDS.has(p.id) && !EXCLUDED_PERIODS.has(p.period);
+
+const periodOrder = PERIODS
+  .filter(pr => !EXCLUDED_PERIODS.has(pr.id))
+  .map(pr => pr.id);
+
+const piecesByPeriod = Object.fromEntries(
+  periodOrder.map(pid => [
+    pid,
+    PIECES.filter(p => p.period === pid && isNavigable(p))
+          .sort((a, b) => a.sortKey - b.sortKey),
+  ])
+);
+
+let nextNav = null;
+
+if (isNavigable(piece)) {
+  const siblings = piecesByPeriod[piece.period] || [];
+  const idx = siblings.findIndex(p => p.id === piece.id);
+  if (idx !== -1 && idx < siblings.length - 1) {
+    const next = siblings[idx + 1];
+    nextNav = { href: `/${next.id}`, label: `${next.title} →`, kind: 'next' };
+  } else {
+    const periodIdx = periodOrder.indexOf(piece.period);
+    const nextPeriodId = periodOrder
+      .slice(periodIdx + 1)
+      .find(pid => (piecesByPeriod[pid] || []).length > 0);
+    if (nextPeriodId) {
+      const nextPeriod = PERIODS.find(pr => pr.id === nextPeriodId);
+      nextNav = {
+        href: `/${piecesByPeriod[nextPeriodId][0].id}`,
+        label: `Move to ${nextPeriod.label} (${nextPeriod.years}) →`,
+        kind: 'section',
+      };
+    }
+  }
+}
 ---
 
 <BaseLayout title={pageTitle} description={piece.corvidsNote || piece.subtitle || ''} ogImage={ogImage} ogUrl={ogUrl}>
@@ -56,6 +99,11 @@ const periodColor = periodColors[piece.period] || '#2a6dd4';
       <!-- Return footer -->
       <div class="piece-footer">
         <a href="/" class="nav-back">← Back to Archive</a>
+        {nextNav && (
+          <a href={nextNav.href} class={`next-link next-${nextNav.kind}`}>
+            {nextNav.label}
+          </a>
+        )}
       </div>
     </div>
   </div>
@@ -188,9 +236,39 @@ const periodColor = periodColors[piece.period] || '#2a6dd4';
     margin: 0;
   }
 
+  .next-link {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: #2a6dd4;
+    text-decoration: none;
+    padding: 6px 16px;
+    background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: all 0.15s;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .next-link:hover {
+    background: #d8d6d0;
+    transform: translateX(2px);
+  }
+
+  .next-section {
+    font-style: italic;
+  }
+
   .piece-footer {
     padding: 48px 0 80px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   /* ── Mobile ── */
@@ -228,8 +306,14 @@ const periodColor = periodColors[piece.period] || '#2a6dd4';
       padding: 16px;
     }
 
+    .next-link {
+      font-size: 12px;
+      padding: 5px 12px;
+    }
+
     .piece-footer {
-      padding: 32px 0 60px;
+      padding: 32px 16px 60px;
+      gap: 10px;
     }
   }
 </style>
