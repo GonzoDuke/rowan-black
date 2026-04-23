@@ -437,7 +437,7 @@ function Archive({ returning, mobile }) {
               fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
               color: C.accent, textDecoration: 'none', fontWeight: 400,
               whiteSpace: 'nowrap',
-            }}>Working Notes</a>
+            }}>Working Notes - Our Blog</a>
           </div>
 
           {/* Column headers */}
