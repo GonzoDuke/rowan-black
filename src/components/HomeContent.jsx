@@ -474,6 +474,12 @@ function Archive({ returning, mobile }) {
           <a href="mailto:submissions@whoisrowanblack.com" style={{ color: C.accent, textDecoration: 'none' }}>
             submissions@whoisrowanblack.com
           </a>
+          <div style={{ marginTop: '6px' }}>
+            Follow via RSS:{' '}
+            <a href="/rss.xml" style={{ color: C.accent, textDecoration: 'none' }}>
+              /rss.xml
+            </a>
+          </div>
         </div>
 
         <BootPrompt returning={returning} mobile={mobile} />
