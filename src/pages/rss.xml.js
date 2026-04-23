@@ -1,5 +1,6 @@
 import rss from '@astrojs/rss';
 import { PIECES } from '../data/pieces.js';
+import { WORKING_NOTES } from '../data/workingNotes.js';
 
 const SITE_TITLE = 'The Collected Works of Rowan Black';
 const SITE_DESCRIPTION =
@@ -12,20 +13,31 @@ function pubDateFromSortKey(sortKey) {
 }
 
 export function GET(context) {
+  const pieceItems = PIECES
+    .filter((p) => p.status === 'live')
+    .map((p) => ({
+      title: p.title,
+      description: p.corvidsNote || p.subtitle || '',
+      link: `/${p.id}/`,
+      pubDate: pubDateFromSortKey(p.sortKey),
+    }));
+
+  const noteItems = WORKING_NOTES.map((n) => ({
+    title: `Working Notes: ${n.title}`,
+    description: n.excerpt || '',
+    link: `/working-notes/${n.id}/`,
+    pubDate: new Date(n.date + 'T00:00:00Z'),
+  }));
+
+  const items = [...pieceItems, ...noteItems]
+    .sort((a, b) => b.pubDate - a.pubDate);
+
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site: context.site,
     stylesheet: '/rss.xsl',
-    items: PIECES
-      .filter((p) => p.status === 'live')
-      .sort((a, b) => b.sortKey - a.sortKey)
-      .map((p) => ({
-        title: p.title,
-        description: p.corvidsNote || p.subtitle || '',
-        link: `/${p.id}/`,
-        pubDate: pubDateFromSortKey(p.sortKey),
-      })),
+    items,
     customData: '<language>en-us</language>',
   });
 }

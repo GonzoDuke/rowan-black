@@ -415,15 +415,29 @@ function Archive({ returning, mobile }) {
           <Description returning={returning} />
 
           {/* About links */}
-          <div style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <a href="/who-is-rowan-black" style={{
+          <div style={{
+            marginBottom: '24px',
+            display: 'flex',
+            flexDirection: mobile ? 'column' : 'row',
+            alignItems: mobile ? 'flex-start' : 'flex-start',
+            justifyContent: 'space-between',
+            gap: mobile ? '4px' : '16px',
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <a href="/who-is-rowan-black" style={{
+                fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
+                color: C.accent, textDecoration: 'none', fontWeight: 400,
+              }}>Who is Rowan Black</a>
+              <a href="/corvids-letter" style={{
+                fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
+                color: C.accent, textDecoration: 'none', fontWeight: 400,
+              }}>A Letter from the Corvids Collective</a>
+            </div>
+            <a href="/working-notes/" style={{
               fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
               color: C.accent, textDecoration: 'none', fontWeight: 400,
-            }}>Who is Rowan Black</a>
-            <a href="/corvids-letter" style={{
-              fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
-              color: C.accent, textDecoration: 'none', fontWeight: 400,
-            }}>A Letter from the Corvids Collective</a>
+              whiteSpace: 'nowrap',
+            }}>Working Notes</a>
           </div>
 
           {/* Column headers */}

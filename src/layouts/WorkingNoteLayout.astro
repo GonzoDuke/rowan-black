@@ -1,0 +1,300 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { siblingNotes } from '../data/workingNotes.js';
+
+const { note } = Astro.props;
+const pageTitle = `${note.title}. Working Notes. Rowan Black.`;
+const ogUrl = `https://www.whoisrowanblack.com/working-notes/${note.id}/`;
+const ogDesc = note.excerpt || 'Working Notes from the Corvids Collective.';
+
+const { newer, older } = siblingNotes(note.id);
+---
+
+<BaseLayout title={pageTitle} description={ogDesc} ogUrl={ogUrl}>
+  <div class="note-page">
+    <nav class="note-nav">
+      <a href="/working-notes/" class="note-back">← Working Notes</a>
+      <span class="note-nav-title">{note.title}</span>
+    </nav>
+
+    <div class="note-wrap">
+      <article class="note-card">
+        <div class="note-label">Working Notes // {note.dateDisplay}</div>
+
+        <h1 class="note-title">{note.title}</h1>
+
+        <div class="note-byline">
+          Posted by the Corvids Collective. {note.dateDisplay}.
+        </div>
+
+        <div class="note-rule"></div>
+
+        <div class="note-body">
+          <slot />
+        </div>
+      </article>
+
+      <nav class="note-siblings" aria-label="Adjacent working notes">
+        <div class="note-siblings-col note-siblings-left">
+          {older && (
+            <a href={`/working-notes/${older.id}/`} class="note-sibling-link">
+              <span class="note-sibling-label">Older note</span>
+              <span class="note-sibling-title">← {older.title}</span>
+            </a>
+          )}
+        </div>
+        <div class="note-siblings-col note-siblings-right">
+          {newer && (
+            <a href={`/working-notes/${newer.id}/`} class="note-sibling-link note-sibling-link-right">
+              <span class="note-sibling-label">Newer note</span>
+              <span class="note-sibling-title">{newer.title} →</span>
+            </a>
+          )}
+        </div>
+      </nav>
+
+      <div class="note-footer">
+        <a href="/working-notes/" class="note-back">← Back to Working Notes</a>
+        <a href="/" class="note-back note-back-archive">Archive Index</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .note-page {
+    background: #dedad4;
+    min-height: 100vh;
+  }
+
+  .note-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(222,218,212,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+
+  .note-back {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: #2a6dd4;
+    text-decoration: none;
+    padding: 6px 16px;
+    background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .note-back:hover {
+    background: #d8d6d0;
+  }
+
+  .note-nav-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: #9099a8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 50%;
+  }
+
+  .note-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 96px 16px 120px;
+  }
+
+  .note-card {
+    background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+    padding: 40px 44px 44px;
+  }
+
+  .note-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #9099a8;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .note-title {
+    font-family: 'Space Grotesk', Arial, sans-serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 400;
+    line-height: 1.2;
+    color: #1a1d24;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+  }
+
+  .note-byline {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #5a6070;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+
+  .note-rule {
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+    margin: 0 0 28px;
+  }
+
+  .note-body {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.85;
+    color: #1a1d24;
+  }
+
+  .note-body :global(p) {
+    margin: 0 0 18px;
+  }
+
+  .note-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .note-body :global(a) {
+    color: #2a6dd4;
+    text-decoration: none;
+  }
+
+  .note-body :global(a:hover) {
+    text-decoration: underline;
+  }
+
+  .note-body :global(.note-signoff) {
+    margin-top: 28px;
+    font-weight: 600;
+    color: #1a1d24;
+  }
+
+  .note-siblings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .note-siblings-col {
+    min-height: 1px;
+  }
+
+  .note-siblings-right {
+    text-align: right;
+  }
+
+  .note-sibling-link {
+    display: inline-block;
+    padding: 14px 18px;
+    background: #e2e0db;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    text-decoration: none;
+    color: #1a1d24;
+    transition: all 0.15s;
+    max-width: 100%;
+  }
+
+  .note-sibling-link:hover {
+    background: #d8d6d0;
+    transform: translateY(-1px);
+  }
+
+  .note-sibling-label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #9099a8;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .note-sibling-title {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #2a6dd4;
+    line-height: 1.4;
+  }
+
+  .note-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 40px 0 0;
+  }
+
+  @media (max-width: 640px) {
+    .note-nav {
+      padding: 0 12px;
+      height: 44px;
+    }
+
+    .note-back {
+      font-size: 12px;
+      padding: 5px 12px;
+    }
+
+    .note-nav-title {
+      font-size: 11px;
+      max-width: 45%;
+    }
+
+    .note-wrap {
+      padding: 60px 0 80px;
+    }
+
+    .note-card {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      padding: 28px 18px 32px;
+    }
+
+    .note-title {
+      font-size: 22px;
+    }
+
+    .note-body {
+      font-size: 13px;
+    }
+
+    .note-siblings {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 28px 16px 0;
+    }
+
+    .note-siblings-right {
+      text-align: left;
+    }
+
+    .note-footer {
+      padding: 28px 16px 0;
+    }
+  }
+</style>
