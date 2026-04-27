@@ -2,6 +2,8 @@ import rss from '@astrojs/rss';
 import { PIECES } from '../data/pieces.js';
 import { WORKING_NOTES } from '../data/workingNotes.js';
 
+export const prerender = true;
+
 const SITE_TITLE = 'The Collected Works of Rowan Black';
 const SITE_DESCRIPTION =
   'A recovered archive of poems, essays, fragments, and digital artifacts. Curated by the Corvids Collective.';
