@@ -160,7 +160,7 @@ function FileEntry({ piece, index, mobile }) {
         background: hovered && isLive ? C.hover : (index % 2 === 0 ? 'rgba(0,0,0,0.02)' : 'transparent'),
         transition: 'background 0.1s',
         borderRadius: '3px',
-        fontSize: mobile ? '13px' : '14px',
+        fontSize: mobile ? '13px' : 'clamp(14px, 0.85vw + 2.5px, 17px)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -173,7 +173,7 @@ function FileEntry({ piece, index, mobile }) {
       </span>
       {!mobile && <span style={{ color: C.ghost, textAlign: 'right' }}>{sizeRef.current}</span>}
       {!mobile && <span style={{ color: C.ghost, textAlign: 'right' }}>{piece.year}</span>}
-      <span style={{ color: statusColor, textAlign: 'right', fontSize: '13px', fontWeight: 500, transition: 'color 0.15s' }}>
+      <span style={{ color: statusColor, textAlign: 'right', fontSize: 'clamp(13px, 0.7vw + 2px, 15px)', fontWeight: 500, transition: 'color 0.15s' }}>
         {statusText}
       </span>
     </a>
@@ -200,9 +200,9 @@ function DirectoryBlock({ period, pieces, startIndex, mobile, open, onToggle, in
         }}
       >
         <span style={{ color: C.accent, fontSize: '13px', width: '16px', fontWeight: 600 }}>{open ? '▼' : '▶'}</span>
-        <span style={{ color: period.color, fontSize: mobile ? '14px' : '15px', fontWeight: 600, WebkitFontSmoothing: 'auto', MozOsxFontSmoothing: 'auto' }}>/{period.id}/</span>
+        <span style={{ color: period.color, fontSize: mobile ? '14px' : 'clamp(15px, 0.9vw + 3px, 18px)', fontWeight: 600, WebkitFontSmoothing: 'auto', MozOsxFontSmoothing: 'auto' }}>/{period.id}/</span>
         {!mobile && (
-          <span style={{ color: C.dim, fontSize: '14px' }}>
+          <span style={{ color: C.dim, fontSize: 'clamp(14px, 0.85vw + 2.5px, 17px)' }}>
             {period.label} ({period.years})
           </span>
         )}
@@ -256,13 +256,13 @@ function Description({ returning }) {
   const fullParts = fullText.split('\n\n');
 
   return (
-    <div style={{ marginBottom: '28px', maxWidth: '620px', position: 'relative' }}>
+    <div style={{ marginBottom: '28px', maxWidth: '720px', position: 'relative' }}>
       <div aria-hidden="true" style={{ visibility: 'hidden' }}>
-        <div style={{ fontSize: '15px', lineHeight: 1.75 }}>{fullParts[0]}</div>
-        <div style={{ fontSize: '15px', lineHeight: 1.75, marginTop: '8px' }}>{fullParts[1]}</div>
+        <div style={{ fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', lineHeight: 1.75 }}>{fullParts[0]}</div>
+        <div style={{ fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', lineHeight: 1.75, marginTop: '8px' }}>{fullParts[1]}</div>
       </div>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
-        <div style={{ fontSize: '15px', lineHeight: 1.75, color: C.dim }}>
+        <div style={{ fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', lineHeight: 1.75, color: C.dim }}>
           {main}
           {!hint && !done && <span style={{
             display: 'inline-block', width: '6px', height: '13px',
@@ -271,7 +271,7 @@ function Description({ returning }) {
           }} />}
         </div>
         {hint && (
-          <div style={{ fontSize: '15px', lineHeight: 1.75, color: C.dim, fontWeight: 400, marginTop: '8px' }}>
+          <div style={{ fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', lineHeight: 1.75, color: C.dim, fontWeight: 400, marginTop: '8px' }}>
             {hint}
             {!done && <span style={{
               display: 'inline-block', width: '6px', height: '13px',
@@ -391,7 +391,7 @@ function Archive({ returning, mobile }) {
         background: C.surface,
         border: mobile ? 'none' : '1px solid ' + C.border,
         borderRadius: mobile ? '0' : '8px',
-        maxWidth: '1120px',
+        maxWidth: '1600px',
         margin: mobile ? '0' : '32px auto',
         boxShadow: mobile ? 'none' : '0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08)',
         overflow: 'hidden',
@@ -424,7 +424,7 @@ function Archive({ returning, mobile }) {
         <div style={{ padding: mobile ? '20px 16px 16px' : '32px 36px 24px' }}>
           <h1 style={{
             fontFamily: "'Space Grotesk', Arial, sans-serif",
-            fontSize: mobile ? '22px' : 'clamp(24px, 4.5vw, 36px)', fontWeight: 300,
+            fontSize: mobile ? '22px' : 'clamp(28px, 3.4vw, 48px)', fontWeight: 300,
             color: C.text, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '16px',
           }}>
             The Collected Works of{' '}<span style={{ fontWeight: 600 }}>Rowan Black</span>
@@ -443,16 +443,16 @@ function Archive({ returning, mobile }) {
           }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <a href="/who-is-rowan-black" style={{
-                fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', fontFamily: "'IBM Plex Mono', monospace",
                 color: C.accent, textDecoration: 'none', fontWeight: 400,
               }}>Who is Rowan Black</a>
               <a href="/corvids-letter" style={{
-                fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', fontFamily: "'IBM Plex Mono', monospace",
                 color: C.accent, textDecoration: 'none', fontWeight: 400,
               }}>A Letter from the Corvids Collective</a>
             </div>
             <a href="/working-notes/" style={{
-              fontSize: '15px', fontFamily: "'IBM Plex Mono', monospace",
+              fontSize: 'clamp(15px, 0.9vw + 3px, 18px)', fontFamily: "'IBM Plex Mono', monospace",
               color: C.accent, textDecoration: 'none', fontWeight: 400,
               whiteSpace: 'nowrap',
             }}>Working Notes - Our Blog</a>
@@ -479,7 +479,7 @@ function Archive({ returning, mobile }) {
             <span
               onClick={toggleAll}
               style={{
-                fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px',
+                fontFamily: "'IBM Plex Mono', monospace", fontSize: 'clamp(13px, 0.8vw + 2px, 16px)',
                 color: C.accent, cursor: 'pointer', userSelect: 'none',
                 padding: '2px 0',
               }}
@@ -511,7 +511,7 @@ function Archive({ returning, mobile }) {
         <div style={{
           padding: mobile ? '12px 16px' : '14px 36px',
           borderTop: '1px solid ' + C.rule,
-          fontSize: '12px', color: C.ghost, lineHeight: 1.6,
+          fontSize: 'clamp(12px, 0.7vw + 2px, 15px)', color: C.ghost, lineHeight: 1.6,
         }}>
           If you believe you've encountered writing by Rowan Black, please contact{' '}
           <a href="mailto:submissions@whoisrowanblack.com" style={{ color: C.accent, textDecoration: 'none' }}>
