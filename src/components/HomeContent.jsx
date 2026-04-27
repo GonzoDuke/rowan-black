@@ -184,9 +184,9 @@ function FileEntry({ piece, index, mobile }) {
    DIRECTORY BLOCK
    ══════════════════════════════ */
 
-function DirectoryBlock({ period, pieces, startIndex, mobile, open, onToggle }) {
+function DirectoryBlock({ period, pieces, startIndex, mobile, open, onToggle, innerRef }) {
   return (
-    <div style={{ marginBottom: mobile ? '12px' : '16px' }}>
+    <div ref={innerRef} style={{ marginBottom: mobile ? '12px' : '16px', scrollMarginTop: mobile ? '52px' : '24px' }}>
       <div
         onClick={onToggle}
         style={{
@@ -348,8 +348,14 @@ function BootPrompt({ returning, mobile }) {
    ══════════════════════════════ */
 
 function Archive({ returning, mobile }) {
-  const [openDirs, setOpenDirs] = useState({});
+  const [openDirs, setOpenDirs] = useState(() => {
+    if (typeof window === 'undefined') return {};
+    const targetId = window.location.hash.replace(/^#/, '');
+    if (PERIODS.some(p => p.id === targetId)) return { [targetId]: true };
+    return {};
+  });
   const allOpen = PERIODS.every(p => openDirs[p.id]);
+  const dirRefs = useRef({});
 
   const toggleDir = (id) => setOpenDirs(prev => ({ ...prev, [id]: !prev[id] }));
   const toggleAll = () => {
@@ -361,6 +367,18 @@ function Archive({ returning, mobile }) {
       setOpenDirs(all);
     }
   };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const targetId = window.location.hash.replace(/^#/, '');
+    if (!targetId) return;
+    if (!PERIODS.some(p => p.id === targetId)) return;
+    const el = dirRefs.current[targetId];
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
 
   let idx = 0;
   const gridCols = mobile
@@ -472,7 +490,18 @@ function Archive({ returning, mobile }) {
 
           {PERIODS.map(period => {
             const pp = PIECES.filter(p => p.period === period.id);
-            const block = <DirectoryBlock key={period.id} period={period} pieces={pp} startIndex={idx} mobile={mobile} open={!!openDirs[period.id]} onToggle={() => toggleDir(period.id)} />;
+            const block = (
+              <DirectoryBlock
+                key={period.id}
+                period={period}
+                pieces={pp}
+                startIndex={idx}
+                mobile={mobile}
+                open={!!openDirs[period.id]}
+                onToggle={() => toggleDir(period.id)}
+                innerRef={(el) => { dirRefs.current[period.id] = el; }}
+              />
+            );
             idx += pp.length;
             return block;
           })}

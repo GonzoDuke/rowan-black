@@ -37,10 +37,12 @@ const piecesByPeriod = Object.fromEntries(
 );
 
 let nextNav = null;
+let prevNav = null;
 
 if (isNavigable(piece)) {
   const siblings = piecesByPeriod[piece.period] || [];
   const idx = siblings.findIndex(p => p.id === piece.id);
+
   if (idx !== -1 && idx < siblings.length - 1) {
     const next = siblings[idx + 1];
     nextNav = { href: `/${next.id}`, label: `${next.title} →`, kind: 'next' };
@@ -58,6 +60,24 @@ if (isNavigable(piece)) {
       };
     }
   }
+
+  if (idx > 0) {
+    const prev = siblings[idx - 1];
+    prevNav = { href: `/${prev.id}`, label: `← ${prev.title}`, kind: 'prev' };
+  } else if (idx === 0) {
+    const periodIdx = periodOrder.indexOf(piece.period);
+    const prevPeriodId = [...periodOrder.slice(0, periodIdx)].reverse()
+      .find(pid => (piecesByPeriod[pid] || []).length > 0);
+    if (prevPeriodId) {
+      const prevPeriod = PERIODS.find(pr => pr.id === prevPeriodId);
+      const prevList = piecesByPeriod[prevPeriodId];
+      prevNav = {
+        href: `/${prevList[prevList.length - 1].id}`,
+        label: `← Move to ${prevPeriod.label} (${prevPeriod.years})`,
+        kind: 'section',
+      };
+    }
+  }
 }
 ---
 
@@ -65,7 +85,7 @@ if (isNavigable(piece)) {
   <div class="piece-page">
     <!-- Nav bar -->
     <nav class="piece-nav">
-      <a href="/" class="nav-back">← Archive</a>
+      <a href={`/#${piece.period}`} class="nav-back">← Archive</a>
       <span class="nav-title">{piece.title}</span>
     </nav>
 
@@ -98,7 +118,12 @@ if (isNavigable(piece)) {
 
       <!-- Return footer -->
       <div class="piece-footer">
-        <a href="/" class="nav-back">← Back to Archive</a>
+        {prevNav && (
+          <a href={prevNav.href} class={`next-link prev-link prev-${prevNav.kind}`}>
+            {prevNav.label}
+          </a>
+        )}
+        <a href={`/#${piece.period}`} class="nav-back">← Back to Archive</a>
         {nextNav && (
           <a href={nextNav.href} class={`next-link next-${nextNav.kind}`}>
             {nextNav.label}
@@ -257,7 +282,12 @@ if (isNavigable(piece)) {
     transform: translateX(2px);
   }
 
-  .next-section {
+  .prev-link:hover {
+    transform: translateX(-2px);
+  }
+
+  .next-section,
+  .prev-section {
     font-style: italic;
   }
 
